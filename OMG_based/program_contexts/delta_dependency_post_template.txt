@@ -1,0 +1,3 @@
+create -db POST_UND_PATH -gitcommit COMMIT_SHA -gitrepo REPO_PATH -languages Java
+add REPO_PATH POST_UND_PATH
+analyze -db POST_UND_PATH -errors

@@ -1,0 +1,364 @@
+commit_url,commit,project,Multi-files?,patch,HM,Rationality (0-4),Comprehensiveness (0-4),Conciseness (0-4),Expressiveness (0-4),FIRA,Rationality (0-4).1,Comprehensiveness (0-4).1,Conciseness (0-4).1,Expressiveness (0-4).1,CMG,Rationality (0-4).2,Comprehensiveness (0-4).2,Conciseness (0-4).2,Expressiveness (0-4).2,AMG,MAD,AMG_CMG_BLEU,AMG_CMG_ROUGEL,AMG_CMG_METEOR,MAD_CMG_BLEU,MAD_CMG_ROUGEL,MAD_CMG_METEOR
+https://github.com/apache/directory-server/commit/9cbf06fcae73d281aa4804e574335d12fd0764ec,9cbf06fcae73d281aa4804e574335d12fd0764ec,apache/directory-server,,"File: core/src/main/java/org/apache/directory/server/core/referral/ReferralLut.java
+Status: modified
+```diff
+@@ -99,7 +99,7 @@ public LdapDN getFarthestReferralAncestor( LdapDN dn )
+         
+         for ( int ii = 0; ii < dn.size(); ii++ )
+         {
+-            farthest.add( dn.getRdn( ii ) );
++            farthest.addNormalized( dn.getRdn( ii ) );
+ 
+             // do not return dn if it is the farthest referral
+             if ( isReferral( farthest ) && ( farthest.size() != dn.size() ) )
+```","Call the addNormalized(RDN) method which is much faster than the add(RDN), as the RDN is not normalized again. ",4,4,4,4,fix failing tests,0,0,4,4,"Refactor: Use addNormalized in getFarthestReferralAncestor method In the `getFarthestReferralAncestor` method of the `ReferralLut` class, replaced the `add` method with the `addNormalized` method. This is an internal change that does not alter the functionality of the method.",4,3,4,4,"Refactor: improve referral ancestor lookup
+refactor the getfarthestreferralancestor method to use addnormalized instead of add, ensuring correct referral handling in ldap referral scenarios.","refactor: Update getFarthestReferralAncestor method to use addNormalized
+Refactor the getFarthestReferralAncestor method in ReferralLut.java to use the addNormalized method instead of the add method when adding referrals to the farthest collection. This change ensures that referrals are added in a normalized manner, improving the LDAP referral handling process.",7.1,20.69,13.7,12.3,38.55,37.84
+https://github.com/apache/ant/commit/89aa7775a83989345756349f99bd3556780eafee,89aa7775a83989345756349f99bd3556780eafee,apache/ant,,"File: src/main/org/apache/tools/ant/taskdefs/condition/Os.java
+Status: modified
+```diff
+@@ -65,8 +65,24 @@
+ public class Os implements Condition {
+     private String family;
+ 
++    /**
++     * Sets the desired OS family type
++     * 
++     * @param f      The OS family type desired<br />
++     *               Possible values:<br />
++     *               <ul><li>dos</li>
++     *               <li>mac</li>
++     *               <li>netware</li>
++     *               <li>unix</li>
++     *               <li>windows</li></ul>
++     */
+     public void setFamily(String f) {family = f.toLowerCase();}
+ 
++    /**
++     * Determines if the OS on which Ant is executing matches the type of 
++     * that set in setFamily.
++     * @see Os#setFamily(String)
++     */
+     public boolean eval() throws BuildException {
+         String osName = System.getProperty(""os.name"").toLowerCase();
+         String pathSep = System.getProperty(""path.separator"");
+```",Added some javadocs for OS condition.,4,4,4,4,add javadoc for Os setFamily,4,4,4,4,Feat: Improve documentation in Os.java Added detailed comments to the setFamily and eval methods in the Os.java file. The comments provide information about the functionality of the methods and the expected input for the setFamily method.,3,4,4,4,"Feat: add os family type setter and evaluator
+this commit introduces a new setter method to specify the desired os family type and an evaluator method to determine if the current os matches the specified type. the setter method converts the input to lowercase, and the evaluator method uses system properties to determine the os name and path separator.","style: Add comments to setFamily and eval methods in Os.java
+Added comments to the setFamily and eval methods in Os.java to explain their purpose and parameters. The setFamily method comment lists possible OS family types, including 'dos', 'mac', 'netware', 'unix', and 'windows'. The eval method comment explains that it determines if the OS on which Ant is executing matches the type set in setFamily. No functionality changes were made to method bodies or classes.",4.9,27.08,22.39,16.38,31.86,27.45
+https://github.com/apache/wicket/commit/526bb16ab2f8b770a052fc93069b8b38a1d6c1f5,526bb16ab2f8b770a052fc93069b8b38a1d6c1f5,apache/wicket,,"File: jdk-1.4/wicket/src/main/java/org/apache/wicket/markup/parser/filter/WicketTagIdentifier.java
+Status: modified
+```diff
+@@ -122,8 +122,7 @@ public MarkupElement nextTag() throws ParseException
+ 						""The wicket:id attribute value must not be empty. May be unmatched quotes?!?"",
+ 						tag.getPos());
+ 			}
+-			// Make it a org.apache.wicket component. Otherwise it would be
+-			// RawMarkup
++			// Make it a wicket component. Otherwise it would be RawMarkup
+ 			tag.setId(value);
+ 		}
+ 
+```","who thought it was a good idea to do ""wicket""->""org.apache.wicket"" ????",0,0,4,4,remove unnecessary code,0,0,4,4,Style: Update comment in nextTag() method The comment in the `nextTag()` method of `WicketTagIdentifier.java` has been updated for clarity. The method retrieves the next XML tag from the markup and converts it into a WicketTag if it belongs to the Wicket namespace. The updated comment better reflects this functionality.,4,4,2,4,"Refactor: simplify wickettagidentifier
+refactor the wickettagidentifier class to use 'wicket component' instead of 'org.apache.wicket component', making the code more concise and easier to understand. this change does not affect the functionality of the class.","refactor: Refactor WicketTagIdentifier to handle Wicket namespace tags and attributes
+Refactored the WicketTagIdentifier.java file to modify a comment and update the nextTag() method to handle Wicket namespace tags and attributes. The method now returns a MarkupElement representation of either a Wicket component or a regular HTML tag. The functionality of the WicketTagIdentifier class remains unchanged.",3.54,16.47,11.93,9.36,20.95,23.68
+https://github.com/apache/usergrid/commit/8814a144b66054048be96a1c892fd750ee327327,8814a144b66054048be96a1c892fd750ee327327,apache/usergrid,,"File: stack/core/src/main/java/org/apache/usergrid/corepersistence/asyncevents/AsyncEventServiceImpl.java
+Status: modified
+```diff
+@@ -355,9 +355,12 @@ else if (event instanceof ElasticsearchIndexEvent) {
+                     throw new Exception(""Unknown EventType for message: ""+ message.getStringBody().trim());
+                 }
+ 
+-                if( single.isEmpty() ){
+-                    logger.warn(""No index operation messages came back from event processing for msg {} "",
+-                        message.getStringBody().trim());
++
++                if( !(event instanceof ElasticsearchIndexEvent)
++                    && !(event instanceof InitializeApplicationIndexEvent)
++                      && single.isEmpty() ){
++                        logger.warn(""No index operation messages came back from event processing for msg: {} "",
++                            message.getStringBody().trim());
+                 }
+ 
+ 
+```",Fix logging statement.,4,3,4,4,throw an exception if there are no message,0,0,4,4,"Refactor: Improve handling of AsyncEvents in AsyncEventServiceImpl This commit refactors the AsyncEventServiceImpl class to improve the handling of different types of AsyncEvents in the queue system. The changes are mainly in the condition of an if statement in the callEventHandlers method, which processes a list of messages from a queue. Each message is expected to contain an AsyncEvent. The changes ensure that the method handles different types of AsyncEvents more effectively. There are no associated issues or pull requests.",4,4,4,4,"Refactor: improve event handling logic in asynceventserviceimpl
+refactored the calleventhandlers method to add additional checks for specific event types before logging a warning when no index operation messages are returned. this change improves the robustness and accuracy of event handling in the asynceventserviceimpl class.","refactor: Refactor callEventHandlers method in AsyncEventServiceImpl
+Refactored the callEventHandlers method in AsyncEventServiceImpl to include additional conditional checks and modified the warning log message. Specifically, added a conditional statement that checks if the event is an instance of ElasticsearchIndexEvent or InitializeApplicationIndexEvent before logging a warning message. The warning message itself has also been modified to include the message's string body. Additionally, some lines of code have been removed, including a warning log message.",4.48,19.67,20.33,5.0,18.67,22.21
+https://github.com/apache/archiva/commit/6987e689ecc1c522d53cb661fa7842284807f471,6987e689ecc1c522d53cb661fa7842284807f471,apache/archiva,,"File: archiva-modules/archiva-database/src/main/java/org/apache/maven/archiva/database/browsing/DefaultRepositoryBrowsing.java
+Status: modified
+```diff
+@@ -212,8 +212,6 @@ private void processSnapshots( List<String> versions )
+     {
+         Map<String, String> snapshots = new HashMap<String, String>();
+ 
+-        log.info( ""Processing snapshots."" );
+-
+         for ( String version : versions )
+         {
+             if ( VersionUtil.isSnapshot( version ) )
+```",Remove useless logging,4,4,4,4,remove debug logging,4,4,4,4,"Refactor: Remove logging statement from processSnapshots method The logging statement ""Processing snapshots."" has been removed from the processSnapshots method in the DefaultRepositoryBrowsing class. This change is part of a refactoring effort to improve the code quality.",3,4,4,4,"Refactor: remove unnecessary log statement
+removed an unnecessary log statement in defaultrepositorybrowsing class, which was logging 'processing snapshots.' without any functional impact. this change simplifies the code and makes it easier to maintain.","refactor: Remove unnecessary log statement and empty line
+Refactored the `DefaultRepositoryBrowsing.java` file by removing a log statement 'Processing snapshots.' and an empty line. This change does not affect any specific method's functionality, and the overall functionality of the modified classes remains the same.",11.79,29.41,43.02,12.7,27.85,51.53
+https://github.com/apache/directory-server/commit/b5546be3333d7a261e6db37ab6e36f34193cffbb,b5546be3333d7a261e6db37ab6e36f34193cffbb,apache/directory-server,Y,"File: core-integ/src/test/java/org/apache/directory/server/core/operations/add/AddIT.java
+Status: renamed
+```diff
+@@ -17,7 +17,7 @@
+  *  under the License.
+  *
+  */
+-package org.apache.directory.server.core.jndi;
++package org.apache.directory.server.core.operations.add;
+ 
+ 
+ import static org.apache.directory.server.core.integ.IntegrationUtils.getAdminConnection;
+```
+
+
+File: core-integ/src/test/java/org/apache/directory/server/core/suites/MigratedStockCoreISuite.java
+Status: modified
+```diff
+@@ -39,7 +39,7 @@
+ import org.apache.directory.server.core.event.EventServiceIT;
+ import org.apache.directory.server.core.exception.ExceptionServiceIT;
+ import org.apache.directory.server.core.integ.FrameworkSuite;
+-import org.apache.directory.server.core.jndi.AddIT;
++import org.apache.directory.server.core.operations.add.AddIT;
+ import org.apache.directory.server.core.operations.add.PasswordHashingInterceptorTest;
+ import org.apache.directory.server.core.operations.move.MoveIT;
+ import org.junit.runner.RunWith;
+```",Moved the AddIT test to the operations package,4,4,4,4,move üòÖ to the correct package,3,0,3,1,Refactor: Update package name of AddIT.java and import in MigratedStockCoreISuite.java The package name of the AddIT.java file has been refactored from 'org.apache.directory.server.core.jndi' to 'org.apache.directory.server.core.operations.add'. The import statement in the MigratedStockCoreISuite.java file has been updated to reflect this change. This refactoring improves the structure of the code without changing its behavior.,4,4,4,4,"Refactor: rename addit.java to new package
+rename addit.java from org/apache/directory/server/core/jndi to org/apache/directory/server/core/operations/add and update its import statement in migratedstockcoreisuite.java to reflect the new package location.","refactor: Rename package of AddIT.java
+Renamed the package of AddIT.java from org.apache.directory.server.core.jndi to org.apache.directory.server.core.operations.add. Updated the import statement in MigratedStockCoreISuite.java to reflect the new package name of AddIT.java. No changes were made to any method bodies or class functionalities in this commit.",4.6,32.61,24.41,48.18,56.2,38.84
+https://github.com/apache/lenya/commit/f3c5e70e7f9cdc18ac0dcef205bc5fcacdee2bf7,f3c5e70e7f9cdc18ac0dcef205bc5fcacdee2bf7,apache/lenya,,"File: src/java/org/apache/lenya/cms/publication/DocumentLocator.java
+Status: modified
+```diff
+@@ -38,10 +38,8 @@ public class DocumentLocator {
+      */
+     public static DocumentLocator getLocator(String pubId, String area, String path, String language) {
+         String key = DocumentLocator.getKey(pubId, area, path, language);
+-        DocumentLocator locator = null;
+-        if (locators.containsKey(key)) {
+-            locator = (DocumentLocator) locators.get(key);
+-        } else {
++        DocumentLocator locator = (DocumentLocator) locators.get(key);
++        if (locator == null) {
+             locator = new DocumentLocator(pubId, area, path, language);
+             locators.put(key, locator);
+         }
+```",Avoid returning null-value DocumentLocator objects,1,4,4,4,fix quality flaw,0,0,4,4,"Refactor: Simplify the existence check in getLocator method The `getLocator` method in the `DocumentLocator` class has been refactored. The old code first checked if a key exists in the `locators` map and then retrieved the value associated with the key. The new code directly retrieves the value associated with the key and then checks if the retrieved value is null. This change simplifies the code and improves its readability. The functionality of the method remains the same: it returns a `DocumentLocator` for the given parameters. If a `DocumentLocator` for these parameters does not exist, a new one is created, stored, and then returned.",4,4,4,4,"Refactor: simplify getlocator method
+the getlocator method has been refactored to reduce unnecessary null checks and improve code readability. the method's functionality remains the same, but the implementation is now more concise and efficient.","refactor: Simplify getLocator method in DocumentLocator
+Refactored the getLocator method in DocumentLocator.java to simplify the logic for retrieving or creating a DocumentLocator instance based on the provided parameters. Removed the if statement and directly retrieved the DocumentLocator instance from the cache. If the instance is not found, a new one is created and added to the cache. This change improves the efficiency of retrieving or creating DocumentLocator instances.",1.9,27.94,19.21,10.54,30.41,29.85
+https://github.com/apache/poi/commit/3234ce48d57222043d1fb8aec33d81315a5f30d9,3234ce48d57222043d1fb8aec33d81315a5f30d9,apache/poi,,"File: src/testcases/org/apache/poi/hssf/record/formula/TestFormulaParser.java
+Status: modified
+```diff
+@@ -54,6 +54,16 @@ public void testFormulaWithSpaceNRef() {
+         assertTrue(""two tokens expected, got ""+ptgs.length,ptgs.length == 2);
+     }
+     
++    public void testFormulaWithString() {
++        Ptg[] ptgs;
++        FormulaParser fp;
++        fp = new FormulaParser(""\""hello\"" & \""world\"" ;"");
++        fp.parse();
++        ptgs = fp.getRPNPtg();
++        assertTrue(""three token expected, got "" + ptgs.length, ptgs.length == 3);
++    }
++
++    
+      public static void main(String [] args) {
+         System.out.println(""Testing org.apache.poi.hssf.record.formula.FormulaParser"");
+         junit.textui.TestRunner.run(TestFormulaParser.class);
+```",test for parsing strings,4,4,4,4,add TestFormulaParser testFormulaWithString,4,4,4,4,Feat: Add new test method in TestFormulaParser A new test method `testFormulaWithString` has been added to the `TestFormulaParser` class. This method tests the formula parsing functionality with a string input.,4,4,4,4,"Feat: add test for parsing formula with string concatenation
+this commit introduces a new unit test, testformulawithstring, to cover the parsing of formulas that concatenate two strings using the ampersand (&) operator. this test ensures the formulaparser class correctly handles string concatenation operations.","feat: Add unit test for parsing formula with string concatenation
+Added a new method testFormulaWithString() to TestFormulaParser.java, which is a unit test for parsing a formula that concatenates two strings using the ampersand (&) operator. The method initializes a FormulaParser object with the formula hello & world ;, parses the formula, and asserts that the parsed formula has three tokens.",6.95,33.8,38.4,5.44,27.59,38.22
+https://github.com/apache/cxf/commit/260efe56fc1bfc89950d1eda89114feb287490cd,260efe56fc1bfc89950d1eda89114feb287490cd,apache/cxf,,"File: rt/rs/security/oauth-parent/oauth2/src/main/java/org/apache/cxf/rs/security/oauth2/common/Client.java
+Status: modified
+```diff
+@@ -28,6 +28,7 @@
+ import javax.persistence.Entity;
+ import javax.persistence.FetchType;
+ import javax.persistence.Id;
++import javax.persistence.Lob;
+ import javax.persistence.ManyToOne;
+ import javax.persistence.MapKeyColumn;
+ import javax.persistence.OneToOne;
+@@ -66,7 +67,7 @@ public class Client implements Serializable {
+     private String homeRealm;
+     private boolean registeredDynamically;
+     private String tokenEndpointAuthMethod;
+-    
++
+     public Client() {
+ 
+     }
+@@ -346,6 +347,7 @@ public void setRegisteredAudiences(List<String> registeredAudiences) {
+ 
+     @ElementCollection(fetch = FetchType.EAGER)
+     @OrderColumn
++    @Lob
+     public List<String> getApplicationCertificates() {
+         return applicationCertificates;
+     }
+```",Add @lob annotation for application certificates,4,3,4,4,fix exception message,0,0,4,4,Refactor: Enhance getApplicationCertificates method in Client class The getApplicationCertificates method in the Client class has been refactored to return a list of application certificates that are eagerly fetched and ordered as per their insertion in the database. The @Lob annotation has been added to indicate that the application certificates are stored as a large object in the database.,4,4,4,4,"Refactor: update getapplicationcertificates to store certificates as lobs
+this commit refactors the getapplicationcertificates method to store application certificates as large objects (lobs) in the database, with eager fetching and ordering. this change improves the storage and retrieval of certificates associated with an application, likely for authentication or authorization purposes.","refactor: Improve storage of application certificates
+Modified the `Client.java` file to store application certificates as a large object (LOB) in the database, with eager fetching and ordering. Added the `@Lob` annotation to the `getApplicationCertificates()` method and imported the necessary `javax.persistence.Lob` class. This change improves the efficiency of storing and retrieving application certificates, making it easier to maintain and modify the codebase.",7.46,26.42,30.57,12.4,29.75,40.42
+https://github.com/apache/wicket/commit/9fb30084cbc737ec035ed0e76a425612db462b47,9fb30084cbc737ec035ed0e76a425612db462b47,apache/wicket,,"File: wicket-core/src/main/java/org/apache/wicket/core/request/mapper/BookmarkableMapper.java
+Status: modified
+```diff
+@@ -70,7 +70,7 @@ public BookmarkableMapper()
+ 	}
+ 
+ 	/**
+-	 * @see org.apache.wicket.request.mapper.AbstractBookmarkableMapper#buildUrl(org.apache.wicket.request.mapper.AbstractBookmarkableMapper.UrlInfo)
++	 * @see AbstractBookmarkableMapper#buildUrl(AbstractBookmarkableMapper.UrlInfo)
+ 	 */
+ 	@Override
+ 	protected Url buildUrl(UrlInfo info)
+@@ -86,7 +86,7 @@ protected Url buildUrl(UrlInfo info)
+ 	}
+ 
+ 	/**
+-	 * @see org.apache.wicket.request.mapper.AbstractBookmarkableMapper#parseRequest(org.apache.wicket.request.Request)
++	 * @see AbstractBookmarkableMapper#parseRequest(org.apache.wicket.request.Request)
+ 	 */
+ 	@Override
+ 	protected UrlInfo parseRequest(Request request)
+@@ -123,7 +123,7 @@ protected UrlInfo parseRequest(Request request)
+ 	}
+ 
+ 	/**
+-	 * @see org.apache.wicket.request.mapper.AbstractBookmarkableMapper#pageMustHaveBeenCreatedBookmarkable()
++	 * @see AbstractBookmarkableMapper#pageMustHaveBeenCreatedBookmarkable()
+ 	 */
+ 	@Override
+ 	protected boolean pageMustHaveBeenCreatedBookmarkable()
+@@ -132,7 +132,7 @@ protected boolean pageMustHaveBeenCreatedBookmarkable()
+ 	}
+ 
+ 	/**
+-	 * @see org.apache.wicket.request.mapper.AbstractBookmarkableMapper#getCompatibilityScore(org.apache.wicket.request.Request)
++	 * @see AbstractBookmarkableMapper#getCompatibilityScore(org.apache.wicket.request.Request)
+ 	 */
+ 	@Override
+ 	public int getCompatibilityScore(Request request)
+```",Fix broken javadoc links,4,3,4,4,fix javadoc warnings,4,3,4,4,Style: Update comments in BookmarkableMapper.java Updated the comments in the `BookmarkableMapper.java` file to use a shorter form of the class name. This change improves the readability of the code and makes it easier to understand.,4,4,4,4,"Refactor: simplify javadoc references
+removed redundant package names from javadoc references in bookmarkablemapper, making the code more concise and easier to read.","style: Update comment lines in BookmarkableMapper.java
+This commit updates the comment lines in BookmarkableMapper.java to reference AbstractBookmarkableMapper instead of org.apache.wicket.request.mapper.AbstractBookmarkableMapper. The changes are limited to the comment lines and do not affect the functionality of any method or class.",4.81,24.14,25.13,9.92,31.71,39.56
+https://github.com/apache/cassandra/commit/2a9fc0e887612725a51b3822a266c1b3d3fadcaf,2a9fc0e887612725a51b3822a266c1b3d3fadcaf,apache/cassandra,,"File: src/java/org/apache/cassandra/io/sstable/format/big/BigTableScanner.java
+Status: modified
+```diff
+@@ -19,6 +19,7 @@
+ 
+ import java.io.IOException;
+ import java.util.*;
++import java.util.concurrent.atomic.AtomicBoolean;
+ 
+ import com.google.common.collect.AbstractIterator;
+ import com.google.common.collect.Ordering;
+@@ -51,6 +52,7 @@
+ 
+ public class BigTableScanner implements ISSTableScanner
+ {
++    private AtomicBoolean isClosed = new AtomicBoolean(false);
+     protected final RandomAccessReader dfile;
+     protected final RandomAccessReader ifile;
+     public final SSTableReader sstable;
+@@ -193,7 +195,8 @@ private void seekToCurrentRangeStart()
+ 
+     public void close() throws IOException
+     {
+-        FileUtils.close(dfile, ifile);
++        if (isClosed.compareAndSet(false, true))
++            FileUtils.close(dfile, ifile);
+     }
+ 
+     public long getLengthInBytes()
+```",make scanner.close idempotent,0,3,4,4,make BigTableScanner close private,0,0,4,4,"Refactor: Prevent multiple closings of files in BigTableScanner This commit introduces a new variable `isClosed` in the `BigTableScanner` class to track whether the data and index files have been closed. The `close()` method is modified to check this variable before closing the files. This change prevents the files from being closed multiple times, which could potentially lead to a NullPointerException as reported in issue CASSANDRA-9531.",3,4,4,4,"Fix: fix nullpointerexception in bigtablescanner close method
+this commit fixes a nullpointerexception that occurs when running messagepayloadtest due to the close method of bigtablescanner being called twice, causing the segment to be deallocated. the fix ensures that the close operation is idempotent by marking the object as closed and only performing the close operation once.","fix: Fix NullPointerException in BigTableScanner
+Fix Jira issue CASSANDRA-9531, which is about a NullPointerException being logged when running MessagePayloadTest. The issue is caused by the close() method of BigTableScanner being called twice in CompactionTask.runMayThrow, leading to the segment being deallocated before getTotalBufferSize is called. The changes made in this commit, specifically the addition of an AtomicBoolean variable isClosed and the modification of the close() method, are intended to fix this issue. The commit modifies the BigTableScanner.java file, adding an AtomicBoolean variable isClosed and modifying the close() method to check the isClosed variable before closing the data file and index file using FileUtils, ensuring that the close operation is only performed once and marks the object as closed.",5.99,21.85,23.12,6.89,22.95,38.56
+https://github.com/helterskelterr/ofbizApp/commit/c5c2b2c9b3f2e5b8cb6e2960b2a6daf9eb9a335c,c5c2b2c9b3f2e5b8cb6e2960b2a6daf9eb9a335c,helterskelterr/ofbizApp,,"File: framework/base/src/base/org/ofbiz/base/util/AliasKeyManager.java
+Status: modified
+```diff
+@@ -48,7 +48,7 @@ public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket so
+             String[] aliases = keyManager.getClientAliases(keyType[i], null); // ignoring the issuers 
+             if (aliases != null && aliases.length > 0) {
+                 for (int x = 0; x < aliases.length; x++) {
+-                    if (this.alias.equals(aliases[i])) {
++                    if (this.alias.equals(aliases[x])) {
+                         if (Debug.verboseOn()) Debug.logVerbose(""chooseClientAlias for keyType ["" + keyType[i] + ""] got alias "" + this.alias, module);
+                         //Debug.logInfo(new Exception(), ""Location where chooseClientAlias is called"", module);
+                         return this.alias;
+```",Just implementing Adam's request.,0,0,4,3,add logVerbose logging to AliasKeyManager,0,0,4,4,"Fix: Correct index used in 'chooseClientAlias' method In the 'chooseClientAlias' method of the 'AliasKeyManager.java' file, the wrong index was being used in the if condition inside a for loop. This commit fixes this bug by replacing 'aliases[i]' with 'aliases[x]'.",4,4,4,4,"Fix: fix alias matching in chooseclientalias method
+the method chooseclientalias was incorrectly using the index 'i' instead of 'x' when comparing aliases, leading to incorrect alias matching. this commit fixes the issue by using the correct index 'x' in the comparison.","fix: Fix alias selection in chooseClientAlias method
+Modified the chooseClientAlias method in AliasKeyManager.java to correctly select a client alias based on the provided key types and issuers. Replaced variable 'i' with 'x' in the for loop to ensure correct alias selection. This change fixes a bug in the method and ensures it returns the correct client alias that matches the given key type and issuers, or null if no match is found.",12.98,27.5,35.9,7.78,28.57,36.76
+https://github.com/apache/logging-log4j2/commit/d2aea7458f08e8b9d48f3768b719aafaf4246007,d2aea7458f08e8b9d48f3768b719aafaf4246007,apache/logging-log4j2,,"File: log4j-core/src/test/java/org/apache/logging/log4j/core/selector/TestClassLoader.java
+Status: modified
+```diff
+@@ -22,10 +22,10 @@
+ import java.net.URL;
+ import java.net.URLConnection;
+ 
++import org.apache.commons.io.IOUtils;
+ import org.apache.logging.log4j.core.util.Closer;
+ import org.apache.logging.log4j.core.util.Throwables;
+ import org.apache.logging.log4j.util.LoaderUtil;
+-import sun.misc.IOUtils;
+ 
+ /**
+  * ClassLoader that loads class in this package (or sub-package) by hand, otherwise delegating to the TCCL.
+@@ -57,10 +57,9 @@ protected Class<?> findClass(final String name) throws ClassNotFoundException {
+             final URLConnection uc = resource.openConnection();
+             final int len = uc.getContentLength();
+             final InputStream in = new BufferedInputStream(uc.getInputStream());
+-            byte[] bytecode;
++            byte[] bytecode = new byte[len];
+             try {
+-                // laziness means using sun.misc
+-                bytecode = IOUtils.readFully(in, len, true);
++                IOUtils.readFully(in, bytecode);
+             } finally {
+                 Closer.closeSilently(in);
+             }
+```",Use Apache Commons IOUtils instead of sun.misc.IOUtils.,0,4,4,4,remove unnecessary code,0,0,4,4,"Refactor: Replace sun.misc.IOUtils with org.apache.commons.io.IOUtils in TestClassLoader This commit refactors the TestClassLoader class by replacing the sun.misc.IOUtils with org.apache.commons.io.IOUtils. The change is made in the findClass method, which finds and loads the class with the specified name. The way the class file is loaded into a byte array has been modified. The commit does not change the functionality of the method or the class.",4,4,4,4,"Refactor: replace sun.misc.ioutils with org.apache.commons.io.ioutils
+this commit replaces the usage of sun.misc.ioutils with org.apache.commons.io.ioutils in the testclassloader class. this change is a refactoring of the internal structure of the code to make it more maintainable and easier to understand.","refactor: Update TestClassLoader to use org.apache.commons.io.IOUtils
+Modified the TestClassLoader.java file to replace sun.misc.IOUtils with org.apache.commons.io.IOUtils. The findClass method has been updated to initialize the bytecode variable with a new byte array of the correct length and to use IOUtils.readFully from the org.apache.commons.io package instead of sun.misc.IOUtils. This change improves the internal structure of the software, making it easier to understand and maintain.",35.22,46.03,24.2,34.37,37.66,33.12
+https://github.com/apache/cxf/commit/455938206f6fe0f5e9717c4a6363d4d11fd414b5,455938206f6fe0f5e9717c4a6363d4d11fd414b5,apache/cxf,,"File: rt/frontend/jaxrs/src/main/java/org/apache/cxf/jaxrs/provider/XSLTJaxbProvider.java
+Status: modified
+```diff
+@@ -337,6 +337,10 @@ protected void addAttachmentMarshaller(Marshaller ms) {
+         // complete
+     }
+ 
++    protected Result getStreamResult(OutputStream os, Annotation[] anns, MediaType mt) throws Exception {
++        return new StreamResult(os);
++    }
++    
+     @Override
+     protected void marshalToOutputStream(Marshaller ms, Object obj, OutputStream os,
+                                          Annotation[] anns, MediaType mt)
+@@ -356,7 +360,7 @@ protected void marshalToOutputStream(Marshaller ms, Object obj, OutputStream os,
+             th = factory.newTransformerHandler(ti.getTemplates());
+             this.trySettingProperties(th, ti);
+         }
+-        Result result = new StreamResult(os);
++        Result result = getStreamResult(os, anns, mt);
+         if (systemId != null) {
+             result.setSystemId(systemId);
+         }
+```","introduce getStreamResult to allow override, e.g. for pdf generation using apache fop",4,4,4,4,fix npe in XSLTJaxbProvider,0,2,4,4,Refactor: Extract StreamResult creation to a new method A new method `getStreamResult` has been added to the `XSLTJaxbProvider` class. This method creates a new `StreamResult` instance with the provided `OutputStream`. The `marshalToOutputStream` method has been refactored to use this new method instead of creating a new `StreamResult` instance directly. This change improves the structure of the code without changing its behavior.,4,4,4,4,"Refactor: introduce getstreamresult method for overriding
+this commit refactors the xsltjaxbprovider class to introduce a new protected method getstreamresult, which allows for overriding the stream result creation, e.g., for pdf generation using apache fop. this change enables more flexibility in the serialization process.","feat: Introduce getStreamResult method for override
+This commit introduces a new getStreamResult method in the XSLTJaxbProvider class, which returns a StreamResult that writes to the provided output stream. The marshalToOutputStream method has been modified to use the new getStreamResult method. This change allows for override, such as for PDF generation using Apache FOP, as stated in the linked pull request.",6.64,21.15,23.62,16.14,38.33,42.47
+https://github.com/apache/logging-log4j2/commit/7831dde2eb0d0aa371639f8984b7a8b9f1b3aa53,7831dde2eb0d0aa371639f8984b7a8b9f1b3aa53,apache/logging-log4j2,,"File: log4j-core/src/test/java/org/apache/logging/log4j/core/net/ssl/SslConfigurationTest.java
+Status: modified
+```diff
+@@ -41,7 +41,7 @@ public void emptyConfigurationHasDefaultTrustStore() throws IOException {
+         final SslConfiguration sc = SslConfiguration.createSSLConfiguration(null, null, null);
+         final SSLSocketFactory factory = sc.getSslSocketFactory();
+         final SSLSocket clientSocket = (SSLSocket) factory.createSocket(TLS_TEST_HOST, TLS_TEST_PORT);
+-        Assert.assertTrue(true);
++        Assert.assertNotNull(clientSocket);
+     }
+ 
+     @Test(expected = IOException.class)
+```",Clearer test assertion.,0,1,4,4,fix failing test,0,0,4,4,"Fix: Correct assertion in SslConfigurationTest In the method emptyConfigurationHasDefaultTrustStore() of the SslConfigurationTest.java file, the assertion has been corrected. Previously, the assertion was always passing (Assert.assertTrue(true)), which did not correctly test the functionality. The assertion has been replaced with Assert.assertNotNull(clientSocket) to ensure that the clientSocket is not null when the default trust store is used with an empty SSL configuration.",4,4,4,4,"Fix: improve assertion in sslconfigurationtest
+the assertion in the emptyconfigurationhasdefaulttruststore method was strengthened to verify that an ssl configuration with no custom trust store settings defaults to the jvm's truststore. this change ensures that the test is more robust and accurate.","refactor: Update emptyConfigurationHasDefaultTrustStore method
+Refactored the emptyConfigurationHasDefaultTrustStore method in SslConfigurationTest.java to assert that the clientSocket is not null, instead of asserting true. This change affects the testing of SSL configurations in the codebase.",4.5,23.53,28.33,9.99,27.37,24.07

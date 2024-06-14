@@ -1,0 +1,3 @@
+🚀 Calling All Java Developers! 🚀 We're conducting a research study at UC Irvine on the quality of commit messages and need your expertise! If you have experience with Java development, version control (e.g., Git), and writing/reviewing commit messages, please take our 15-20 minute survey. Contribute to advancing software engineering research and help improve commit message practices! Click here to participate: https://uci.questionpro.com/amg-survey-1
+
+#Java #SoftwareDevelopment #Research #CommitMessages

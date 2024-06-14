@@ -1,0 +1,5 @@
+create -db TEMP_UND_PATH -gitcommit GITHASH -gitrepo PROJECT_PATH -languages Java
+add PROJECT_PATH TEMP_UND_PATH
+analyze -db TEMP_UND_PATH -errors
+export -dependencies -group to -sort to -col none -format longnoroot file csv CSV_PATH TEMP_UND_PATH
+export -dependencies -format longnoroot -col refs file csv PAIRWISE_PATH TEMP_UND_PATH

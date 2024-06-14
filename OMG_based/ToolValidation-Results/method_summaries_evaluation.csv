@@ -1,0 +1,5 @@
+model,bleu,meteor,rougeL
+CodeQwen1.5-7B-Chat-AWQ,19.46,38.91,39.58
+OpenCodeInterpreter-DS-33B-AWQ,16.11,37.42,37.01
+CodeFuse-DeepSeek-33B-AWQ,15.5,38.11,37.36
+Meta-Llama-3-70B-Instruct-AWQ,9.64,35.75,30.66

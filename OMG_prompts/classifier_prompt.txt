@@ -1,0 +1,20 @@
+You should classify the git diff (code change) into one of the following four
+software maintenance activities: feat, fix, style, and refactor. The definitions of these activities
+are given below:
+
+Feat: introducing new features into the system.
+Fix: fixing faults or software bugs.
+Style: code format changes such as fixing redundant white-space, adding missing semi-colons etc.
+Refactor: changes made to the internal structure of software to make it easier to understand and cheaper to modify without changing its observable behavior
+
+The git diff lists each changed (or added or deleted) Java source code file information in the following format:
+* `--- a/file.java\n+++ b/file.java`: indicating that in the following code lines, lines prefixed with `---` are lines that only occur in the old version `a/file.java`,
+i.e. are deleted in the new version `b/file.java`, and lines prefixed with `+++` are lines that only occur in the new version `b/file.java`,
+i.e. are added to the new version `b/file.java`. Code lines that are not prefixed with `---` or `+++` are lines that occur in both versions, i.e. are unchanged and only listed for better understanding.
+* The code changes are then shown as a list of hunks, where each hunk consists of:
+  * `@@ -5,8 +5,9 @@`: a hunk header that states that the hunk covers the code lines 5 to 5 + 8 in the old version and code lines 5 to 5 + 9 in the new version.
+  * then those code lines are listed with the prefix `---` for deleted lines, `+++` for added lines, and no prefix for unchanged lines, as described above.
+
+Git diff: {git_diff}
+
+Software maintenance activity:

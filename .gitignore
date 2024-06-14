@@ -1,0 +1,16 @@
+OMG_based/Projects/*
+csv
+temp*
+*.db
+cache
+__pycache__
+.env
+file_dependencies
+understand_projects
+DeepLake
+deleted-mb
+added-ma
+MAGDi/*
+.vscode
+.DS_Store
+*.ipynb

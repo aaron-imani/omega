@@ -1,0 +1,3 @@
+create -db PRE_UND_PATH -gitcommit PARENT_COMMIT_SHA -gitrepo REPO_PATH -refdb POST_UND_PATH -languages Java
+add REPO_PATH PRE_UND_PATH
+analyze -db PRE_UND_PATH -errors

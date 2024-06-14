@@ -1,0 +1,3302 @@
+id,raw_code,comment,label,generated_comment
+35374,"public void compileProjects(List<File> projects,IssueAcceptor issueAcceptor) throws N4JSCompileException {
+  compileProjects(Arrays.asList(new File(""."")),projects,Collections.emptyList(),issueAcceptor);
+}",compile a list of projects .,what, compile a list of projects . 
+63102,"public static ServerSocket createServerSocket(int port,InetAddress bindAddress) throws IOException {
+  ServerSocket socket=null;
+  if (SysProperties.ENABLE_ANONYMOUS_TLS) {
+    removeAnonFromLegacyAlgorithms();
+  }
+  setKeystore();
+  ServerSocketFactory f=SSLServerSocketFactory.getDefault();
+  SSLServerSocket secureSocket;
+  if (bindAddress == null) {
+    secureSocket=(SSLServerSocket)f.createServerSocket(port);
+  }
+ else {
+    secureSocket=(SSLServerSocket)f.createServerSocket(port,0,bindAddress);
+  }
+  secureSocket.setEnabledProtocols(disableSSL(secureSocket.getEnabledProtocols()));
+  if (SysProperties.ENABLE_ANONYMOUS_TLS) {
+    String[] list=enableAnonymous(secureSocket.getEnabledCipherSuites(),secureSocket.getSupportedCipherSuites());
+    secureSocket.setEnabledCipherSuites(list);
+  }
+  socket=secureSocket;
+  return socket;
+}",create a secure server socket .,what, create a secure server socket that is bound to the given address and port . 
+66421,"protected void paintContentBorderBottomEdge(Graphics g,int x,int y,int w,int h,boolean drawBroken,Rectangle selRect,boolean isContentBorderPainted){
+  if (isContentBorderPainted) {
+    g.setColor(darkShadow);
+    g.fillRect(x,y + h - 1,w - 1,1);
+  }
+}",draws the bottom edge of the border around the content area .,what, draws the bottom edge of the border around the content area . 
+85097,"private void serializeCompactRDFGeneralQualifier(int indent,XMPNode node) throws IOException, XMPException {
+  write("" rdf:parseType=\""Resource\"">"");
+  writeNewline();
+  serializeCanonicalRDFProperty(node,false,true,indent + 1);
+  for (Iterator iq=node.iterateQualifier(); iq.hasNext(); ) {
+    XMPNode qualifier=(XMPNode)iq.next();
+    serializeCanonicalRDFProperty(qualifier,false,false,indent + 1);
+  }
+}",serializes the general qualifier .,what, serialize the compact rdf : general qualifier . 
+78353,"public static void log(final String msg,final Throwable t){
+  if (DEBUG) {
+    log(msg);
+    t.printStackTrace(System.out);
+  }
+}",prints msg and exception to system . out .,what, log a message and a throwable if debug mode is enabled . 
+19645,"public MessageTokenizer(IDiscordClient client,String content){
+  if (content == null)   throw new IllegalArgumentException(""Content cannot be null!"");
+  if (content.length() == 0)   throw new IllegalArgumentException(""Content must have length!"");
+  if (client == null)   throw new IllegalArgumentException(""Client cannot be null!"");
+  this.content=content;
+  this.client=client;
+  stepForward(0);
+}",initializes with the string contents .,what, constructs a new message tokenizer . 
+67801,"protected void createFromHValues(int[] hValues,int partitions){
+  Arrays.sort(hValues);
+  this.splits=new int[partitions];
+  int maxH=0x7fffffff;
+  for (int i=0; i < splits.length; i++) {
+    int quantile=(int)((long)(i + 1) * hValues.length / partitions);
+    this.splits[i]=quantile == hValues.length ? maxH : hValues[quantile];
+  }
+}",create a hilbertcurvepartitioner from a list of points,what, creates a histogram from the hValues array and partitions it into the specified number of parts . 
+61104,"private Set unionIPRange(byte[] ipWithSubmask1,byte[] ipWithSubmask2){
+  Set set=new HashSet();
+  if (Arrays.areEqual(ipWithSubmask1,ipWithSubmask2)) {
+    set.add(ipWithSubmask1);
+  }
+ else {
+    set.add(ipWithSubmask1);
+    set.add(ipWithSubmask2);
+  }
+  return set;
+}",calculates the union if two ip ranges .,what, calculates the union if two ip ranges . 
+2083,"private static List<Size> pickUpToThree(List<Size> sizes){
+  List<Size> result=new ArrayList<Size>();
+  Size largest=sizes.get(0);
+  result.add(largest);
+  Size lastSize=largest;
+  for (  Size size : sizes) {
+    double targetArea=Math.pow(.5,result.size()) * area(largest);
+    if (area(size) < targetArea) {
+      if (!result.contains(lastSize) && (targetArea - area(lastSize) < area(size) - targetArea)) {
+        result.add(lastSize);
+      }
+ else {
+        result.add(size);
+      }
+    }
+    lastSize=size;
+    if (result.size() == 3) {
+      break;
+    }
+  }
+  if (result.size() < 3 && !result.contains(lastSize)) {
+    result.add(lastSize);
+  }
+  return result;
+}","given a list of sizes of a similar aspect ratio , it tries to pick evenly spaced out options .",what," selects the largest, second largest, and third largest sizes from a list of sizes . "
+34848,"@SuppressWarnings(""purity"") private static boolean isRegex(String s){
+  try {
+    Pattern.compile(s);
+  }
+ catch (  PatternSyntaxException e) {
+    return false;
+  }
+  return true;
+}",this method is a copy of regexutil . isregex .,what, checks if a string is a valid regex pattern 
+54532,"void insertFunction2(ByteBuffer bb){
+  int baseSec=(int)(windowId >> 32);
+  bb.putInt(baseSec);
+  Integer operId=operatorId;
+  for (int i=0; i < 3; i++) {
+    byte num=(byte)(operId >> 8 * (2 - i));
+    bb.put(num);
+  }
+  bb.putShort((short)(windowId & 0xffff));
+  for (int i=0; i < 3; i++) {
+    byte num=(byte)(tupleId >> 8 * (2 - i));
+    bb.put(num);
+  }
+}",4b basesec | 3b operatorid | 2b windowid | 3b tupleid,what, 4b basesec | 3b operatorid | 2b windowid | 3b tupleid 
+81747,"String format(Object obj,StringBuffer toAppendTo) throws IllegalArgumentException {
+  Date source=null;
+  if (obj instanceof Date) {
+    source=(Date)obj;
+  }
+ else   if (obj instanceof String) {
+    try {
+      source=parse((String)obj);
+    }
+ catch (    ParseException pe) {
+      throw new RuntimeException(pe.toString());
+    }
+  }
+  if (source == null) {
+    throw new IllegalArgumentException((obj == null) ? ""null"" : obj.toString());
+  }
+  return format(source,toAppendTo);
+}",format a given object .,what, format a given object into a string buffer . 
+85288,"public ByteMatrix encode(String contents,int width,int height,Map<EncodeHintType,Object> hints) throws WriterException {
+  if (contents == null || contents.length() == 0) {
+    throw new IllegalArgumentException(""Found empty contents"");
+  }
+  if (width < 0 || height < 0) {
+    throw new IllegalArgumentException(""Requested dimensions are too small: "" + width + 'x'+ height);
+  }
+  ErrorCorrectionLevel errorCorrectionLevel=ErrorCorrectionLevel.L;
+  if (hints != null) {
+    ErrorCorrectionLevel requestedECLevel=(ErrorCorrectionLevel)hints.get(EncodeHintType.ERROR_CORRECTION);
+    if (requestedECLevel != null) {
+      errorCorrectionLevel=requestedECLevel;
+    }
+  }
+  QRCode code=new QRCode();
+  Encoder.encode(contents,errorCorrectionLevel,hints,code);
+  return renderResult(code,width,height);
+}",encode a string into a qr code with dimensions width x height .,what, encodes the given contents into a QR code matrix . 
+41569,"void decodeAttributeBody(byte[] attributeValue,char offset,char length) throws StunException {
+  realm=new byte[length];
+  System.arraycopy(attributeValue,offset,realm,0,length);
+}",copies the value of the realm attribute from the specified attributevalue .,what, copies the value of the realm attribute from the specified attributevalue . 
+67275,"public int next(){
+  return mix(gen.getAndIncrement());
+}",produce the next identifier .,what, generate the next pseudorandom number . 
+27368,"public static IKeyBuilder newInstance(int capacity,CollatorEnum collatorChoice,Locale locale,Object strength,DecompositionEnum mode){
+  if (collatorChoice == CollatorEnum.ASCII) {
+    return new KeyBuilder(capacity);
+  }
+  if (locale == null) {
+    locale=Locale.getDefault();
+    if (log.isInfoEnabled())     log.info(""Using default locale: "" + locale.getDisplayName());
+  }
+  final boolean icu=collatorChoice == CollatorEnum.ICU;
+  if (icu && !DefaultKeyBuilderFactory.isICUAvailable()) {
+    throw new UnsupportedOperationException(DefaultKeyBuilderFactory.ICU_NOT_AVAILABLE);
+  }
+  final byte[] buf=createBuffer(capacity);
+  final int len=0;
+switch (collatorChoice) {
+case ICU:
+    return new KeyBuilder(new ICUSortKeyGenerator(locale,strength,mode),len,buf);
+case JDK:
+  return new KeyBuilder(new JDKSortKeyGenerator(locale,strength,mode),len,buf);
+default :
+throw new UnsupportedOperationException(""Collator not supported: "" + collatorChoice);
+}
+}",create a new instance that optionally supports unicode sort keys .,what, creates a new key builder instance with the specified parameters . 
+44318,"private void collectText(){
+  if (textNodeCount > 1) {
+    firstTextNode.setText(textBuffer.toString());
+  }
+  textNodeCount=0;
+}",this method breaks concatenation mode .,what, collects the text from the text nodes and sets the text in the first text node . 
+28487,"public void add(int position,T item){
+  mData.add(position,item);
+  notifyItemInserted(position);
+}",insert a item associated with the specified position of adapter,what, inserts the specified item at the specified position in the data . 
+73636,"private void consumeNestedScroll(int dxUnconsumed,int dyUnconsumed,int dxFinalUnconsumed,int dyFinalUnconsumed){
+  if (mOverScrollEffect == OverScrollEffect.BOUNCE && dyFinalUnconsumed != 0) {
+    mUnconsumedOverScrollOffset+=-dyFinalUnconsumed;
+    int maxOffset=mOverScrollOffsetLimit;
+    if (mUnconsumedOverScrollOffset > 0) {
+      mUnconsumedOverScrollOffset=Math.min(maxOffset,mUnconsumedOverScrollOffset);
+    }
+ else     if (mUnconsumedOverScrollOffset < 0) {
+      mUnconsumedOverScrollOffset=Math.max(-maxOffset,mUnconsumedOverScrollOffset);
+    }
+    setScrollingOffset(getUnconsumedScrollingOffset());
+  }
+  pullEdgeEffects(dxUnconsumed,dyUnconsumed);
+}",consume the final unconsumed nested scroll after all behaviors done .,what, consume the nested scroll event and apply the over-scroll effect if necessary . 
+27540,"public RootBlockView(final boolean rootBlock0,final ByteBuffer buf,final ChecksumUtility checker) throws RootBlockException {
+  if (buf == null)   throw new IllegalArgumentException();
+  if (buf.remaining() != SIZEOF_ROOT_BLOCK) {
+    throw new IllegalArgumentException(""Expecting "" + SIZEOF_ROOT_BLOCK + "" remaining, actual=""+ buf.remaining());
+  }
+  this.buf=buf.asReadOnlyBuffer();
+  this.rootBlock0=rootBlock0;
+switch (getStoreType()) {
+case RW:
+{
+      am=new RWAddressManager(null);
+      break;
+    }
+case WORM:
+{
+    final int offsetBits=getOffsetBits();
+    am=new WormAddressManager(offsetBits);
+    break;
+  }
+default :
+throw new RootBlockException(""Unknown storeType="" + getStoreType());
+}
+if (checker == null) {
+log.warn(""Checksum will not be validated"");
+}
+this.checker=checker;
+valid();
+}",create a new read - only view from the supplied buffer .,what, create a root block view . 
+69757,"@Override public void visitVertex(StreetRouter.State state){
+  Integer edgeIdx=state.backEdge;
+  if (!(edgeIdx == null || edgeIdx == -1)) {
+    EdgeStore.Edge edge=edgeStore.getCursor(edgeIdx);
+    GeoJsonFeature feature=new GeoJsonFeature(edge.getGeometry());
+    feature.addProperty(""weight"",state.weight);
+    feature.addProperty(""mode"",state.streetMode);
+    feature.addProperty(""backEdge"",state.backEdge);
+    features.add(feature);
+  }
+}",saves current state geometry mode and weight as geojson feature properties in list of features .,what, adds a vertex to the list of features . 
+61747,"public boolean doTransaction(DB db,Object threadstate) throws WorkloadException {
+  boolean ret=true;
+  long st=System.nanoTime();
+  String op=operationchooser.nextString();
+  if (op.compareTo(""READ"") == 0) {
+    ret=doTransactionRead(db);
+  }
+ else   if (op.compareTo(""UPDATE"") == 0) {
+    ret=doTransactionUpdate(db);
+  }
+ else   if (op.compareTo(""INSERT"") == 0) {
+    ret=doTransactionInsert(db);
+  }
+ else   if (op.compareTo(""SCAN"") == 0) {
+    ret=doTransactionScan(db);
+  }
+ else {
+    ret=doTransactionReadModifyWrite(db);
+  }
+  long en=System.nanoTime();
+  _measurements.measure(_operations.get(op),(int)((en - st) / 1000));
+  if (ret)   _measurements.reportReturnCode(_operations.get(op),-1);
+ else {
+    _measurements.reportReturnCode(_operations.get(op),0);
+  }
+  actualopcount.addAndGet(1);
+  return ret;
+}",do one transaction operation .,what, perform one transaction operation . 
+72739,"public boolean shouldInclude(final Path path){
+  return includeMatchers.size() == 0 || matches(path,includeMatchers);
+}",check whether a path should be included .,what, checks if the path should be included based on the include matchers . 
+12223,"public final void removeAll(){
+  actionList.clear();
+  constraintsList.clear();
+  needSorting=true;
+}",removes all children actions ( separators as well ) from the group .,what, removes all actions and constraints from the group . 
+13298,"private boolean scanExpr(SymbolTable symbolTable,Tokens tokens,String data,int currentOffset,int endOffset) throws XNIException {
+  int ch;
+  int openParen=0;
+  int closeParen=0;
+  int nameOffset, dataOffset;
+  boolean isQName=false;
+  String name=null;
+  String prefix=null;
+  String schemeData=null;
+  StringBuffer schemeDataBuff=new StringBuffer();
+  while (true) {
+    if (currentOffset == endOffset) {
+      break;
+    }
+    ch=data.charAt(currentOffset);
+    while (ch == ' ' || ch == 0x0A || ch == 0x09 || ch == 0x0D) {
+      if (++currentOffset == endOffset) {
+        break;
+      }
+      ch=data.charAt(currentOffset);
+    }
+    if (currentOffset == endOffset) {
+      break;
+    }
+    byte chartype=(ch >= 0x80) ? CHARTYPE_NONASCII : fASCIICharMap[ch];
+switch (chartype) {
+case CHARTYPE_OPEN_PAREN:
+      addToken(tokens,Tokens.XPTRTOKEN_OPEN_PAREN);
+    openParen++;
+  ++currentOffset;
+break;
+case CHARTYPE_CLOSE_PAREN:
+addToken(tokens,Tokens.XPTRTOKEN_CLOSE_PAREN);
+closeParen++;
+++currentOffset;
+break;
+case CHARTYPE_CARRET:
+case CHARTYPE_COLON:
+case CHARTYPE_DIGIT:
+case CHARTYPE_EQUAL:
+case CHARTYPE_LETTER:
+case CHARTYPE_MINUS:
+case CHARTYPE_NONASCII:
+case CHARTYPE_OTHER:
+case CHARTYPE_PERIOD:
+case CHARTYPE_SLASH:
+case CHARTYPE_UNDERSCORE:
+case CHARTYPE_WHITESPACE:
+if (openParen == 0) {
+nameOffset=currentOffset;
+currentOffset=scanNCName(data,endOffset,currentOffset);
+if (currentOffset == nameOffset) {
+reportError(""InvalidShortHandPointer"",new Object[]{data});
+return false;
+}
+if (currentOffset < endOffset) {
+ch=data.charAt(currentOffset);
+}
+ else {
+ch=-1;
+}
+name=symbolTable.addSymbol(data.substring(nameOffset,currentOffset));
+prefix=XMLSymbols.EMPTY_STRING;
+if (ch == ':') {
+if (++currentOffset == endOffset) {
+return false;
+}
+ch=data.charAt(currentOffset);
+prefix=name;
+nameOffset=currentOffset;
+currentOffset=scanNCName(data,endOffset,currentOffset);
+if (currentOffset == nameOffset) {
+return false;
+}
+if (currentOffset < endOffset) {
+ch=data.charAt(currentOffset);
+}
+ else {
+ch=-1;
+}
+isQName=true;
+name=symbolTable.addSymbol(data.substring(nameOffset,currentOffset));
+}
+if (currentOffset != endOffset) {
+addToken(tokens,Tokens.XPTRTOKEN_SCHEMENAME);
+tokens.addToken(prefix);
+tokens.addToken(name);
+isQName=false;
+}
+ else if (currentOffset == endOffset) {
+addToken(tokens,Tokens.XPTRTOKEN_SHORTHAND);
+tokens.addToken(name);
+isQName=false;
+}
+closeParen=0;
+break;
+}
+ else if (openParen > 0 && closeParen == 0 && name != null) {
+dataOffset=currentOffset;
+currentOffset=scanData(data,schemeDataBuff,endOffset,currentOffset);
+if (currentOffset == dataOffset) {
+reportError(""InvalidSchemeDataInXPointer"",new Object[]{data});
+return false;
+}
+if (currentOffset < endOffset) {
+ch=data.charAt(currentOffset);
+}
+ else {
+ch=-1;
+}
+schemeData=symbolTable.addSymbol(schemeDataBuff.toString());
+addToken(tokens,Tokens.XPTRTOKEN_SCHEMEDATA);
+tokens.addToken(schemeData);
+openParen=0;
+schemeDataBuff.delete(0,schemeDataBuff.length());
+}
+ else {
+return false;
+}
+}
+}
+return true;
+}",scans the xpointer expression,what, scans the xpointer expression . 
+74493,"protected void newFastClockMinute(){
+  for (int i=delayedTrains.size() - 1; i >= 0; i--) {
+    ActiveTrain at=delayedTrains.get(i);
+    if ((!at.getStarted()) && at.getDelayedStart() != ActiveTrain.NODELAY) {
+      if (at.getDelayedStart() == ActiveTrain.TIMEDDELAY) {
+        if (isFastClockTimeGE(at.getDepartureTimeHr(),at.getDepartureTimeMin())) {
+          at.setStarted();
+          delayedTrains.remove(i);
+          if (_AutoAllocate) {
+            autoAllocate.scanAllocationRequestList(allocationRequests);
+          }
+        }
+      }
+    }
+ else     if (at.getStarted() && at.getStatus() == ActiveTrain.READY && at.reachedRestartPoint()) {
+      if (isFastClockTimeGE(at.getRestartDepartHr(),at.getRestartDepartMin())) {
+        at.restart();
+        delayedTrains.remove(i);
+        if (_AutoAllocate) {
+          autoAllocate.scanAllocationRequestList(allocationRequests);
+        }
+      }
+    }
+  }
+}",handle activity that is triggered by the fast clock,what, This code is part of a larger system that manages train schedules. It checks if any trains are delayed and if their delayed start time has been
+38671,"public static void saveXStream(File saveTo,Object model,Instances header) throws Exception {
+  Vector<Object> v=new Vector<Object>();
+  v.add(model);
+  if (header != null) {
+    v.add(header);
+  }
+  v.trimToSize();
+  XStream.write(saveTo.getAbsolutePath(),v);
+}",save a model in xstream deep object serialized xml form .,what, save a model in xstream object serialized xml form . 
+101,"public JsonArray add(String value){
+  values.add(Json.value(value));
+  return this;
+}",appends the json representation of the specified string to the end of this array .,what, appends the json representation of the specified string to the end of this array . 
+79737,"public static void mergeNodeChildren(TreeNode node){
+  DefaultMutableTreeNode masterNode=(DefaultMutableTreeNode)node;
+  for (int i=0; i < masterNode.getChildCount(); i++) {
+    DefaultMutableTreeNode child=(DefaultMutableTreeNode)masterNode.getChildAt(i);
+    if (!child.isLeaf()) {
+      MergeHelpUtilities.mergeNodeChildren(DEFAULT_MERGE_TYPE,child);
+    }
+  }
+}",merge node children .,what, merge the children of the specified node . 
+46680,"public File createNewFolder(File containingDir) throws IOException {
+  if (containingDir == null) {
+    throw new IOException(""Containing directory is null:"");
+  }
+  File newFolder=createFileObject(containingDir,newFolderString);
+  int i=2;
+  while (newFolder.exists() && i < 100) {
+    newFolder=createFileObject(containingDir,MessageFormat.format(newFolderNextString,new Integer(i)));
+    i++;
+  }
+  if (newFolder.exists()) {
+    throw new IOException(""Directory already exists:"" + newFolder.getAbsolutePath());
+  }
+ else {
+    newFolder.mkdirs();
+  }
+  return newFolder;
+}",creates a new folder with a default folder name .,what, creates a new folder with a default folder name . 
+46509,"public boolean isDefined(Object attrName){
+  return table.containsKey(attrName);
+}",tells whether a given attribute is defined .,what, checks if the attribute is defined in the table . 
+36838,"protected static boolean checkRawModulesTables(final CConnection connection,final String databaseName,final int rawModuleId){
+  Preconditions.checkNotNull(connection,""IE02261: Connection argument can not be null"");
+  Preconditions.checkNotNull(databaseName,""IE02262: Database name argument can not be null"");
+  Preconditions.checkArgument(rawModuleId > 0,""Raw module id %s must be a positive integer"",rawModuleId);
+  final ImmutableSet<String> rawTableNames=ImmutableSet.of(String.format(CTableNames.RAW_ADDRESS_COMMENTS_TABLE,rawModuleId),String.format(CTableNames.RAW_ADDRESS_REFERENCES_TABLE,rawModuleId),String.format(CTableNames.RAW_BASE_TYPES,rawModuleId),String.format(CTableNames.RAW_BASIC_BLOCK_INSTRUCTIONS_TABLE,rawModuleId),String.format(CTableNames.RAW_BASIC_BLOCKS_TABLE,rawModuleId),String.format(CTableNames.RAW_CALLGRAPH_TABLE,rawModuleId),String.format(CTableNames.RAW_CONTROL_FLOW_GRAPHS_TABLE,rawModuleId),String.format(CTableNames.RAW_EXPRESSION_NODES_TABLE,rawModuleId),String.format(CTableNames.RAW_EXPRESSION_SUBSTITUTIONS_TABLE,rawModuleId),String.format(CTableNames.RAW_EXPRESSION_TREE_NODES_TABLE,rawModuleId),String.format(CTableNames.RAW_EXPRESSION_TREES_TABLE,rawModuleId),String.format(CTableNames.RAW_EXPRESSION_TYPES_TABLE,rawModuleId),String.format(CTableNames.RAW_FUNCTIONS_TABLE,rawModuleId),String.format(CTableNames.RAW_INSTRUCTIONS_TABLE,rawModuleId),String.format(CTableNames.RAW_OPERANDS_TABLE,rawModuleId),String.format(CTableNames.RAW_SECTIONS,rawModuleId),String.format(CTableNames.RAW_EXPRESSION_TYPE_INSTANCES,rawModuleId),String.format(CTableNames.RAW_TYPE_INSTACES,rawModuleId),String.format(CTableNames.RAW_TYPES,rawModuleId));
+  final Pair<CConnection,String> cacheKey=new Pair<>(connection,databaseName);
+  if (PostgreSQLDatabaseFunctions.queryCache(cacheKey,rawTableNames)) {
+    return true;
+  }
+ else {
+    if (!PostgreSQLDatabaseFunctions.fillCache(cacheKey)) {
+      return false;
+    }
+    return PostgreSQLDatabaseFunctions.queryCache(cacheKey,rawTableNames);
+  }
+}",checks the existence of all necessary raw module tables .,what, checks if the raw modules tables exist in the database . 
+82892,"public Result result(SqlNode node,Collection<Clause> clauses,RelNode rel){
+  final String alias2=SqlValidatorUtil.getAlias(node,-1);
+  final String alias3=alias2 != null ? alias2 : ""t"";
+  final String alias4=SqlValidatorUtil.uniquify(alias3,aliasSet,SqlValidatorUtil.EXPR_SUGGESTER);
+  final String alias5=alias2 == null || !alias2.equals(alias4) ? alias4 : null;
+  return new Result(node,clauses,alias5,Collections.singletonList(Pair.of(alias4,rel.getRowType())));
+}",creates a result based on a single relational expression .,what, create a result object . 
+40515,"protected int unicodeEscapeLexer(int c) throws IOException {
+  int ret=0;
+  c=in.read();
+  code.clear();
+  try {
+    for (int i=0; i < 4; i++) {
+      c=in.read();
+      if (isEndOfFile(c) || isEndOfLine(c)) {
+        throw new NumberFormatException(""number too short"");
+      }
+      code.append((char)c);
+    }
+    ret=Integer.parseInt(code.toString(),16);
+  }
+ catch (  NumberFormatException e) {
+    throw new IOException(""(line "" + getLineNumber() + "") Wrong unicode escape sequence found '""+ code.toString()+ ""'""+ e.toString());
+  }
+  return ret;
+}",decodes unicode escapes .,what, reads a unicode escape sequence from the input stream and returns the corresponding unicode character . 
+30245,"public static Colour attemptToGetAsColour(String part){
+  Colour col=null;
+  try {
+    col=Colour.valueOf(part.toUpperCase());
+  }
+ catch (  Exception e) {
+  }
+  return col;
+}",attempt to parse string as a colour,what, attempt to get a colour from a string . 
+42926,"public RotationMatrixBuilder withThetas(double theta){
+  for (  Plane plane : planes) {
+    plane.setTheta(theta);
+  }
+  return this;
+}","sets the rotation angle , in radians , of all 2d rotation planes added to this builder .",what," sets the rotation angle , in radians , of all 2d rotation planes added to this builder . "
+34724,"public boolean isTabAssociatedWithNonDestroyedActivity(boolean isIncognito,int tabId){
+  List<WeakReference<Activity>> activities=ApplicationStatus.getRunningActivities();
+  for (  WeakReference<Activity> ref : activities) {
+    Activity activity=ref.get();
+    if (activity != null && isValidActivity(isIncognito,activity.getIntent()) && getTabIdFromIntent(activity.getIntent()) == tabId && !isActivityDestroyed(activity)) {
+      return true;
+    }
+  }
+  return false;
+}",check if the tab is associated with an activity that hasn ' t been destroyed .,what, checks if the tab is associated with a non-destroyed activity . 
+15520,"public void clear(FacesContext facesContext,Map<String,Object> viewMap){
+  if (LOGGER.isLoggable(Level.FINEST)) {
+    LOGGER.log(Level.FINEST,""Clearing @ViewScoped CDI beans for given view map: {0}"");
+  }
+  Map<String,ViewScopeContextObject> contextMap=getContextMap(facesContext,viewMap);
+  if (contextMap != null) {
+    destroyBeans(viewMap,contextMap);
+  }
+}",clear the given view map .,what, clear the given view map . 
+48480,"public static int normalize(char[] src,int srcStart,int srcLimit,char[] dest,int destStart,int destLimit,Mode mode,int options){
+  int length=mode.normalize(src,srcStart,srcLimit,dest,destStart,destLimit,options);
+  if (length <= (destLimit - destStart)) {
+    return length;
+  }
+ else {
+    throw new IndexOutOfBoundsException(Integer.toString(length));
+  }
+}",normalize a string .,what, normalizes the source array and stores the result in the destination array . 
+5550,"public static IMultiPoint[] randomPoints(int n,int d,int scale){
+  IMultiPoint points[]=new IMultiPoint[n];
+  for (int i=0; i < n; i++) {
+    StringBuilder sb=new StringBuilder();
+    for (int j=0; j < d; j++) {
+      sb.append(rGen.nextDouble() * scale);
+      if (j < d - 1) {
+        sb.append("","");
+      }
+    }
+    points[i]=new Hyperpoint(sb.toString());
+  }
+  return points;
+}",generate array of n d - dimensional points whose coordinates are values in the range 0 . .,what, generate array of n d - dimensional points whose coordinates are values in the range 0 . . 
+31239,"static float rotateY(float pX,float pY,float cX,float cY,float angleInDegrees){
+  double angle=Math.toRadians(angleInDegrees);
+  return (float)(Math.sin(angle) * (pX - cX) + Math.cos(angle) * (pY - cY) + cY);
+}",rotate point p around center point c .,what, rotates point p around center point c . 
+8878,"private static String reportListContents(Collection<ProcessErrorStateInfo> errList){
+  if (errList == null)   return null;
+  StringBuilder builder=new StringBuilder();
+  Iterator<ProcessErrorStateInfo> iter=errList.iterator();
+  while (iter.hasNext()) {
+    ProcessErrorStateInfo entry=iter.next();
+    String condition;
+switch (entry.condition) {
+case ActivityManager.ProcessErrorStateInfo.CRASHED:
+      condition=""a CRASH"";
+    break;
+case ActivityManager.ProcessErrorStateInfo.NOT_RESPONDING:
+  condition=""an ANR"";
+break;
+default :
+condition=""an unknown error"";
+break;
+}
+builder.append(String.format(""Process %s encountered %s (%s)"",entry.processName,condition,entry.shortMsg));
+if (entry.condition == ActivityManager.ProcessErrorStateInfo.CRASHED) {
+builder.append(String.format("" with stack trace:\n%s\n"",entry.stackTrace));
+}
+builder.append(""\n"");
+}
+return builder.toString();
+}",this helper function will dump the actual error reports .,what, reports the contents of a list of process error state information . 
+77796,"public byte[] readRawBytes(final int size) throws IOException {
+  if (size < 0) {
+    throw InvalidProtocolBufferNanoException.negativeSize();
+  }
+  if (bufferPos + size > currentLimit) {
+    skipRawBytes(currentLimit - bufferPos);
+    throw InvalidProtocolBufferNanoException.truncatedMessage();
+  }
+  if (size <= bufferSize - bufferPos) {
+    final byte[] bytes=new byte[size];
+    System.arraycopy(buffer,bufferPos,bytes,0,size);
+    bufferPos+=size;
+    return bytes;
+  }
+ else {
+    throw InvalidProtocolBufferNanoException.truncatedMessage();
+  }
+}",read a fixed size of bytes from the input .,what, reads a fixed size of bytes from the input . 
+44215,"protected int readFully(InputStream in,byte buffer[]) throws java.io.IOException {
+  for (int i=0; i < buffer.length; i++) {
+    int q=in.read();
+    if (q == -1)     return i;
+    buffer[i]=(byte)q;
+  }
+  return buffer.length;
+}",this method works around the bizarre semantics of bufferedinputstream ' s read method .,what, reads the input stream into a byte array . 
+68478,"@Override public void stop(Runnable arg0){
+  stop();
+  arg0.run();
+}",smart lifecycle stop implementation .,what, stop the currently running thread and then run the specified runnable . 
+58174,"private void initialize(URI p_other){
+  m_scheme=p_other.getScheme();
+  m_userinfo=p_other.getUserinfo();
+  m_host=p_other.getHost();
+  m_port=p_other.getPort();
+  m_path=p_other.getPath();
+  m_queryString=p_other.getQueryString();
+  m_fragment=p_other.getFragment();
+}",initialize all fields of this uri from another uri .,what, initializes this uri from another uri . 
+32415,"private void checkPendingCustomMessages(){
+  if (joiningNodes.isEmpty() && isLocalNodeCoordinator()) {
+    TcpDiscoveryCustomEventMessage msg;
+    while ((msg=pendingCustomMsgs.poll()) != null) {
+      processCustomMessage(msg);
+      if (msg.verified())       msgHist.add(msg);
+    }
+  }
+}",checks and flushes custom event messages if no nodes are attempting to join the grid .,what, checks for pending custom messages 
+68982,"public void update(long dt,float ratioY){
+  double step=2 * Math.PI / POINTS_PER_CIRCLE;
+  angle+=dt * BUBBLE_D_ANGLE;
+  float fromX=startX + (float)(0.05f * Math.sin(angle));
+  float toX=fromX + size;
+  float fromY=this.fromY + dt * speed;
+  float toY=fromY + size;
+  centerY+=dt * virtualSpeed;
+  getColor()[3]=(TOP_Y - centerY / TOP_Y);
+  vertexBuffer.put(0,Utils.normalizeGl(0,fromX,toX));
+  vertexBuffer.put(1,Utils.normalizeGl(centerY * ratioY,fromY,toY));
+  for (int i=1; i <= POINTS_PER_CIRCLE; i++) {
+    vertexBuffer.put(COORDS_PER_VERTEX * i,Utils.normalizeGl((float)Math.sin(-Math.PI + step * i),fromX,toX));
+    vertexBuffer.put(COORDS_PER_VERTEX * i + 1,Utils.normalizeGl((float)Math.cos(-Math.PI + step * i) * ratioY,fromY,toY));
+  }
+  this.fromY=fromY;
+}",update position of bubble .,what, update the position and size of a bubble . 
+84207,"public void resetReferences(){
+  if (_refs != null)   _refs.clear();
+}",resets the references for streaming .,why, resets the references to the object . 
+10529,"private void nukeSymbols(){
+  _count=0;
+  _longestCollisionList=0;
+  Arrays.fill(_mainHash,0);
+  Arrays.fill(_mainNames,null);
+  Arrays.fill(_collList,null);
+  _collCount=0;
+  _collEnd=0;
+}","helper method called to empty all shared symbols , but to leave arrays allocated",why, this method is used to reset the symbol table . 
+14694,"public void addPolicyListener(PolicyListener policyListener){
+  policyCache.addPolicyListener(policyListener);
+}","adds a policy listener that would be notified whenever a policy is added , removed or changed",why, adds a policy listener to the policy cache . 
+8814,"private String classToEntryPath(Class<?> clazz){
+  String name="""";
+  Class<?> parent;
+  while ((parent=clazz.getEnclosingClass()) != null) {
+    name=""$"" + clazz.getSimpleName() + name;
+    clazz=parent;
+  }
+  return classNameToEntryPath(clazz.getCanonicalName() + name);
+}",utility method to get the jar entry path from a class name .,why, convert a class to an entry path for use in a classpath . 
+14057,"protected boolean isIDPProxyEnabled(FSAuthnRequest authnRequest) throws FSException {
+  if (authnRequest.getMinorVersion() != IFSConstants.FF_12_PROTOCOL_MINOR_VERSION) {
+    return false;
+  }
+  FSScoping scoping=authnRequest.getScoping();
+  if (scoping != null && scoping.getProxyCount() == 0) {
+    return false;
+  }
+  String enabledString=IDFFMetaUtils.getFirstAttributeValueFromConfig(spConfig,IFSConstants.ENABLE_IDP_PROXY);
+  if (enabledString != null && enabledString.equalsIgnoreCase(""true"")) {
+    return true;
+  }
+ else {
+    return false;
+  }
+}",checks if the identity provider is configured for proxying the authentication requests for a requesting service provider .,why, checks if the IDP proxy is enabled for the given authentication request .
+28860,"public void reset(boolean clear){
+  gotVersion=false;
+  gotHeaderLength=false;
+  gotHeader=false;
+  gotBody=false;
+  gotBodyBoundary=false;
+  headerLength=0;
+  bodyLength=0;
+  bodyBytesReceived=0;
+  if (clear) {
+    bufferOffset=0;
+    buffer.clear();
+    bodyFile=null;
+    if (bodyStream != null) {
+      try {
+        bodyStream.close();
+      }
+ catch (      IOException e) {
+        e.printStackTrace();
+      }
+      bodyStream=null;
+    }
+  }
+}",reset the state of the receiver in preparation for a new sessionmessage .,why," resets the state of the parser, clearing all buffers and streams if the clear parameter is true . "
+46877,"ObservedObject createObservedObject(ObjectName object){
+  return new ObservedObject(object);
+}",factory method for observedobject creation .,why, creates an observed object from a given object name . 
+49950,"public String prepOperand(String label,DataType dt,ValueType vt,boolean literal){
+  StringBuilder sb=new StringBuilder();
+  sb.append(label);
+  sb.append(Lop.DATATYPE_PREFIX);
+  sb.append(dt);
+  sb.append(Lop.VALUETYPE_PREFIX);
+  sb.append(vt);
+  sb.append(Lop.LITERAL_PREFIX);
+  sb.append(literal);
+  return sb.toString();
+}",method to prepare instruction operand with given parameters .,why, prepares an operand for the operation . 
+10639,"public DrawerBuilder addStickyDrawerItems(@NonNull IDrawerItem... stickyDrawerItems){
+  if (this.mStickyDrawerItems == null) {
+    this.mStickyDrawerItems=new ArrayList<>();
+  }
+  Collections.addAll(this.mStickyDrawerItems,IdDistributor.checkIds(stickyDrawerItems));
+  return this;
+}",add a initial draweritem or a draweritem array for the stickydrawerfooter,why, add sticky drawer items to the drawer builder . 
+12610,"public ViterbiPoint(Item item){
+  this.item=item;
+}",creates a viterbipoint for the given item .,why, create a new ViterbiPoint with the given item . 
+76368,"public static void fullReset(){
+  resetRuntime();
+synchronized (readProperties) {
+    readProperties.clear();
+  }
+}","fully reset the state , not only the one related to latest test case execution",why, resets the runtime and clears the read properties . 
+74474,"private void startStoppedChanged(){
+  clock.setStartStopped(startStoppedCheckBox.isSelected());
+  changed=true;
+}",method to handle start stopped check box change,why, updates the start/stopped state of the clock when the checkbox is changed 
+55680,"public ScannerException(File file,ErrorMessages message){
+  this(file,ErrorMessages.get(message),message,-1,-1);
+}",creates a new scannerexception for a file with a message only .,why, creates a new instance of the ScannerException class with the specified file and error message.
+76685,"public static Query newPrefixQuery(String field,InetAddress value,int prefixLength){
+  if (value == null) {
+    throw new IllegalArgumentException(""InetAddress must not be null"");
+  }
+  if (prefixLength < 0 || prefixLength > 8 * value.getAddress().length) {
+    throw new IllegalArgumentException(""illegal prefixLength '"" + prefixLength + ""'. Must be 0-32 for IPv4 ranges, 0-128 for IPv6 ranges"");
+  }
+  byte lower[]=value.getAddress();
+  byte upper[]=value.getAddress();
+  for (int i=prefixLength; i < 8 * lower.length; i++) {
+    int m=1 << (7 - (i & 7));
+    lower[i >> 3]&=~m;
+    upper[i >> 3]|=m;
+  }
+  try {
+    return newRangeQuery(field,InetAddress.getByAddress(lower),InetAddress.getByAddress(upper));
+  }
+ catch (  UnknownHostException e) {
+    throw new AssertionError(e);
+  }
+}",create a prefix query for matching a cidr network range .,why, create a new prefix query for the given field and value with the specified prefix length . 
+48564,"protected void decodeLineSuffix(PushbackInputStream inStream,OutputStream outStream) throws IOException {
+  int c;
+  while (true) {
+    c=inStream.read();
+    if (c == -1) {
+      throw new CEStreamExhausted();
+    }
+    if (c == '\n') {
+      break;
+    }
+    if (c == '\r') {
+      c=inStream.read();
+      if ((c != '\n') && (c != -1)) {
+        inStream.unread(c);
+      }
+      break;
+    }
+  }
+}",find the end of the line for the next operation .,why, decodes the line suffix from the input stream and writes it to the output stream . 
+71226,"private void checkInteriorIntersections(){
+  for (Iterator i=segStrings.iterator(); i.hasNext(); ) {
+    SegmentString ss0=(SegmentString)i.next();
+    for (Iterator j=segStrings.iterator(); j.hasNext(); ) {
+      SegmentString ss1=(SegmentString)j.next();
+      checkInteriorIntersections(ss0,ss1);
+    }
+  }
+}",checks all pairs of segments for intersections at an interior point of a segment,why, checks for intersections between interior segments of the same ring . 
+598,"protected void initLookup(){
+  m_lookup=new HashMap();
+  for (int i=0; i < m_names.length; ++i) {
+    m_lookup.put(m_names[i],new Integer(i));
+  }
+}",lazily construct the lookup table for this schema .,why, initialize the lookup table for the names . 
+62535,"private static synchronized String formatAndParse(SimpleDateFormat formatDate,SimpleDateFormat parseDate,String text){
+  try {
+    Date date=parseDate.parse(text);
+    String result=formatDate.format(date);
+    return result;
+  }
+ catch (  ParseException e) {
+    logger.warning(""Unable to parse:"" + text);
+  }
+  return """";
+}",synchronized because simpledatformat aren ' t thread safe,why, parses and formats a date string . 
+35343,"private Token toPrefixToken(ILeafNode leaf){
+  Lexer lexer=new InternalN4JSLexer();
+  String text=leaf.getText();
+  String prefix=text.substring(0,endOffset - leaf.getTotalOffset());
+  ANTLRStringStream stream=new ANTLRStringStream(prefix);
+  lexer.setCharStream(stream);
+  Token nextToken=lexer.nextToken();
+  return new CommonToken(nextToken.getType(),nextToken.getText());
+}",produce an antlr token for the prefix of the given leaf that overlaps the requested region,why, helper method for creating a prefix token . 
+10491,"protected JsonEncoding findEncoding(MediaType mediaType,MultivaluedMap<String,Object> httpHeaders){
+  return JsonEncoding.UTF8;
+}",helper method to use for determining desired output encoding .,why, returns the encoding for the given media type and http headers . 
+71005,"private Parameters(){
+  for (Iterator i=arguments.iterator(); i.hasNext(); ) {
+    String arg=(String)i.next();
+    arg=arg.toLowerCase();
+    if (!arg.startsWith(""-""))     throw new IllegalArgumentException(""Command-line argument does not start with '-': "" + arg);
+    int colonIndex=arg.indexOf("":"");
+    String key;
+    String value;
+    if (colonIndex >= 0) {
+      key=arg.substring(1,colonIndex);
+      value=arg.substring(colonIndex + 1);
+    }
+ else {
+      key=arg.substring(1);
+      value="""";
+    }
+    if (!allowedKeys.contains(key))     throw new IllegalArgumentException(""Unrecognized command-line argument: "" + arg.substring(1) + "". Valid arguments are: ""+ StringUtil.toCommaDelimitedString(allowedKeys));
+    hashtable.put(key,value);
+  }
+  for (Iterator i=requiredKeys.iterator(); i.hasNext(); ) {
+    String requiredKey=(String)i.next();
+    if (!hashtable.containsKey(requiredKey))     throw new IllegalArgumentException(""Required command-line argument is missing: "" + requiredKey);
+  }
+}",creates a parameters object for the given main - method arguments .,why, constructor for the parameters class . 
+69621,"public Channel chan(final String topic,final JsonNode payload){
+  LOG.log(Level.FINE,""chan: {0}, {1}"",new Object[]{topic,payload});
+  final Channel channel=new Channel(topic,payload,Socket.this);
+synchronized (channels) {
+    channels.add(channel);
+  }
+  return channel;
+}",retrieve a channel instance for the specified topic,why, creates a new channel for the given topic and payload . 
+75978,"private void updateBaseMatrix(Drawable d){
+  ImageView imageView=getImageView();
+  if (null == imageView || null == d) {
+    return;
+  }
+  final float viewWidth=imageView.getWidth();
+  final float viewHeight=imageView.getHeight();
+  final int drawableWidth=d.getIntrinsicWidth();
+  final int drawableHeight=d.getIntrinsicHeight();
+  mBaseMatrix.reset();
+  final float widthScale=viewWidth / drawableWidth;
+  final float heightScale=viewHeight / drawableHeight;
+  if (mScaleType == ScaleType.CENTER) {
+    mBaseMatrix.postTranslate((viewWidth - drawableWidth) / 2F,(viewHeight - drawableHeight) / 2F);
+  }
+ else   if (mScaleType == ScaleType.CENTER_CROP) {
+    float scale=Math.max(widthScale,heightScale);
+    mBaseMatrix.postScale(scale,scale);
+    mBaseMatrix.postTranslate((viewWidth - drawableWidth * scale) / 2F,(viewHeight - drawableHeight * scale) / 2F);
+  }
+ else   if (mScaleType == ScaleType.CENTER_INSIDE) {
+    float scale=Math.min(1.0f,Math.min(widthScale,heightScale));
+    mBaseMatrix.postScale(scale,scale);
+    mBaseMatrix.postTranslate((viewWidth - drawableWidth * scale) / 2F,(viewHeight - drawableHeight * scale) / 2F);
+  }
+ else {
+    RectF mTempSrc=new RectF(0,0,drawableWidth,drawableHeight);
+    RectF mTempDst=new RectF(0,0,viewWidth,viewHeight);
+switch (mScaleType) {
+case FIT_CENTER:
+      mBaseMatrix.setRectToRect(mTempSrc,mTempDst,ScaleToFit.CENTER);
+    break;
+case FIT_START:
+  mBaseMatrix.setRectToRect(mTempSrc,mTempDst,ScaleToFit.START);
+break;
+case FIT_END:
+mBaseMatrix.setRectToRect(mTempSrc,mTempDst,ScaleToFit.END);
+break;
+case FIT_XY:
+mBaseMatrix.setRectToRect(mTempSrc,mTempDst,ScaleToFit.FILL);
+break;
+default :
+break;
+}
+}
+resetMatrix();
+}",calculate matrix for fit _ center,why, updates the base matrix for the image view based on the scale type 
+21622,"private Map<URI,Map<URI,Map<String,List<URI>>>> createDeviceToCGMapFromDescriptors(List<VolumeDescriptor> addDescriptors,List<VolumeDescriptor> removeDescriptors){
+  Map<URI,Map<URI,Map<String,List<URI>>>> deviceToCGMap=new HashMap<URI,Map<URI,Map<String,List<URI>>>>();
+  for (  VolumeDescriptor descr : addDescriptors) {
+    URI deviceURI=descr.getDeviceURI();
+    Map<URI,Map<String,List<URI>>> volumesToUpdateByCG=deviceToCGMap.get(deviceURI);
+    if (volumesToUpdateByCG == null) {
+      volumesToUpdateByCG=new HashMap<URI,Map<String,List<URI>>>();
+      deviceToCGMap.put(deviceURI,volumesToUpdateByCG);
+    }
+    URI consistencyGroupURI=descr.getConsistencyGroupURI();
+    Map<String,List<URI>> volumesToUpdate=volumesToUpdateByCG.get(consistencyGroupURI);
+    if (volumesToUpdate == null) {
+      volumesToUpdate=new HashMap<String,List<URI>>();
+      volumesToUpdateByCG.put(consistencyGroupURI,volumesToUpdate);
+    }
+    List<URI> volumesToAdd=volumesToUpdate.get(ADD_VOLUMES_TO_CG_KEY);
+    if (volumesToAdd == null) {
+      volumesToAdd=new ArrayList<URI>();
+      volumesToUpdate.put(ADD_VOLUMES_TO_CG_KEY,volumesToAdd);
+    }
+    volumesToAdd.add(descr.getVolumeURI());
+  }
+  for (  VolumeDescriptor descr : removeDescriptors) {
+    URI deviceURI=descr.getDeviceURI();
+    Map<URI,Map<String,List<URI>>> volumesToUpdateByCG=deviceToCGMap.get(deviceURI);
+    if (volumesToUpdateByCG == null) {
+      volumesToUpdateByCG=new HashMap<URI,Map<String,List<URI>>>();
+      deviceToCGMap.put(deviceURI,volumesToUpdateByCG);
+    }
+    URI consistencyGroupURI=descr.getConsistencyGroupURI();
+    Map<String,List<URI>> volumesToUpdate=volumesToUpdateByCG.get(consistencyGroupURI);
+    if (volumesToUpdate == null) {
+      volumesToUpdate=new HashMap<String,List<URI>>();
+      volumesToUpdateByCG.put(consistencyGroupURI,volumesToUpdate);
+    }
+    List<URI> volumesToRemove=volumesToUpdate.get(REMOVE_VOLUMES_FROM_CG_KEY);
+    if (volumesToRemove == null) {
+      volumesToRemove=new ArrayList<URI>();
+      volumesToUpdate.put(REMOVE_VOLUMES_FROM_CG_KEY,volumesToRemove);
+    }
+    volumesToRemove.add(descr.getVolumeURI());
+  }
+  return deviceToCGMap;
+}",convenience method to create a map device to cg to volume to add and remove .,why, creates a map of devices to consistency groups to volumes to be added or removed.
+26275,"public static Map<String,Object> createImage(DispatchContext dctx,Map<String,? extends Object> context){
+  Map<String,Object> result=createImageMethod(dctx,context);
+  return result;
+}",a service wrapper for the createimagemethod method .,why, this method creates an image based on the context provided.
+18450,"public Process executeAsync(final CommandLine command,Map<String,String> environment) throws IOException {
+  if (workingDirectory != null && !workingDirectory.exists()) {
+    throw new IOException(workingDirectory + "" doesn't exist."");
+  }
+  return executeInternal(command,environment,workingDirectory,streamHandler,null);
+}",methods for starting asynchronous execution .,why, executes a command asynchronously with the specified environment and working directory 
+86135,"TypeSimplifier(Types typeUtils,String packageName,Set<TypeMirror> types,TypeMirror base){
+  this.typeUtils=typeUtils;
+  Set<TypeMirror> typesPlusBase=new TypeMirrorSet(types);
+  if (base != null) {
+    typesPlusBase.add(base);
+  }
+  Set<TypeMirror> referenced=referencedClassTypes(typeUtils,typesPlusBase);
+  Set<TypeMirror> defined=nonPrivateDeclaredTypes(typeUtils,base);
+  this.imports=findImports(typeUtils,packageName,referenced,defined);
+}",makes a new simplifier for the given package and set of types .,why," TypeSimplifier is a class that simplifies types by finding imports. It takes in a TypeUtils object, a package name, a set"
+28231,"static void removeRedundantAffix(TranslatorUtils.IContain iContain,List<String> strList){
+  if (strList.size() <= 1) {
+    return;
+  }
+  int w=0;
+  for (  String str : strList) {
+    if (w == 0 || !iContain.containFunc(str,strList.get(w - 1))) {
+      strList.set(w,str);
+      w++;
+    }
+  }
+  strList=strList.subList(0,w);
+}",this function ensures that prefix / suffix sets aren ' t redundant .,why, removes redundant affixes from a list of strings . 
+78436,"private void createInsertList(final IItem item,List<IItem> tempList,List<IItem> insertList,int depth,int removed){
+  if (!tempList.contains(item)) {
+    tempList.add(item);
+    if (depth == 0) {
+      insertList.add(item);
+    }
+    if (item.getItems() != null) {
+      depth++;
+      for (      IItem child : item.getItems()) {
+        createInsertList(child,tempList,insertList,depth,removed);
+      }
+    }
+  }
+ else {
+    insertList.remove(item);
+    removed++;
+  }
+}",recursive helper method for createinsertlist,why, creates a list of items to be inserted into the database . 
+19958,"public synchronized Future<V> submit(Callable<V> task) throws RejectedExecutionException {
+  return pool.submit(task);
+}",submits a task for execution .,why, submit a task to the thread pool and return a future object to get the result of the task 
+35831,"static String escapeStringForASCII(String s){
+  String out="""";
+  char[] cArray=s.toCharArray();
+  for (int i=0; i < cArray.length; i++) {
+    char c=cArray[i];
+    if (c > 127) {
+      out+=""\\U"";
+      String hex=Integer.toHexString(c);
+      while (hex.length() < 4)       hex=""0"" + hex;
+      out+=hex;
+    }
+ else     if (c == '\\') {
+      out+=""\\\\"";
+    }
+ else     if (c == '\""') {
+      out+=""\\\"""";
+    }
+ else     if (c == '\b') {
+      out+=""\\b"";
+    }
+ else     if (c == '\n') {
+      out+=""\\n"";
+    }
+ else     if (c == '\r') {
+      out+=""\\r"";
+    }
+ else     if (c == '\t') {
+      out+=""\\t"";
+    }
+ else {
+      out+=c;
+    }
+  }
+  return out;
+}",escapes a string for use in ascii property lists .,why, this method is used to escape special characters in a string for ASCII encoding. 
+80247,"ManagedWindowDecorator(Window window,String windowId){
+  this.window=window;
+  name=""system."" + windowId;
+}",create a managed window decorator with an identity for a window .,why, constructs a new ManagedWindowDecorator with the specified window and windowId . 
+8388,"public static ObjectOutputStream newObjectOutputStream(Path self) throws IOException {
+  return new ObjectOutputStream(Files.newOutputStream(self));
+}",create an object output stream for this path .,why, create a new object output stream for the given path . 
+31779,"private void addDefaultUri() throws IgniteSpiException {
+  assert uriEncodedList != null;
+  URI uri;
+  try {
+    uri=U.resolveWorkDirectory(DFLT_DEPLOY_DIR,false).toURI();
+  }
+ catch (  IgniteCheckedException e) {
+    throw new IgniteSpiException(""Failed to initialize default file scanner"",e);
+  }
+  uriEncodedList.add(uri);
+}",add configuration for file scanner .,why, adds the default URI to the list of URIs to scan for deployment files .
+20410,"public FileInputStream openRead() throws FileNotFoundException {
+  if (mBackupName.exists()) {
+    mBaseName.delete();
+    mBackupName.renameTo(mBaseName);
+  }
+  return new FileInputStream(mBaseName);
+}",open the atomic file for reading .,why," opens a file for reading, possibly moving a backup file to the base name . "
+78633,"private final StringBuilder appendParameterSignature(StringBuilder buffer,char[][] parameterTypes,char[][] parameterNames){
+  if (parameterTypes != null) {
+    for (int i=0; i < parameterTypes.length; i++) {
+      if (i > 0) {
+        buffer.append(',');
+        buffer.append(' ');
+      }
+      buffer.append(parameterTypes[i]);
+      if (parameterNames != null && parameterNames[i] != null) {
+        buffer.append(' ');
+        buffer.append(parameterNames[i]);
+      }
+    }
+  }
+  return buffer;
+}",creates a display string of a parameter list ( without the parentheses ) for the given parameter types and names .,why, appends the parameter signature to the buffer . 
+8549,"<T>List<T> concatValues(final T[]... data){
+  final List<T> rv=new ArrayList<>();
+  for (  T[] values : data) {
+    rv.addAll(Arrays.asList(values));
+  }
+  return rv;
+}",helper for concatenating several arrays .,why, concatenates the values of the input arrays into a single list 
+30642,"public static <U>AtomicIntegerFieldUpdater<U> newUpdater(Class<U> tclass,String fieldName){
+  if (UnsafeHolder.isAvailable()) {
+    return new AtomicIntegerFieldUpdaterImpl<U>(tclass,fieldName);
+  }
+  return AtomicIntegerFieldUpdater.newUpdater(tclass,fieldName);
+}",creates an updater for objects with the given field .,why, creates a new updater for the specified class and field name . 
+12891,"public static LinkedList<MaryModule> modulesRequiredForProcessing(MaryDataType sourceType,MaryDataType targetType,Locale locale,Voice voice){
+  if (!registrationComplete)   throw new IllegalStateException(""Cannot inquire about modules while registration is ongoing"");
+  if (sourceType == null)   throw new NullPointerException(""Received null source type"");
+  if (targetType == null)   throw new NullPointerException(""Received null target type"");
+  LinkedList<MaryDataType> seenTypes=new LinkedList<MaryDataType>();
+  seenTypes.add(sourceType);
+  return modulesRequiredForProcessing(sourceType,targetType,locale,voice,seenTypes);
+}",a method for determining the list of modules required to transform the given source data type into the requested target data type .,why, returns a list of modules required for processing from source type to target type in a specific locale and voice .
+74146,"public String checkStartBlock(int mode){
+  if (log.isDebugEnabled())   log.debug(""checkStartBlock for warrant \"""" + getDisplayName() + ""\""."");
+  BlockOrder bo=_orders.get(0);
+  OBlock block=bo.getBlock();
+  String msg=block.allocate(this);
+  if (msg != null) {
+    return msg;
+  }
+  msg=bo.setPath(this);
+  if (msg != null) {
+    return msg;
+  }
+  int state=block.getState();
+  if ((state & OBlock.DARK) != 0 || _tempRunBlind) {
+    msg=Bundle.getMessage(""BlockDark"",block.getDisplayName());
+  }
+ else   if ((state & OBlock.OCCUPIED) == 0) {
+    if (mode == MODE_LEARN) {
+      msg=""learnStart"";
+    }
+ else {
+      msg=""warnStart"";
+    }
+    msg=Bundle.getMessage(msg,getTrainName(),block.getDisplayName());
+  }
+ else {
+    TrackerTableAction.stopTrackerIn(block);
+  }
+  return msg;
+}",check start block for occupied for start of run,why, checks the start block for a given mode.
+70356,"private synchronized void loadHexImage(IHex hex){
+  hexTileset.assignMatch(hex,boardview);
+  hexTileset.trackHexImages(hex,tracker);
+}",loads the image ( s ) for this hex into the tracker .,why, load the hex image and assign it to the board view . 
+69607,"public String eventTopic(String eventId){
+  if (eventId == null) {
+    eventId=""+"";
+  }
+  return evtTopic.replace(""{EVENTID}"",eventId);
+}",get the mqtt topic for an device event .,why, returns the topic for the specified event . 
+12387,"private void stopDrag(MotionEvent ev){
+  mTouchMode=TOUCH_MODE_IDLE;
+  final boolean commitChange=ev.getAction() == MotionEvent.ACTION_UP && isEnabled();
+  final boolean oldState=isChecked();
+  final boolean newState;
+  if (commitChange) {
+    mVelocityTracker.computeCurrentVelocity(1000);
+    final float xvel=mVelocityTracker.getXVelocity();
+    if (Math.abs(xvel) > mMinFlingVelocity) {
+      newState=ViewUtils.isLayoutRtl(this) ? (xvel < 0) : (xvel > 0);
+    }
+ else {
+      newState=getTargetCheckedState();
+    }
+  }
+ else {
+    newState=oldState;
+  }
+  if (newState != oldState) {
+    playSoundEffect(SoundEffectConstants.CLICK);
+  }
+  setChecked(newState);
+  cancelSuperTouch(ev);
+}",called from ontouchevent to end a drag operation .,why, private method to handle the end of a drag event . 
+74215,"public void deleteLeaves(String name){
+  for (int i=0; i < _leaves.size(); i++) {
+    CatalogTreeLeaf leaf=_leaves.get(i);
+    if (name.equals(leaf.getName())) {
+      _leaves.remove(i);
+    }
+  }
+}",leaves can be used for many - to - many relations,why, deletes a leaf from the catalog tree . 
+79608,"private void clipViewOnTheRight(Rect curViewBound,float curViewWidth,int right){
+  curViewBound.right=(int)(right - mClipPadding);
+  curViewBound.left=(int)(curViewBound.right - curViewWidth);
+}",set bounds for the right textview including clip padding .,why, adjusts the view bounds to clip the view on the right side . 
+67627,"protected static boolean eq(Object o1,Object o2){
+  return o1 == null ? o2 == null : o1.equals(o2);
+}","helper method to check for equality between two object , including null checks .",why," checks if two objects are equal, taking into account the possibility of null values. "
+86992,"private String local_number() throws ParseException {
+  StringBuilder s=new StringBuilder();
+  if (debug)   dbg_enter(""local_number"");
+  try {
+    int lc=0;
+    while (lexer.hasMoreChars()) {
+      char la=lexer.lookAhead(0);
+      if (la == '*' || la == '#' || la == '-' || la == '.' || la == '(' || la == ')' || Lexer.isHexDigit(la)) {
+        lexer.consume(1);
+        s.append(la);
+        lc++;
+      }
+ else       if (lc > 0)       break;
+ else       throw createParseException(""unexepcted "" + la);
+    }
+    return s.toString();
+  }
+  finally {
+    if (debug)     dbg_leave(""local_number"");
+  }
+}",parser for the local phone # .,why, parse local number from lexer . 
+64161,"private void walk(File directory,int depth,Collection<T> results) throws IOException {
+  checkIfCancelled(directory,depth,results);
+  if (handleDirectory(directory,depth,results)) {
+    handleDirectoryStart(directory,depth,results);
+    int childDepth=depth + 1;
+    if (depthLimit < 0 || childDepth <= depthLimit) {
+      checkIfCancelled(directory,depth,results);
+      File[] childFiles=filter == null ? directory.listFiles() : directory.listFiles(filter);
+      childFiles=filterDirectoryContents(directory,depth,childFiles);
+      if (childFiles == null) {
+        handleRestricted(directory,childDepth,results);
+      }
+ else {
+        for (        File childFile : childFiles) {
+          if (childFile.isDirectory()) {
+            walk(childFile,childDepth,results);
+          }
+ else {
+            checkIfCancelled(childFile,childDepth,results);
+            handleFile(childFile,childDepth,results);
+            checkIfCancelled(childFile,childDepth,results);
+          }
+        }
+      }
+    }
+    handleDirectoryEnd(directory,depth,results);
+  }
+  checkIfCancelled(directory,depth,results);
+}",main recursive method to examine the directory hierarchy .,why, helper method to traverse a directory tree . 
+83818,"public boolean computeAngleOffset(){
+  if (mFinished) {
+    return false;
+  }
+  long systemClock=AnimationUtils.currentAnimationTimeMillis();
+  long timePassed=systemClock - mStartTime;
+  if (timePassed < mDuration) {
+switch (mMode) {
+case SCROLL_MODE:
+      float sc=(float)timePassed / mDuration;
+    mCurrAngle=mStartAngle + Math.round(mDeltaAngle * sc);
+  break;
+case FLING_MODE:
+float timePassedSeconds=timePassed / 1000.0f;
+float distance;
+if (mVelocity < 0) {
+distance=mCoeffVelocity * mVelocity * timePassedSeconds - (mDeceleration * timePassedSeconds * timePassedSeconds / 2.0f);
+}
+ else {
+distance=-mCoeffVelocity * mVelocity * timePassedSeconds - (mDeceleration * timePassedSeconds * timePassedSeconds / 2.0f);
+}
+mCurrAngle=mStartAngle - Math.signum(mVelocity) * Math.round(distance);
+break;
+}
+return true;
+}
+ else {
+mFinished=true;
+return false;
+}
+}",call this when you want to know the new location .,usage, computes the angle offset based on the mode of the animation (scroll or fling) and the time passed since the animation started.
+36604,"@Override public void valueChanged(TreeSelectionEvent e){
+  if (preventEvent) {
+    return;
+  }
+  if (mainFrame != null) {
+    List<Operator> selectedOperators=getSelectedOperators();
+    if (selectedOperators != null && !selectedOperators.isEmpty()) {
+      mainFrame.selectOperators(selectedOperators);
+    }
+  }
+}",this method will be invoked after a user selection of an operator in the tree .,usage, called when a tree selection event occurs . 
+76676,"protected void processChildren(QueryNode queryTree) throws QueryNodeException {
+  List<QueryNode> children=queryTree.getChildren();
+  ChildrenList newChildren;
+  if (children != null && children.size() > 0) {
+    newChildren=allocateChildrenList();
+    try {
+      for (      QueryNode child : children) {
+        child=processIteration(child);
+        if (child == null) {
+          throw new NullPointerException();
+        }
+        newChildren.add(child);
+      }
+      List<QueryNode> orderedChildrenList=setChildrenOrder(newChildren);
+      queryTree.set(orderedChildrenList);
+    }
+  finally {
+      newChildren.beingUsed=false;
+    }
+  }
+}",this method is called every time a child is processed .,usage, called when processing children of a query node . 
+50171,"private void addReplicationFactor(Operation op){
+  op.addRequestHeader(Operation.REPLICATION_QUORUM_HEADER,Operation.REPLICATION_QUORUM_HEADER_VALUE_ALL);
+}","authorization related operations should take effect on all replicas , before they complete .",usage, adds replication factor to the operation . 
+63507,"public static ResultSet pointTable(double x,double y){
+  GeometryFactory factory=new GeometryFactory();
+  SimpleResultSet rs=new SimpleResultSet();
+  rs.addColumn(""THE_GEOM"",Types.JAVA_OBJECT,""GEOMETRY"",0,0);
+  rs.addRow(factory.createPoint(new Coordinate(x,y)));
+  return rs;
+}",this method is called via reflection from the database .,usage, this method is used to create a result set with a point geometry . 
+59637,"public void addSwipeListener(SwipeListener listener){
+  if (mListeners == null) {
+    mListeners=new ArrayList<SwipeListener>();
+  }
+  mListeners.add(listener);
+}",add a callback to be invoked when a swipe event is sent to this view .,usage, adds a swipe listener to the list of listeners . 
+35508,"@Override public void onFailure(IMqttToken asyncActionToken,Throwable exception){
+  exception.printStackTrace();
+  Log.e(""TrafficService"",""Error connecting: "" + exception.getMessage());
+  onDisconnect(false);
+}",called when there was an error connecting,usage, called when connection to the MQTT broker fails . 
+10928,"protected void configureFromProperties(InputStream is,String rootDirectory) throws IOException {
+  Properties props=new Properties();
+  props.load(is);
+  props.put(ROOT_DIR_PATH_PROPERTY,rootDirectory);
+  String oldPrefix=getPropertyPrefix();
+  setProperties(null,props);
+  setPropertyPrefix(oldPrefix);
+}","called with an input stream for a properties file , used for reading tiles . omp files .",usage, called when loading properties from an input stream . 
+65838,"public void mouseClicked(MouseEvent e){
+  if (e.getClickCount() > 1) {
+    System.gc();
+  }
+}",invoked when the mouse has been clicked on a component .,usage," called when the mouse is clicked. If the click count is more than 1, it will call the garbage collector."
+31521,"@Override public void onDetachedFromRecyclerView(RecyclerView recyclerView){
+  super.onDetachedFromRecyclerView(recyclerView);
+  mAttachedRecyclerViewPool.remove(recyclerView);
+}",implementation of adapter . ondetachedfromrecyclerview ( recyclerview ) called when this expandablerecycleradapter is detached from a recyclerview .,usage, called when the RecyclerView is detached from the adapter. This method is used to clean up any resources that were previously set up in on
+11319,"public void actionPerformed(java.awt.event.ActionEvent e){
+  Object source=e.getSource();
+  if (!(source instanceof JMenuItem))   return;
+  JMenuItem mi=(JMenuItem)source;
+  String name=mi.getText();
+  OMGraphicHandlerLayer targetLayer=(OMGraphicHandlerLayer)layers.get(name);
+  if (targetLayer == null) {
+    Debug.message(""defaultdndcatcher"",""ERROR> DefaultDnDCatcher::actionPerformed: "" + ""no layer found with name "" + name);
+    return;
+  }
+  targetLayer.doAction((OMGraphic)transferData,new OMAction(OMAction.UPDATE_GRAPHIC_MASK));
+}",invoked when an action from the popup menu occurs .,usage, this method is called when a menu item is selected . 
+17178,"public void addTranslator(ClassPool cp,Translator t) throws NotFoundException, CannotCompileException {
+  source=cp;
+  translator=t;
+  t.start(cp);
+}","adds a translator , which is called whenever a class is loaded .",usage, add a translator to the class pool . 
+56112,"public void onSinksReceived(String sourceUrn,List<MediaSink> sinks){
+  mSinks.put(sourceUrn,sinks);
+  nativeOnSinksReceived(mNativeMediaRouterAndroid,sourceUrn,sinks.size());
+}",called when the sinks found by the media route provider for the particular | sourceurn | have changed .,usage, invoked when a list of sinks is received for a given source . 
+11246,"public void httpRequest(HttpRequestEvent e) throws java.io.IOException {
+  String request=e.getRequest();
+  if (Debug.debugging(""shis"")) {
+    Debug.output(""SHIS: Handling request - \"""" + request + ""\"""");
+  }
+  if (request.charAt(0) == '/') {
+    request=request.substring(0,request.length());
+  }
+  int index=0;
+  index=request.indexOf('?');
+  if (index != -1) {
+    request=request.substring(index + 1,request.length());
+    Debug.message(""shis"",""SHIS: GET Request received"");
+  }
+ else {
+    Debug.message(""shis"",""SHIS: Probably a POST Request received"");
+  }
+  try {
+    iServer.handleRequest(request,e.getOutputStream());
+  }
+ catch (  IOException ioe) {
+    Debug.error(""SHIS: caught IOException - \n"" + ioe.getMessage());
+  }
+catch (  MapRequestFormatException exception) {
+    String message=""OpenMap SimpleHttpImageServer encountered an problem with your request:\n\n"" + exception.getMessage() + ""\n\n""+ ErrorMessage;
+    HttpConnection.writeHttpResponse(e.getOutputStream(),HttpConnection.CONTENT_PLAIN,message);
+  }
+}",invoked when an http request is received .,usage, invoked when a HTTP request is received . 
+13792,"public void schemaChanged(String serviceName,String version){
+synchronized (mapRealmToFormat) {
+    mapRealmToFormat.remove(ROOT);
+  }
+}",this method will be invoked when a service ' s schema has been changed .,usage, called when the schema changes . 
+48785,"protected final void dragDropFinished(final boolean success,final int operations,final int x,final int y){
+  DragSourceEvent event=new DragSourceDropEvent(getDragSourceContext(),operations & sourceActions,success,x,y);
+  EventDispatcher dispatcher=new EventDispatcher(DISPATCH_FINISH,event);
+  SunToolkit.invokeLaterOnAppContext(SunToolkit.targetToAppContext(getComponent()),dispatcher);
+  startSecondaryEventLoop();
+  setNativeContext(0);
+  dragImage=null;
+  dragImageOffset=null;
+}",upcall from native code via implemented class ( do ),usage, this method is called when a drag operation has ended . 
+23838,"protected void closeCallbacksExceptListener(){
+  closeCacheCallback(getCacheLoader());
+  closeCacheCallback(getCacheWriter());
+  closeCacheCallback(getEvictionController());
+}",the listener is not closed until after the afterregiondestroy event,usage, close all callbacks except the listener . 
+11343,"protected void cutSelectedBean(){
+  if (Debug.debugging(""beanbox""))   Debug.output(""Enter> cutSelectedBean"");
+  if (selectedBean == null || selectedBeanLocation == null) {
+    if (Debug.debugging(""beanbox""))     Debug.output(""selectedBean="" + selectedBean);
+    if (Debug.debugging(""beanbox""))     Debug.output(""selectedBeanLocation="" + selectedBeanLocation);
+    clearSelection();
+    return;
+  }
+  try {
+    serBean=new ByteArrayOutputStream();
+    ObjectOutputStream oos=new ObjectOutputStream(serBean);
+    oos.writeObject(selectedBean);
+  }
+ catch (  Exception e) {
+    e.printStackTrace();
+    clearSelection();
+    if (Debug.debugging(""beanbox""))     Debug.output(""Exit> copySelectedBean"");
+    return;
+  }
+  cutBean=selectedBean;
+  selectedBeanBox.showCut(selectedBean);
+  if (Debug.debugging(""beanbox""))   Debug.output(""Exit> cutSelectedBean"");
+}",this method is called when the user chooses to cut a bean by some means such by by pressing ctrl - x .,usage, called when the user wants to cut the selected bean . 
+68937,"public void onAccuracyChanged(Sensor sensor,int accuracy){
+  if (sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
+    return;
+  }
+  if (this.status == AccelListener.STOPPED) {
+    return;
+  }
+  this.accuracy=accuracy;
+}",called when the accuracy of the sensor has changed .,usage, invoked when the accuracy of a sensor has changed . 
+25509,"private boolean loadUnpackedUMD(String filename) throws IOException, GeneralJpcspException {
+  if (doUmdBuffering) {
+    return false;
+  }
+  File file=new File(filename);
+  if (file.exists()) {
+    RandomAccessFile raf=new RandomAccessFile(file,""r"");
+    FileChannel roChannel=raf.getChannel();
+    ByteBuffer readbuffer=roChannel.map(FileChannel.MapMode.READ_ONLY,0,(int)roChannel.size());
+    emulator.load(""disc0:/PSP_GAME/SYSDIR/EBOOT.BIN"",readbuffer);
+    raf.close();
+    log.info(""Using unpacked UMD EBOOT.BIN image"");
+    return true;
+  }
+  return false;
+}","don ' t call this directly , see loadumd ( file file )",usage, this method is used to load an unpacked UMD file. It checks if the file exists and then loads it into the emulator. If the
+84599,"public void makeDirty(){
+  betaChanged=true;
+  newMode=true;
+  precisionChanged=true;
+  regressionInterface.makeDirty(instance);
+}",forces a complete recalculation of the likelihood next time getlikelihood is called,usage, called when the model has changed and needs to be saved . 
+68091,"protected void onException(final WroRuntimeException e){
+  throw e;
+}",invoked when an unexpected exception occurred during processing .,usage, invoked when an exception occurs during the request processing . 
+49211,"void doHandleJavaMouseEvent(MouseEvent mouseEvent){
+  if (!XToolkit.isLeftMouseButton(mouseEvent) && !XToolkit.isRightMouseButton(mouseEvent)) {
+    return;
+  }
+  XBaseWindow grabWindow=XAwtState.getGrabWindow();
+  Point ptGlobal=mouseEvent.getLocationOnScreen();
+  if (!hasPointerMoved) {
+    if (grabInputPoint == null || (Math.abs(ptGlobal.x - grabInputPoint.x) > getMouseMovementSmudge()) || (Math.abs(ptGlobal.y - grabInputPoint.y) > getMouseMovementSmudge())) {
+      hasPointerMoved=true;
+    }
+  }
+  XBaseMenuWindow wnd=getMenuWindowFromPoint(ptGlobal);
+  XMenuItemPeer item=(wnd != null) ? wnd.getItemFromPoint(wnd.toLocal(ptGlobal)) : null;
+  XBaseMenuWindow cwnd=getShowingLeaf();
+switch (mouseEvent.getID()) {
+case MouseEvent.MOUSE_PRESSED:
+    showingMousePressedSubmenu=null;
+  if ((grabWindow == this) && (wnd == null)) {
+    ungrabInput();
+  }
+ else {
+    grabInput();
+    if (item != null && !item.isSeparator() && item.isTargetItemEnabled()) {
+      if (wnd.getShowingSubmenu() == item) {
+        showingMousePressedSubmenu=(XMenuPeer)item;
+      }
+      wnd.selectItem(item,true);
+    }
+ else {
+      if (wnd != null) {
+        wnd.selectItem(null,false);
+      }
+    }
+  }
+break;
+case MouseEvent.MOUSE_RELEASED:
+if (item != null && !item.isSeparator() && item.isTargetItemEnabled()) {
+if (item instanceof XMenuPeer) {
+  if (showingMousePressedSubmenu == item) {
+    if (wnd instanceof XMenuBarPeer) {
+      ungrabInput();
+    }
+ else {
+      wnd.selectItem(item,false);
+    }
+  }
+}
+ else {
+  item.action(mouseEvent.getWhen());
+  ungrabInput();
+}
+}
+ else {
+if (hasPointerMoved || (wnd instanceof XMenuBarPeer)) {
+  ungrabInput();
+}
+}
+showingMousePressedSubmenu=null;
+break;
+case MouseEvent.MOUSE_DRAGGED:
+if (wnd != null) {
+if (item != null && !item.isSeparator() && item.isTargetItemEnabled()) {
+if (grabWindow == this) {
+wnd.selectItem(item,true);
+}
+}
+ else {
+wnd.selectItem(null,false);
+}
+}
+ else {
+if (cwnd != null) {
+cwnd.selectItem(null,false);
+}
+}
+break;
+}
+}",performs handling of java mouse event note that this function should be invoked only from root of menu window ' s hierarchy that grabs input focus,usage, this method is called when a mouse event occurs in the menu window. It handles the event and updates the menu window accordingly.
+69714,"protected void drawConnectorCenters(Canvas c){
+  List<Connection> connections=mBlock.getAllConnections();
+  Paint paint=new Paint();
+  paint.setStyle(Paint.Style.FILL);
+  for (int i=0; i < connections.size(); i++) {
+    Connection conn=connections.get(i);
+    if (conn.inDragMode()) {
+      if (conn.isConnected()) {
+        paint.setColor(Color.RED);
+      }
+ else {
+        paint.setColor(Color.MAGENTA);
+      }
+    }
+ else {
+      if (conn.isConnected()) {
+        paint.setColor(Color.GREEN);
+      }
+ else {
+        paint.setColor(Color.CYAN);
+      }
+    }
+    mTempWorkspacePoint.set(conn.getPosition().x - mBlock.getPosition().x,conn.getPosition().y - mBlock.getPosition().y);
+    mHelper.workspaceToVirtualViewDelta(mTempWorkspacePoint,mTempConnectionPosition);
+    if (mHelper.useRtl()) {
+      mTempConnectionPosition.x+=mBlockViewSize.x;
+    }
+    c.drawCircle(mTempConnectionPosition.x,mTempConnectionPosition.y,10,paint);
+  }
+}",this is a developer testing function subclasses can call to draw dots at the model ' s location of all connections on this block .,usage, draws the connection centers for the block 
+64152,"public FileSystemUtils(){
+  super();
+}",instances should not be constructed in standard programming .,usage, this is the constructor for the FileSystemUtils class . 
+63968,"@CallSuper protected void onPageScrolled(int position,float offset,int offsetPixels){
+  if (mDecorChildCount > 0) {
+    final int scrollX=getScrollX();
+    int paddingLeft=getPaddingLeft();
+    int paddingRight=getPaddingRight();
+    final int width=getWidth();
+    final int childCount=getChildCount();
+    for (int i=0; i < childCount; i++) {
+      final View child=getChildAt(i);
+      final LayoutParams lp=(LayoutParams)child.getLayoutParams();
+      if (!lp.isDecor)       continue;
+      final int hgrav=lp.gravity & Gravity.HORIZONTAL_GRAVITY_MASK;
+      int childLeft=0;
+switch (hgrav) {
+default :
+        childLeft=paddingLeft;
+      break;
+case Gravity.LEFT:
+    childLeft=paddingLeft;
+  paddingLeft+=child.getWidth();
+break;
+case Gravity.CENTER_HORIZONTAL:
+childLeft=Math.max((width - child.getMeasuredWidth()) / 2,paddingLeft);
+break;
+case Gravity.RIGHT:
+childLeft=width - paddingRight - child.getMeasuredWidth();
+paddingRight+=child.getMeasuredWidth();
+break;
+}
+childLeft+=scrollX;
+final int childOffset=childLeft - child.getLeft();
+if (childOffset != 0) {
+child.offsetLeftAndRight(childOffset);
+}
+}
+}
+dispatchOnPageScrolled(position,offset,offsetPixels);
+if (mPageTransformer != null) {
+final int scrollX=getScrollX();
+final int childCount=getChildCount();
+for (int i=0; i < childCount; i++) {
+final View child=getChildAt(i);
+final LayoutParams lp=(LayoutParams)child.getLayoutParams();
+if (lp.isDecor) continue;
+final float transformPos=(float)(child.getLeft() - scrollX) / getClientWidth();
+mPageTransformer.transformPage(child,transformPos);
+}
+}
+mCalledSuper=true;
+}","this method will be invoked when the current page is scrolled , either as part of a programmatically initiated smooth scroll or a user initiated touch scroll .",usage, this method is called when the page is scrolled . 
+13290,"protected void resetCommon() throws XNIException {
+  int count=fCommonComponents.size();
+  for (int i=0; i < count; i++) {
+    XMLComponent c=(XMLComponent)fCommonComponents.get(i);
+    c.reset(this);
+  }
+}",reset all common components before parsing,usage, called when the component model is reset . 
+25328,"public void onStart(){
+  if (mAudioMirrorBuffer == null) {
+    mAudioMirrorBuffer=new byte[262144];
+  }
+  if (mStreamer != null) {
+    mStreamer.start();
+  }
+  if (mInsecureStreamer != null) {
+    mInsecureStreamer.start();
+  }
+}",called when the playback service starts,usage, called when the streamer starts . 
+29969,"public void stop(){
+  setLedOn(false);
+  if (null != blinkFuture) {
+    blinkFuture.cancel(true);
+  }
+  if (null != blinkService) {
+    blinkService.shutdownNow();
+  }
+}",calling this method will stop all threads .,usage, stop the blinking of the LED . 
+39498,"protected boolean isCorrectMethod(Method method,Object[] args){
+  return (proxySignature.equals(method.getName()) && args.length == 1);
+}","compare the method that was called to the intended method when the osxadapter instance was created ( e . g . handleabout , handlequit , handleopenfile , etc . ) .",usage, checks if the method is the correct one to be invoked 
+68444,"public void actionPerformed(ActionEvent e){
+  navigateToPriorDemo();
+}",invoked when an action occurs .,usage, invoked when an action is performed on the button . 
+80148,"private void onHPChange(final int amount){
+  if (User.squaredDistanceTo(x,y) < HEARING_DISTANCE_SQ) {
+    if (amount > 0) {
+      addTextIndicator(""+"" + amount,NotificationType.POSITIVE);
+    }
+ else {
+      addTextIndicator(String.valueOf(amount),NotificationType.NEGATIVE);
+    }
+  }
+}",called when entity adjusts hp .,usage, called when the health points of the user change . 
+39988,"protected void onPageScrolled(int position,float offset,int offsetPixels){
+  if (mDecorChildCount > 0) {
+    final int scrollX=getScrollX();
+    int paddingLeft=getPaddingLeft();
+    int paddingRight=getPaddingRight();
+    final int width=getWidth();
+    final int childCount=getChildCount();
+    for (int i=0; i < childCount; i++) {
+      final View child=getChildAt(i);
+      final LayoutParams lp=(LayoutParams)child.getLayoutParams();
+      if (!lp.isDecor)       continue;
+      final int hgrav=lp.gravity & Gravity.HORIZONTAL_GRAVITY_MASK;
+      int childLeft=0;
+switch (hgrav) {
+default :
+        childLeft=paddingLeft;
+      break;
+case Gravity.LEFT:
+    childLeft=paddingLeft;
+  paddingLeft+=child.getWidth();
+break;
+case Gravity.CENTER_HORIZONTAL:
+childLeft=Math.max((width - child.getMeasuredWidth()) / 2,paddingLeft);
+break;
+case Gravity.RIGHT:
+childLeft=width - paddingRight - child.getMeasuredWidth();
+paddingRight+=child.getMeasuredWidth();
+break;
+}
+childLeft+=scrollX;
+final int childOffset=childLeft - child.getLeft();
+if (childOffset != 0) {
+child.offsetLeftAndRight(childOffset);
+}
+}
+}
+if (mOnPageChangeListener != null) {
+mOnPageChangeListener.onPageScrolled(position,offset,offsetPixels);
+}
+if (mInternalPageChangeListener != null) {
+mInternalPageChangeListener.onPageScrolled(position,offset,offsetPixels);
+}
+if (mPageTransformer != null) {
+final int scrollX=getScrollX();
+final int childCount=getChildCount();
+for (int i=0; i < childCount; i++) {
+final View child=getChildAt(i);
+final LayoutParams lp=(LayoutParams)child.getLayoutParams();
+if (lp.isDecor) continue;
+final float transformPos=(float)(child.getLeft() - scrollX) / getClientWidth();
+mPageTransformer.transformPage(child,transformPos);
+}
+}
+mCalledSuper=true;
+}","this method will be invoked when the current page is scrolled , either as part of a programmatically initiated smooth scroll or a user initiated touch scroll .",usage, called when the page is scrolled . 
+25881,"@Override public AbstractScannedResult scanBlocklet(BlocksChunkHolder blocksChunkHolder) throws QueryExecutionException {
+  try {
+    fillScannedResult(blocksChunkHolder);
+  }
+ catch (  FilterUnsupportedException e) {
+    throw new QueryExecutionException(e.getMessage());
+  }
+  return scannedResult;
+}",below method will be used to process the block,usage, this method is called when a blocklet is scanned . 
+6348,"public static void printStackTrace(Throwable e){
+  try {
+    Debug.printStackTrace(e);
+  }
+ catch (  Throwable f) {
+    e.printStackTrace();
+  }
+}",used in environments where full debug may not be available,usage, prints the stack trace of the given exception . 
+53945,"public void start(){
+  if (setState(EnumSet.of(TaskState.INITIAL,TaskState.QUEUED),TaskState.RUNNING)) {
+    DHT.logDebug(""Starting Task: "" + toString());
+    startTime=System.currentTimeMillis();
+    try {
+      serializedUpdate.run();
+    }
+ catch (    Exception e) {
+      DHT.log(e,LogLevel.Error);
+    }
+  }
+}","start the task , to be used when a task is queued .",usage," starts the task and logs the start time. If the task is already running or queued, it will not start again."
+11663,"public boolean mouseDragged(MouseEvent e){
+  if (grabbed_plot_graphics_) {
+    int x=e.getX();
+    int y=e.getY();
+    int dx=x - prevX;
+    int dy=y - prevY;
+    plotX+=dx;
+    plotY+=dy;
+    prevX=x;
+    prevY=y;
+    graph.resize(plotX,plotY,plotWidth,plotHeight);
+    OMGraphicList plotGraphics=graph.getPlotGraphics();
+    plotGraphics.generate(getProjection(),true);
+    repaint();
+  }
+  return false;
+}",called whenever the mouse is dragged on this layer and one of the requested mouse modes is active .,usage, called when the mouse is dragged over the component . 
+75368,"@Override public void onCreate(Bundle savedInstanceState){
+  super.onCreate(savedInstanceState);
+  mHandler=new Handler();
+  setContentView(R.layout.voice_recognition);
+  Button speakButton=(Button)findViewById(R.id.btn_speak);
+  mList=(ListView)findViewById(R.id.list);
+  mSupportedLanguageView=(Spinner)findViewById(R.id.supported_languages);
+  PackageManager pm=getPackageManager();
+  List<ResolveInfo> activities=pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH),0);
+  if (activities.size() != 0) {
+    speakButton.setOnClickListener(this);
+  }
+ else {
+    speakButton.setEnabled(false);
+    speakButton.setText(""Recognizer not present"");
+  }
+  refreshVoiceSettings();
+}",called with the activity is first created .,usage,This code is part of an Android application. It is called when the activity is first created. It sets up the UI and checks if the device has
+50178,"public void handleMaintenance(Operation maintOp){
+  performPendingRequestMaintenance();
+  checkAndScheduleSynchronization(this.cachedGroupState.membershipUpdateTimeMicros);
+  maintOp.complete();
+}",invoked by parent during its maintenance interval,usage, called when a maintenance operation is requested . 
+63597,"public int onBlockExploded(){
+  return (int)(fuseTime / 2 + Math.random() * fuseTime / 4);
+}",called when the block for of this explosive is destroy by an explosion,usage, called when a block explodes . 
+16920,"public ActionRequestHelper dependsOn(ActionRequestHelper dependency){
+  mDependencies.add(dependency);
+  return this;
+}",this request will execute after the dependency completes .,usage, this method is used to add a dependency to the current action request helper .
+2536,"public IOUtils(){
+  super();
+}",instances should not be constructed in standard programming .,usage, This is a constructor for the IOUtils class. It is used to initialize the object of the class.
+25502,"public void pushDrawList(PspGeList list){
+synchronized (drawListQueue) {
+    drawListQueue.add(list);
+  }
+}",called from pspge module,usage, This method is used to add a new draw list to the queue. It is synchronized to ensure that only one thread can add a draw list at
+33914,"private void applyTo(ClassVisitor v,Field f){
+  if (Log.isLoggingOn()) {
+    Log.logLine(String.format(""Visiting field %s"",f.toGenericString()));
+  }
+  v.visit(f);
+}",apply a visitor to a field .,usage, this method is used to apply the visitor to the given field. It logs the field being visited if logging is on.
+3515,"public void clientDisconnect(){
+  try {
+    OutHttpApp responseStream=_responseStream;
+    if (responseStream != null) {
+      responseStream.close();
+    }
+  }
+ catch (  Exception e) {
+    log.log(Level.FINER,e.toString(),e);
+  }
+  ConnectionTcp conn=connTcp();
+  if (conn != null) {
+    conn.clientDisconnect();
+  }
+  killKeepalive(""client disconnect"");
+}",called when the client has disconnected,usage, called when the client disconnects . 
+10541,"private final void _writeUTF8Segments(byte[] utf8,int offset,int totalLen) throws IOException, JsonGenerationException {
+  do {
+    int len=Math.min(_outputMaxContiguous,totalLen);
+    _writeUTF8Segment(utf8,offset,len);
+    offset+=len;
+    totalLen-=len;
+  }
+ while (totalLen > 0);
+}","method called when utf - 8 encoded ( but not yet escaped ! ) content is not guaranteed to fit in the output buffer after escaping ; as such , we just need to chunk writes .",usage, this method is called from the writeUTF8 method . 
+83647,"@Override public boolean onPreferenceClick(Preference preference){
+  if (preference == mPlayExample) {
+    getSampleText();
+    return true;
+  }
+  return false;
+}",called when mplayexample is clicked,usage, called when a preference is clicked . 
+49295,"@Override @SuppressWarnings(""unchecked"") public void completed(int bytesTransferred,boolean canInvokeDirect){
+  if (bytesTransferred == 0) {
+    bytesTransferred=-1;
+  }
+ else {
+    updateBuffers(bytesTransferred);
+  }
+  releaseBuffers();
+synchronized (result) {
+    if (result.isDone())     return;
+    enableReading();
+    if (scatteringRead) {
+      result.setResult((V)Long.valueOf(bytesTransferred));
+    }
+ else {
+      result.setResult((V)Integer.valueOf(bytesTransferred));
+    }
+  }
+  if (canInvokeDirect) {
+    Invoker.invokeUnchecked(result);
+  }
+ else {
+    Invoker.invoke(result);
+  }
+}",executed when the i / o has completed,usage, called when a read operation is completed 
+9599,"public static KeyStore load(File keyStoreFile,Password password) throws CryptoException, FileNotFoundException {
+  KeyStoreType keyStoreType=null;
+  try {
+    keyStoreType=CryptoFileUtil.detectKeyStoreType(new FileInputStream(keyStoreFile));
+  }
+ catch (  FileNotFoundException ex) {
+    throw ex;
+  }
+catch (  IOException ex) {
+    throw new CryptoException(res.getString(""NoLoadKeyStore.exception.message""),ex);
+  }
+  if (keyStoreType == null) {
+    return null;
+  }
+  return load(keyStoreFile,password,keyStoreType);
+}","load a keystore , auto - detecting the type , from a file accessed by a password .",done," loads a keystore from a file , using the specified password and type . "
+67089,"public void addMethod(SootMethod m){
+  checkLevel(SIGNATURES);
+  if (m.isDeclared())   throw new RuntimeException(""already declared: "" + m.getName());
+  if (subSigToMethods.get(m.getNumberedSubSignature()) != null) {
+    throw new RuntimeException(""Attempting to add method "" + m.getSubSignature() + "" to class ""+ this+ "", but the class already has a method with that signature."");
+  }
+  subSigToMethods.put(m.getNumberedSubSignature(),m);
+  methodList.add(m);
+  m.setDeclared(true);
+  m.setDeclaringClass(this);
+}",adds the given method to this class .,done," adds a method to the class, checking for any existing methods with the same signature. "
+40177,"public ScriptBuilder data(int index,byte[] data){
+  byte[] copy=Arrays.copyOf(data,data.length);
+  int opcode;
+  if (data.length == 0) {
+    opcode=OP_0;
+  }
+ else   if (data.length == 1) {
+    byte b=data[0];
+    if (b >= 1 && b <= 16)     opcode=Script.encodeToOpN(b);
+ else     opcode=1;
+  }
+ else   if (data.length < OP_PUSHDATA1) {
+    opcode=data.length;
+  }
+ else   if (data.length < 256) {
+    opcode=OP_PUSHDATA1;
+  }
+ else   if (data.length < 65536) {
+    opcode=OP_PUSHDATA2;
+  }
+ else {
+    throw new RuntimeException(""Unimplemented"");
+  }
+  return addChunk(index,new ScriptChunk(opcode,copy));
+}",adds a copy of the given byte array as a data element ( i . e . pushdata ) at the given index in the program .,done, adds a data chunk to the script builder . 
+74232,"public int findCarByRoadNumber(String roadNumber){
+  if (sysList != null) {
+    if (!roadNumber.equals(_roadNumber)) {
+      return getIndex(0,roadNumber);
+    }
+    int index=getIndex(_index,roadNumber);
+    if (index > 0) {
+      return index;
+    }
+    return getIndex(0,roadNumber);
+  }
+  return -1;
+}",search for car by road number,done, find a car by its road number in the system list . 
+67853,"public void hspan(double start,double end,Paint color,String legend){
+  LegendText legendText=new LegendText(color,legend);
+  comments.add(legendText);
+  plotElements.add(new HSpan(start,end,color,legendText));
+}",draws a horizontal span into the graph and optionally adds a legend .,done," adds a horizontal span to the plot with the specified start and end points, color, and legend text."
+66527,"private static a createImageLink(String AD_Language,String name,String js_command,boolean enabled,boolean pressed){
+  a img=new a(""#"",createImage(AD_Language,name));
+  if (!pressed || !enabled)   img.setID(""imgButtonLink"");
+ else   img.setID(""imgButtonPressedLink"");
+  if (js_command == null)   js_command=""'Submit'"";
+  if (js_command.length() > 0 && enabled) {
+    if (js_command.startsWith(""startPopup""))     img.setOnClick(js_command);
+ else     img.setOnClick(""SubmitForm('"" + name + ""', ""+ js_command+ "",'toolbar');return false;"");
+  }
+  img.setClass(""ToolbarButton"");
+  img.setOnMouseOver(""window.status='"" + name + ""';return true;"");
+  img.setOnMouseOut(""window.status='';return true;"");
+  img.setOnBlur(""this.hideFocus=false"");
+  return img;
+}","create image with name , id of button _ name and set p _ command onclick",done, creates an image link with the specified parameters and returns the created image link.
+70010,"public void put(int key,E value){
+  int i=ContainerHelpers.binarySearch(mKeys,mSize,key);
+  if (i >= 0) {
+    mValues[i]=value;
+  }
+ else {
+    i=~i;
+    if (i < mSize && mValues[i] == DELETED) {
+      mKeys[i]=key;
+      mValues[i]=value;
+      return;
+    }
+    if (mGarbage && mSize >= mKeys.length) {
+      gc();
+      i=~ContainerHelpers.binarySearch(mKeys,mSize,key);
+    }
+    if (mSize >= mKeys.length) {
+      int n=ContainerHelpers.idealIntArraySize(mSize + 1);
+      int[] nkeys=new int[n];
+      Object[] nvalues=new Object[n];
+      System.arraycopy(mKeys,0,nkeys,0,mKeys.length);
+      System.arraycopy(mValues,0,nvalues,0,mValues.length);
+      mKeys=nkeys;
+      mValues=nvalues;
+    }
+    if (mSize - i != 0) {
+      System.arraycopy(mKeys,i,mKeys,i + 1,mSize - i);
+      System.arraycopy(mValues,i,mValues,i + 1,mSize - i);
+    }
+    mKeys[i]=key;
+    mValues[i]=value;
+    mSize++;
+  }
+}","adds a mapping from the specified key to the specified value , replacing the previous mapping from the specified key if there was one .",done," adds a key-value pair to the map . If the key already exists, the value is replaced . If the map is full, it is expanded"
+25607,"public static String convertClassNameToResourcePath(String className){
+  Assert.notNull(className,""Class name must not be null"");
+  return className.replace('.','/');
+}","convert a "" . "" - based fully qualified class name to a "" / "" - based resource path .",done, convert a class name to a resource path . 
+6260,"public static String removePattern(final String source,final String regex){
+  return replacePattern(source,regex,StringUtils.EMPTY);
+}",removes each substring of the source string that matches the given regular expression using the dotall option .,done, removes all occurrences of the regex pattern from the source string . 
+74883,"public void updateValue(final Object value,final boolean isSelected,boolean sync){
+  if (isReadOnly()) {
+    return;
+  }
+  if (GenericFormFactory.isTextForm(formType)) {
+    textString=(String)value;
+    if (textString != null && textString.equals(lastTextString)) {
+      sync=false;
+    }
+    lastTextString=textString;
+  }
+ else {
+    textString=(String)value;
+    this.isSelected=isSelected;
+    if (isSelected != lastIsSelected && lastTextString != null && textString != null && textString.equals(lastTextString)) {
+      sync=false;
+    }
+    lastTextString=textString;
+    lastIsSelected=isSelected;
+  }
+  if ((sync && guiType != FormFactory.ULC) && guiComp != null) {
+    syncGUI(value);
+  }
+}",allow us to update value ( and sync to gui version if exists,done, updates the value of the form field and syncs the GUI if necessary.
+16584,"@Override protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec){
+  int widthSpecMode=MeasureSpec.getMode(widthMeasureSpec);
+  int heightSpecMode=MeasureSpec.getMode(heightMeasureSpec);
+  int parentWidth=MeasureSpec.getSize(widthMeasureSpec);
+  int parentHeight=MeasureSpec.getSize(heightMeasureSpec);
+  boolean resizeWidth=widthSpecMode != MeasureSpec.EXACTLY;
+  boolean resizeHeight=heightSpecMode != MeasureSpec.EXACTLY;
+  int width=parentWidth;
+  int height=parentHeight;
+  if (sWidth > 0 && sHeight > 0) {
+    if (resizeWidth && resizeHeight) {
+      width=sWidth();
+      height=sHeight();
+    }
+ else     if (resizeHeight) {
+      height=(int)((((double)sHeight() / (double)sWidth()) * width));
+    }
+ else     if (resizeWidth) {
+      width=(int)((((double)sWidth() / (double)sHeight()) * height));
+    }
+  }
+  width=Math.max(width,getSuggestedMinimumWidth());
+  height=Math.max(height,getSuggestedMinimumHeight());
+  setMeasuredDimension(width,height);
+}","measures the width and height of the view , preserving the aspect ratio of the image displayed if wrap _ content is used .",done," this method is used to measure the view and its content. It is called by measure(int, int) and should be overridden by sub"
+56967,"public static String writeActionsToString(OFInstructionWriteActions inst,Logger log) throws Exception {
+  return ActionUtils.actionsToString(inst.getActions(),log);
+}",convert an ofinstructionwriteactions to string form .,done, converts a list of actions to a string . 
+78820,"public void add(@NonNull T item){
+synchronized (lock) {
+    if (items == null) {
+      items=new ArrayList<>();
+    }
+    items.add(item);
+  }
+  if (notifyOnChange) {
+    notifyItemInserted(items.size());
+  }
+}",adds the specified item to the end of the list,done, adds an item to the list and notifies the adapter of the change if the notifyOnChange flag is set . 
+34053,"public static void executeRandomModifiableVariableModification(ModifiableVariableHolder object){
+  Field field=object.getRandomModifiableVariableField();
+  executeModifiableVariableModification(object,field);
+}",picks a random modifiable variable and executes a random modification on this variable .,done, modifies a random modifiable variable in the given object . 
+75340,"public static String trim(CharSequence s){
+  if (s == null) {
+    return null;
+  }
+  Matcher m=sTrimPattern.matcher(s);
+  return m.replaceAll(""$1"");
+}","trims the string , removing all whitespace at the beginning and end of the string .",done, trims the leading and trailing whitespace from a string . 
+28392,"public void add(DataSource source,boolean visible){
+  add(data.size(),source,visible);
+}",adds a new data series to the plot .,done, adds a new data source to the list of data sources . 
+50242,"public void showLoading(){
+  switchState(LOADING,null,null,null,null,null,Collections.<Integer>emptyList());
+}",hide content and show the progress bar,done, show loading state . 
+12197,"private static boolean addIfMatches(List<String> container,String statusLine,char x,char y){
+  if (matches(statusLine,x,y)) {
+    final String filename=statusLine.substring(3);
+    if (!container.contains(filename)) {
+      container.add(filename);
+    }
+    return true;
+  }
+  return false;
+}",adds files to container if they matched to template .,done, adds a filename to the container if the status line matches the specified characters 
+33603,"private float colorToAngle(int color){
+  float[] colors=new float[3];
+  Color.colorToHSV(color,colors);
+  return (float)Math.toRadians(-colors[0]);
+}",convert a color to an angle .,done, convert a color to an angle in radians . 
+56381,"public IdsQueryBuilder addIds(String... ids){
+  values.addAll(Arrays.asList(ids));
+  return this;
+}",adds ids to the filter .,done, adds ids to the query builder . 
+73394,"private void extractWeightValues(List<Synapse> synapses){
+  int exWeights=0;
+  int inWeights=0;
+  for (  Synapse s : synapses) {
+    double w=s.getStrength();
+    if (w > 0) {
+      exWeights++;
+    }
+ else {
+      inWeights++;
+    }
+  }
+  weights[0]=new double[exWeights];
+  weights[1]=new double[inWeights];
+  exWeights=0;
+  inWeights=0;
+  if (weights[0].length != 0) {
+    for (    Synapse s : synapses) {
+      double w=s.getStrength();
+      if (w > 0) {
+        weights[0][exWeights++]=w;
+      }
+ else {
+        weights[1][inWeights++]=w;
+      }
+    }
+  }
+}",extracts weight values and organizes them by synapse type ( inhibitory or excitatory ) .,done," extracts the weights from the given list of synapses and stores them in two arrays, one for excitatory weights and one for inhibitory"
+40153,"public void trackFailure(){
+  retryTime=Utils.currentTimeMillis() + (long)backoff;
+  backoff=Math.min(backoff * params.multiplier,params.maximum);
+}",track a failure - multiply the back off interval by the multiplier,done, track the failure of a task and update the retry time and backoff for the next retry.
+45731,"public static String buildPath(JsonPath jsonPath){
+  List<String> urlParts=new LinkedList<>();
+  JsonPath currentJsonPath=jsonPath;
+  String pathPart;
+  do {
+    if (currentJsonPath instanceof RelationshipsPath) {
+      pathPart=RELATIONSHIP_MARK + SEPARATOR + currentJsonPath.getElementName();
+    }
+ else     if (currentJsonPath instanceof FieldPath) {
+      pathPart=currentJsonPath.getElementName();
+    }
+ else {
+      pathPart=currentJsonPath.getElementName();
+      if (currentJsonPath.getIds() != null) {
+        pathPart+=SEPARATOR + mergeIds(currentJsonPath.getIds());
+      }
+    }
+    urlParts.add(pathPart);
+    currentJsonPath=currentJsonPath.getParentResource();
+  }
+ while (currentJsonPath != null);
+  Collections.reverse(urlParts);
+  return SEPARATOR + StringUtils.join(SEPARATOR,urlParts) + SEPARATOR;
+}",creates a path using the provided jsonpath structure .,done, builds a URL path from a JsonPath object . 
+61575,"public String decode(String pString) throws DecoderException {
+  if (pString == null) {
+    return null;
+  }
+  try {
+    return decode(pString,getDefaultCharset());
+  }
+ catch (  UnsupportedEncodingException e) {
+    throw new DecoderException(e.getMessage());
+  }
+}",decodes a url safe string into its original form using the default string charset .,done, decodes a string using the default charset . 
+76915,"protected synchronized void start(long curPrimaryGen) throws IOException {
+  if (state.equals(""init"") == false) {
+    throw new IllegalStateException(""already started"");
+  }
+  message(""top: now start"");
+  try {
+    String segmentsFileName=SegmentInfos.getLastCommitSegmentsFileName(dir);
+    long maxPendingGen=-1;
+    for (    String fileName : dir.listAll()) {
+      if (fileName.startsWith(IndexFileNames.PENDING_SEGMENTS)) {
+        long gen=Long.parseLong(fileName.substring(IndexFileNames.PENDING_SEGMENTS.length() + 1),Character.MAX_RADIX);
+        if (gen > maxPendingGen) {
+          maxPendingGen=gen;
+        }
+      }
+    }
+    SegmentInfos infos;
+    if (segmentsFileName == null) {
+      infos=new SegmentInfos();
+      message(""top: init: no segments in index"");
+    }
+ else {
+      message(""top: init: read existing segments commit "" + segmentsFileName);
+      infos=SegmentInfos.readCommit(dir,segmentsFileName);
+      message(""top: init: segments: "" + infos.toString() + "" version=""+ infos.getVersion());
+      Collection<String> indexFiles=infos.files(false);
+      lastCommitFiles.add(segmentsFileName);
+      lastCommitFiles.addAll(indexFiles);
+      deleter.incRef(lastCommitFiles);
+      lastNRTFiles.addAll(indexFiles);
+      deleter.incRef(lastNRTFiles);
+      message(""top: commitFiles="" + lastCommitFiles);
+      message(""top: nrtFiles="" + lastNRTFiles);
+    }
+    message(""top: delete unknown files on init: all files="" + Arrays.toString(dir.listAll()));
+    deleter.deleteUnknownFiles(segmentsFileName);
+    message(""top: done delete unknown files on init: all files="" + Arrays.toString(dir.listAll()));
+    String s=infos.getUserData().get(PRIMARY_GEN_KEY);
+    long myPrimaryGen;
+    if (s == null) {
+      assert infos.size() == 0;
+      myPrimaryGen=-1;
+    }
+ else {
+      myPrimaryGen=Long.parseLong(s);
+    }
+    message(""top: myPrimaryGen="" + myPrimaryGen);
+    boolean doCommit;
+    if (infos.size() > 0 && myPrimaryGen != -1 && myPrimaryGen != curPrimaryGen) {
+      assert myPrimaryGen < curPrimaryGen;
+      final long initSyncStartNS=System.nanoTime();
+      message(""top: init: primary changed while we were down myPrimaryGen="" + myPrimaryGen + "" vs curPrimaryGen=""+ curPrimaryGen+ ""; sync now before mgr init"");
+      CopyJob job=null;
+      message(""top: now delete starting commit point "" + segmentsFileName);
+      assert deleter.getRefCount(segmentsFileName) == 1;
+      deleter.decRef(Collections.singleton(segmentsFileName));
+      if (dir instanceof FSDirectory && ((FSDirectory)dir).checkPendingDeletions()) {
+        throw new RuntimeException(""replica cannot start: existing segments file="" + segmentsFileName + "" must be removed in order to start, but the file delete failed"");
+      }
+      boolean didRemove=lastCommitFiles.remove(segmentsFileName);
+      assert didRemove;
+      while (true) {
+        job=newCopyJob(""sync on startup replica="" + name() + "" myVersion=""+ infos.getVersion(),null,null,true,null);
+        job.start();
+        message(""top: init: sync sis.version="" + job.getCopyState().version);
+        try {
+          job.runBlocking();
+          job.finish();
+          break;
+        }
+ catch (        IOException ioe) {
+          job.cancel(""startup failed"",ioe);
+          if (ioe.getMessage().contains(""checksum mismatch after file copy"")) {
+            message(""top: failed to copy: "" + ioe + ""; retrying"");
+          }
+ else {
+            throw ioe;
+          }
+        }
+      }
+      lastPrimaryGen=job.getCopyState().primaryGen;
+      byte[] infosBytes=job.getCopyState().infosBytes;
+      SegmentInfos syncInfos=SegmentInfos.readCommit(dir,new BufferedChecksumIndexInput(new ByteArrayIndexInput(""SegmentInfos"",job.getCopyState().infosBytes)),job.getCopyState().gen);
+      syncInfos.updateGeneration(infos);
+      infos=syncInfos;
+      assert infos.getVersion() == job.getCopyState().version;
+      message(""  version="" + infos.getVersion() + "" segments=""+ infos.toString());
+      message(""top: init: incRef nrtFiles="" + job.getFileNames());
+      deleter.incRef(job.getFileNames());
+      message(""top: init: decRef lastNRTFiles="" + lastNRTFiles);
+      deleter.decRef(lastNRTFiles);
+      lastNRTFiles.clear();
+      lastNRTFiles.addAll(job.getFileNames());
+      message(""top: init: set lastNRTFiles="" + lastNRTFiles);
+      lastFileMetaData=job.getCopyState().files;
+      message(String.format(Locale.ROOT,""top: %d: start: done sync: took %.3fs for %s, opened NRT reader version=%d"",id,(System.nanoTime() - initSyncStartNS) / 1000000000.0,bytesToString(job.getTotalBytesCopied()),job.getCopyState().version));
+      doCommit=true;
+    }
+ else {
+      doCommit=false;
+      lastPrimaryGen=curPrimaryGen;
+      message(""top: same primary as before"");
+    }
+    if (infos.getGeneration() < maxPendingGen) {
+      message(""top: move infos generation from "" + infos.getGeneration() + "" to ""+ maxPendingGen);
+      infos.setNextWriteGeneration(maxPendingGen);
+    }
+    sendNewReplica();
+    mgr=new SegmentInfosSearcherManager(dir,this,infos,searcherFactory);
+    IndexSearcher searcher=mgr.acquire();
+    try {
+      int hitCount=searcher.count(new TermQuery(new Term(""marker"",""marker"")));
+      message(""top: marker count="" + hitCount + "" version=""+ ((DirectoryReader)searcher.getIndexReader()).getVersion());
+    }
+  finally {
+      mgr.release(searcher);
+    }
+    if (doCommit) {
+      commit();
+    }
+    message(""top: done start"");
+    state=""idle"";
+  }
+ catch (  Throwable t) {
+    if (t.getMessage().startsWith(""replica cannot start"") == false) {
+      message(""exc on start:"");
+      t.printStackTrace(printStream);
+    }
+ else {
+      dir.close();
+    }
+    IOUtils.reThrow(t);
+  }
+}","start up this replica , which possibly requires heavy copying of files from the primary node , if we were down for a long time",done, starts the process of initializing the replica and synchronizing it with the primary. It also handles any exceptions that may occur during the process.
+13597,"private void addPropertyType(URI p,Resource t){
+  OwlProperty prop=getProperty(p);
+  if (t.equals(OWL.TRANSITIVEPROPERTY)) {
+    prop.setTransitive();
+  }
+ else   if (t.equals(OWL.SYMMETRICPROPERTY)) {
+    prop.setSymmetric();
+  }
+ else   if (t.equals(OWL2.ASYMMETRICPROPERTY)) {
+    prop.setAsymmetric();
+  }
+ else   if (t.equals(OWL.FUNCTIONALPROPERTY)) {
+    prop.setFunctional();
+  }
+ else   if (t.equals(OWL.INVERSEFUNCTIONALPROPERTY)) {
+    prop.setInverseFunctional();
+  }
+ else   if (t.equals(OWL2.IRREFLEXIVEPROPERTY)) {
+    prop.setIrreflexive();
+  }
+}",add a particular characteristic to a property .,done, adds a property type to the property based on the given URI and resource . 
+67837,"protected static int toDigit(final char ch,final int index) throws HexDecodeException {
+  final int digit=Character.digit(ch,16);
+  if (digit == -1) {
+    throw new HexDecodeException(""Illegal hexadecimal character "" + ch + "" at index ""+ index);
+  }
+  return digit;
+}",converts a hexadecimal character to an integer .,done," converts a hexadecimal character to a digit . If the character is not a valid hexadecimal digit, it throws a Hex"
+80424,"public void addDropItem(final String name,final double probability,final int min,final int max){
+  dropsItems.add(new DropItem(name,probability,min,max));
+}","adds a named item to the list of items that will be dropped on dead if cleardropitemlist hasn ' t been called first , this will change all creatures of this kind .",done," adds a new drop item to the list of drops with the specified name, probability, minimum, and maximum amounts."
+8332,"public String resolveParentRelationName(String parentName,Object parent,String childName,Object child){
+  return parentName;
+}","follow the most conventional pattern , returns the parentname unchanged .",done, returns the parent relation name for the given parent and child objects. 
+42296,"private void adjustBCIndex(Instruction barrier){
+  NormalMethod source=barrier.position().method;
+  if (source.isForOsrSpecialization()) {
+    barrier.adjustBytecodeIndex(-source.getOsrPrologueLength());
+  }
+}","the osrbarrier instruction is not in ir , so the bc index was not adjusted in osr _ adjustbcindex .",done, adjusts the bytecode index of the barrier instruction based on the method it is in. 
+25087,"public GT_MetaGenerated_Item(String aUnlocalized,short aOffset,short aItemAmount){
+  super(aUnlocalized);
+  setCreativeTab(GregTech_API.TAB_GREGTECH_MATERIALS);
+  setHasSubtypes(true);
+  setMaxDamage(0);
+  mEnabledItems=new BitSet(aItemAmount);
+  mVisibleItems=new BitSet(aItemAmount);
+  mOffset=(short)Math.min(32766,aOffset);
+  mItemAmount=(short)Math.min(aItemAmount,32766 - mOffset);
+  mIconList=new IIcon[aItemAmount][1];
+  sInstances.put(getUnlocalizedName(),this);
+}",creates the item using these parameters .,done, creates a new instance of GT_MetaGenerated_Item with the given parameters.
+1640,"int put(T segment,List<? super T> recycleBin){
+  int count;
+  if (lastCount == 0) {
+    count=0;
+    lastCount=1;
+    last=segment;
+  }
+ else   if (Objects.deepEquals(last,segment)) {
+    ++lastCount;
+    count=0;
+    recycleBin.add(segment);
+  }
+ else {
+    count=lastCount;
+    lastCount=1;
+    last=segment;
+  }
+  return count;
+}",adds an element to the stream .,done, adds a segment to the list of segments and returns the count of the last segment added . 
+18191,"public void flushPending() throws SAXException {
+  if (m_needToCallStartDocument) {
+    startDocumentInternal();
+    m_needToCallStartDocument=false;
+  }
+  if (m_elemContext.m_startTagOpen) {
+    closeStartTag();
+    m_elemContext.m_startTagOpen=false;
+  }
+  if (m_cdataTagOpen) {
+    closeCDATA();
+    m_cdataTagOpen=false;
+  }
+  if (m_writer != null) {
+    try {
+      m_writer.flush();
+    }
+ catch (    IOException e) {
+    }
+  }
+}","this method flushes any pending events , which can be startdocument ( ) closing the opening tag of an element , or closing an open cdata section .",done, flushes any pending operations to the underlying writer . 
+76987,"private void pushTerm(BytesRef text) throws IOException {
+  int limit=Math.min(lastTerm.length(),text.length);
+  int pos=0;
+  while (pos < limit && lastTerm.byteAt(pos) == text.bytes[text.offset + pos]) {
+    pos++;
+  }
+  for (int i=lastTerm.length() - 1; i >= pos; i--) {
+    int prefixTopSize=pending.size() - prefixStarts[i];
+    if (prefixTopSize >= minItemsInBlock) {
+      writeBlocks(i + 1,prefixTopSize);
+      prefixStarts[i]-=prefixTopSize - 1;
+    }
+  }
+  if (prefixStarts.length < text.length) {
+    prefixStarts=ArrayUtil.grow(prefixStarts,text.length);
+  }
+  for (int i=pos; i < text.length; i++) {
+    prefixStarts[i]=pending.size();
+  }
+  lastTerm.copyBytes(text);
+}","pushes the new term to the top of the stack , and writes new blocks .",done, pushes the term to the pending list and updates the prefix starts . 
+14623,"static Map addElementToMap(String key,Set values,Map toMap){
+  if ((key != null) && (toMap != null)) {
+    toMap.put(key,values);
+  }
+  return toMap;
+}",adds a key / value pair to a map,done, adds an element to a map . 
+47720,"protected void flip(BufferCapabilities.FlipContents flipAction){
+  if (peer != null) {
+    Image backBuffer=getBackBuffer();
+    if (backBuffer != null) {
+      peer.flip(0,0,backBuffer.getWidth(null),backBuffer.getHeight(null),flipAction);
+    }
+  }
+ else {
+    throw new IllegalStateException(""Component must have a valid peer"");
+  }
+}","flipping moves the contents of the back buffer to the front buffer , either by copying or by moving the video pointer .",done, flips the image in the buffer . 
+25127,"@Override public void actOn(File f){
+  BufferedReader reader=null;
+  try {
+    reader=new BufferedReader(new FileReader(f));
+    announceSeedsFromReader(reader);
+  }
+ catch (  FileNotFoundException fnf) {
+    logger.log(Level.SEVERE,""seed file source not found"",fnf);
+  }
+ finally {
+    IOUtils.closeQuietly(reader);
+  }
+}","treat the given file as a source of additional seeds , announcing to seedlisteners .",done, reads a file and announces seeds from the file. 
+82346,"public synchronized boolean removeElement(Object object){
+  int index;
+  if ((index=indexOf(object,0)) == -1) {
+    return false;
+  }
+  removeElementAt(index);
+  return true;
+}","removes the first occurrence , starting at the beginning and moving towards the end , of the specified object from this vector .",done, removes an element from the vector . 
+10954,"protected boolean read(){
+  if (!nReuseHeader) {
+    Debug.message(""iso8211"",""DDFRecord reusing header, calling readHeader()"");
+    return readHeader();
+  }
+  byte[] tempData=new byte[nDataSize - nFieldOffset];
+  int nReadBytes=poModule.read(tempData,0,tempData.length);
+  System.arraycopy(pachData,nFieldOffset,tempData,0,tempData.length);
+  if (nReadBytes != (int)(nDataSize - nFieldOffset) && nReadBytes == -1) {
+    return false;
+  }
+ else   if (nReadBytes != (int)(nDataSize - nFieldOffset)) {
+    Debug.error(""DDFRecord: Data record is short on DDF file."");
+    return false;
+  }
+  return true;
+}","read a record of data from the file , and parse the header to build a field list for the record ( or reuse the existing one if reusing headers ) .",done," reads the data from the DDF file and checks if the data is complete or not. If the data is not complete, it returns false. If"
+73920,"protected boolean readReceiveDelay(){
+  try {
+    receiveDelay=Integer.parseInt(receiveDelayField.getText());
+  }
+ catch (  Exception e) {
+    statusText1.setText(rb.getString(""Error7""));
+    statusText1.setVisible(true);
+    receiveDelay=0;
+    errorInStatus1=true;
+    resetNotes2();
+    return (false);
+  }
+  if (receiveDelay < 0) {
+    statusText1.setText(rb.getString(""Error8""));
+    statusText1.setVisible(true);
+    receiveDelay=0;
+    errorInStatus1=true;
+    resetNotes2();
+    return (false);
+  }
+  if (receiveDelay > 65535) {
+    statusText1.setText(rb.getString(""Error9""));
+    statusText1.setVisible(true);
+    receiveDelay=0;
+    errorInStatus1=true;
+    resetNotes2();
+    return (false);
+  }
+  return true;
+}","read receive delay from window returns ' true ' if successful , ' false ' if an error was detected .",done," reads the receive delay from a text field and checks if it is valid. If not, it sets an error message and returns false. If the delay"
+33466,"public synchronized void addMessages(ArrayList<SmsMmsMessage> newMessages){
+  if (newMessages != null) {
+    messages.addAll(0,newMessages);
+    UpdateMessageCount();
+  }
+}",add a list of new messages to the end of the current message list .,done, add new messages to the list of messages and update the message count . 
+82617,"protected final void refreshLoadingViewsSize(){
+  final int maximumPullScroll=(int)(getMaximumPullScroll() * 1.2f);
+  int pLeft=getPaddingLeft();
+  int pTop=getPaddingTop();
+  int pRight=getPaddingRight();
+  int pBottom=getPaddingBottom();
+switch (getPullToRefreshScrollDirection()) {
+case HORIZONTAL:
+    if (mMode.showHeaderLoadingLayout()) {
+      mHeaderLayout.setWidth(maximumPullScroll);
+      pLeft=-maximumPullScroll;
+    }
+ else {
+      pLeft=0;
+    }
+  if (mMode.showFooterLoadingLayout()) {
+    mFooterLayout.setWidth(maximumPullScroll);
+    pRight=-maximumPullScroll;
+  }
+ else {
+    pRight=0;
+  }
+break;
+case VERTICAL:
+if (mMode.showHeaderLoadingLayout()) {
+mHeaderLayout.setHeight(maximumPullScroll);
+pTop=-maximumPullScroll;
+}
+ else {
+pTop=0;
+}
+if (mMode.showFooterLoadingLayout()) {
+mFooterLayout.setHeight(maximumPullScroll);
+pBottom=-maximumPullScroll;
+}
+ else {
+pBottom=0;
+}
+break;
+}
+if (DEBUG) {
+Log.d(LOG_TAG,String.format(""Setting Padding. L: %d, T: %d, R: %d, B: %d"",pLeft,pTop,pRight,pBottom));
+}
+setPadding(pLeft,pTop,pRight,pBottom);
+}","re - measure the loading views height , and adjust internal padding as necessary",done, refreshes the size of the loading views based on the maximum pull scroll distance.
+81353,"public static void sortFields(FieldBinding[] sortedFields,int left,int right){
+  Arrays.sort(sortedFields,left,right,FIELD_COMPARATOR);
+}",sort the field array using a quicksort,done, sorts the fields in the given range using the field comparator . 
+70192,"protected void processConnectionEvent(ConnectionEvent event){
+  for (Enumeration<ConnectionListener> e=connectionListeners.elements(); e.hasMoreElements(); ) {
+    ConnectionListener l=e.nextElement();
+switch (event.getType()) {
+case ConnectionEvent.CONNECTED:
+      l.connected((ConnectedEvent)event);
+    break;
+case ConnectionEvent.DISCONNECTED:
+  l.disconnected((DisconnectedEvent)event);
+break;
+case ConnectionEvent.PACKET_RECEIVED:
+l.packetReceived((PacketReceivedEvent)event);
+break;
+}
+}
+}",processes game events occurring on this connection by dispatching them to any registered gamelistener objects .,done, processes a connection event by notifying all listeners of the event . 
+25600,"public static boolean isCacheSafe(Class<?> clazz,ClassLoader classLoader){
+  Assert.notNull(clazz,""Class must not be null"");
+  ClassLoader target=clazz.getClassLoader();
+  if (target == null) {
+    return false;
+  }
+  ClassLoader cur=classLoader;
+  if (cur == target) {
+    return true;
+  }
+  while (cur != null) {
+    cur=cur.getParent();
+    if (cur == target) {
+      return true;
+    }
+  }
+  return false;
+}","check whether the given class is cache - safe in the given context , i . e . whether it is loaded by the given classloader or a parent of it .",done, checks if the given class is safe to be cached by the given class loader .
+50483,"public void addLast(StatementSequence statements){
+  if (statements != null) {
+    sequence.addAll(statements.sequence);
+  }
+}","adds a sequence of statements to the end of this sequence when the sequence object is not null , otherwise does nothing .",done, adds a sequence of statements to the end of the current sequence . 
+57688,"public IntBuffer put(int[] src,int srcOffset,int intCount){
+  if (isReadOnly()) {
+    throw new ReadOnlyBufferException();
+  }
+  Arrays.checkOffsetAndCount(src.length,srcOffset,intCount);
+  if (intCount > remaining()) {
+    throw new BufferOverflowException();
+  }
+  for (int i=srcOffset; i < srcOffset + intCount; ++i) {
+    put(src[i]);
+  }
+  return this;
+}","writes ints from the given int array , starting from the specified offset , to the current position and increases the position by the number of ints written .",done, puts the specified int array into the buffer starting at the current position and advances the position by the number of elements written. 
+78975,"public boolean init(StepMetaInterface smi,StepDataInterface sdi){
+  this.meta=((SortKeyStepMeta)smi);
+  this.data=((SortKeyStepData)sdi);
+  return super.init(smi,sdi);
+}",initialize and do work where other steps need to wait for . . .,done, initialize the step data and meta data . 
+50310,"default ClassDeclaration asClass(){
+  throw new UnsupportedOperationException(String.format(""%s is not a class"",this));
+}",return this as a classdeclaration or throw unsupportedoperationexception .,property, throws an UnsupportedOperationException if the element is not a class . 
+35296,"public static boolean isAccessorPair(TMember member,TMember member2){
+  return (member instanceof TGetter && member2 instanceof TSetter) || (member instanceof TSetter && member2 instanceof TGetter);
+}",returns true if one of the members is a getter and the other one is a setter .,property," returns true if the two members are a getter and a setter , or a setter and a getter . "
+48994,"private static Collection<TCPTransport> allKnownTransports(){
+  Set<TCPTransport> s;
+synchronized (localEndpoints) {
+    s=new HashSet<TCPTransport>(localEndpoints.size());
+    for (    LinkedList<TCPEndpoint> epList : localEndpoints.values()) {
+      TCPEndpoint ep=epList.getFirst();
+      s.add(ep.transport);
+    }
+  }
+  return s;
+}",returns the current list of known transports .,property, returns a collection of all known transports . 
+52350,"public int writeUTF8(final CharSequence chars,int off,int len){
+  if (len > remaining()) {
+    return writeUTF8Slow(chars,off,len);
+  }
+  final Block block=current;
+  int limit=block.limit;
+  char ch='\0';
+  int octets=0;
+  while (len > 0) {
+    ch=chars.charAt(off);
+    if (ch >= UTF8_2_OCTET_MIN_VALUE) {
+      break;
+    }
+    block.data[limit++]=(byte)ch;
+    octets++;
+    off++;
+    len--;
+  }
+  block.limit=limit;
+  if (len > 0) {
+    if (ch < UTF8_3_OCTET_MIN_VALUE) {
+      return octets + writeUTF8UpTo2Byte(chars,off,len);
+    }
+    if (ch >= LOW_SURROGATE_FIRST && ch <= LOW_SURROGATE_LAST) {
+      throw new IllegalArgumentException(""Unpaired low surrogate: "" + ch);
+    }
+    if (ch >= HIGH_SURROGATE_FIRST && ch <= HIGH_SURROGATE_LAST) {
+      return octets + writeUTF8Slow(chars,off,len);
+    }
+    return octets + writeUTF8UpTo3Byte(chars,off,len);
+  }
+  return octets;
+}",returns the number of octets written .,property, writes the given sequence of characters to the buffer in UTF-8 encoding .
+19738,"protected String buildCreateSchemaStatement() throws ReplicatorException {
+  return null;
+}","return a statement that will create the schema , null if no create schema can be given",property, returns a SQL statement to create the schema for the replicator. 
+25280,"private boolean decodeHandshake(ByteBuffer socketBufferNew){
+  ByteBuffer socketBuffer;
+  if (tmpHandshakeBytes.capacity() == 0) {
+    socketBuffer=socketBufferNew;
+  }
+ else {
+    if (tmpHandshakeBytes.remaining() < socketBufferNew.remaining()) {
+      ByteBuffer buf=ByteBuffer.allocate(tmpHandshakeBytes.capacity() + socketBufferNew.remaining());
+      tmpHandshakeBytes.flip();
+      buf.put(tmpHandshakeBytes);
+      tmpHandshakeBytes=buf;
+    }
+    tmpHandshakeBytes.put(socketBufferNew);
+    tmpHandshakeBytes.flip();
+    socketBuffer=tmpHandshakeBytes;
+  }
+  socketBuffer.mark();
+  try {
+    if (draft == null) {
+      HandshakeState isflashedgecase=isFlashEdgeCase(socketBuffer);
+      if (isflashedgecase == HandshakeState.MATCHED) {
+        try {
+          write(ByteBuffer.wrap(Charsetfunctions.utf8Bytes(wsl.getFlashPolicy(this))));
+          close(CloseFrame.FLASHPOLICY,"""");
+        }
+ catch (        InvalidDataException e) {
+          close(CloseFrame.ABNORMAL_CLOSE,""remote peer closed connection before flashpolicy could be transmitted"",true);
+        }
+        return false;
+      }
+    }
+    HandshakeState handshakestate=null;
+    try {
+      if (role == Role.SERVER) {
+        if (draft == null) {
+          for (          Draft d : knownDrafts) {
+            d=d.copyInstance();
+            try {
+              d.setParseMode(role);
+              socketBuffer.reset();
+              Handshakedata tmphandshake=d.translateHandshake(socketBuffer);
+              if (tmphandshake instanceof ClientHandshake == false) {
+                flushAndClose(CloseFrame.PROTOCOL_ERROR,""wrong http function"",false);
+                return false;
+              }
+              ClientHandshake handshake=(ClientHandshake)tmphandshake;
+              handshakestate=d.acceptHandshakeAsServer(handshake);
+              if (handshakestate == HandshakeState.MATCHED) {
+                resourceDescriptor=handshake.getResourceDescriptor();
+                ServerHandshakeBuilder response;
+                try {
+                  response=wsl.onWebsocketHandshakeReceivedAsServer(this,d,handshake);
+                }
+ catch (                InvalidDataException e) {
+                  flushAndClose(e.getCloseCode(),e.getMessage(),false);
+                  return false;
+                }
+catch (                RuntimeException e) {
+                  wsl.onWebsocketError(this,e);
+                  flushAndClose(CloseFrame.NEVER_CONNECTED,e.getMessage(),false);
+                  return false;
+                }
+                write(d.createHandshake(d.postProcessHandshakeResponseAsServer(handshake,response),role));
+                draft=d;
+                open(handshake);
+                return true;
+              }
+            }
+ catch (            InvalidHandshakeException e) {
+            }
+          }
+          if (draft == null) {
+            close(CloseFrame.PROTOCOL_ERROR,""no draft matches"");
+          }
+          return false;
+        }
+ else {
+          Handshakedata tmphandshake=draft.translateHandshake(socketBuffer);
+          if (tmphandshake instanceof ClientHandshake == false) {
+            flushAndClose(CloseFrame.PROTOCOL_ERROR,""wrong http function"",false);
+            return false;
+          }
+          ClientHandshake handshake=(ClientHandshake)tmphandshake;
+          handshakestate=draft.acceptHandshakeAsServer(handshake);
+          if (handshakestate == HandshakeState.MATCHED) {
+            open(handshake);
+            return true;
+          }
+ else {
+            close(CloseFrame.PROTOCOL_ERROR,""the handshake did finaly not match"");
+          }
+          return false;
+        }
+      }
+ else       if (role == Role.CLIENT) {
+        draft.setParseMode(role);
+        Handshakedata tmphandshake=draft.translateHandshake(socketBuffer);
+        if (tmphandshake instanceof ServerHandshake == false) {
+          flushAndClose(CloseFrame.PROTOCOL_ERROR,""wrong http function"",false);
+          return false;
+        }
+        ServerHandshake handshake=(ServerHandshake)tmphandshake;
+        handshakestate=draft.acceptHandshakeAsClient(handshakerequest,handshake);
+        if (handshakestate == HandshakeState.MATCHED) {
+          try {
+            wsl.onWebsocketHandshakeReceivedAsClient(this,handshakerequest,handshake);
+          }
+ catch (          InvalidDataException e) {
+            flushAndClose(e.getCloseCode(),e.getMessage(),false);
+            return false;
+          }
+catch (          RuntimeException e) {
+            wsl.onWebsocketError(this,e);
+            flushAndClose(CloseFrame.NEVER_CONNECTED,e.getMessage(),false);
+            return false;
+          }
+          open(handshake);
+          return true;
+        }
+ else {
+          close(CloseFrame.PROTOCOL_ERROR,""draft "" + draft + "" refuses handshake"");
+        }
+      }
+    }
+ catch (    InvalidHandshakeException e) {
+      close(e);
+    }
+  }
+ catch (  IncompleteHandshakeException e) {
+    if (tmpHandshakeBytes.capacity() == 0) {
+      socketBuffer.reset();
+      int newsize=e.getPreferedSize();
+      if (newsize == 0) {
+        newsize=socketBuffer.capacity() + 16;
+      }
+ else {
+        assert (e.getPreferedSize() >= socketBuffer.remaining());
+      }
+      tmpHandshakeBytes=ByteBuffer.allocate(newsize);
+      tmpHandshakeBytes.put(socketBufferNew);
+    }
+ else {
+      tmpHandshakeBytes.position(tmpHandshakeBytes.limit());
+      tmpHandshakeBytes.limit(tmpHandshakeBytes.capacity());
+    }
+  }
+  return false;
+}",returns whether the handshake phase has is completed .,property," decodes the handshake and returns true if the handshake was successful, false otherwise."
+51962,"public static String readFully(Reader reader) throws IOException {
+  try {
+    StringWriter writer=new StringWriter();
+    char[] buffer=new char[1024];
+    int count;
+    while ((count=reader.read(buffer)) != -1) {
+      writer.write(buffer,0,count);
+    }
+    return writer.toString();
+  }
+  finally {
+    reader.close();
+  }
+}","returns the remainder of ' reader ' as a string , closing it when done .",property, reads all characters from the reader and returns them as a string . 
+7323,"public static int parseString(String value){
+  return Integer.parseInt(value);
+}",parse string value returning a int .,property, parses a string into an integer . 
+27163,"private static URI refragUri(URI uri,String frag) throws URISyntaxException {
+  return new URI(uri.getScheme(),uri.getSchemeSpecificPart(),frag);
+}",return a new uri with a different fragment .,property, returns a new URI with the specified fragment . 
+72991,"@Override public List chunkString(String sToChunk){
+  Integer[] iRes=splitPointsByDelimiterList(sToChunk,getDelimiters());
+  String[] sRes=splitStringByDelimiterPoints(sToChunk,iRes);
+  return Arrays.asList(sRes);
+}","returns a list of string chunks , derived from a given string .",property, returns a list of strings split by the delimiters . 
+80868,"private static MappingObject ObjectAt(PCalLocation loc,MappingObject[][] map){
+  return map[loc.getLine()][loc.getColumn()];
+}",returns the mappingobject at the location in map indicated by loc .,property, returns the object at the specified location in the map . 
+44005,"public double interceptStdErr(){
+  return Math.sqrt(svar0);
+}",returns the standard error of the estimate for the intercept .,property, returns the standard deviation of the residuals from the regression . 
+48707,"private static boolean isBufferTooLarge(ByteBuffer buf){
+  return isBufferTooLarge(buf.capacity());
+}","returns true if the buffer is too large to be added to the buffer cache , false otherwise .",property," returns true if the buffer is too large , false otherwise . "
+38006,"public Enumeration<String> enumerateMeasures(){
+  Vector<String> newVector=new Vector<String>(1);
+  newVector.addElement(""measureNumIterations"");
+  return newVector.elements();
+}",returns an enumeration of the additional measure names,property, returns an enumeration of the names of the measures that this class can provide. 
+46645,"protected boolean arePathsContiguous(TreePath[] paths){
+  if (rowMapper == null || paths.length < 2)   return true;
+ else {
+    BitSet bitSet=new BitSet(32);
+    int anIndex, counter, min;
+    int pathCount=paths.length;
+    int validCount=0;
+    TreePath[] tempPath=new TreePath[1];
+    tempPath[0]=paths[0];
+    min=rowMapper.getRowsForPaths(tempPath)[0];
+    for (counter=0; counter < pathCount; counter++) {
+      if (paths[counter] != null) {
+        tempPath[0]=paths[counter];
+        int[] rows=rowMapper.getRowsForPaths(tempPath);
+        if (rows == null) {
+          return false;
+        }
+        anIndex=rows[0];
+        if (anIndex == -1 || anIndex < (min - pathCount) || anIndex > (min + pathCount))         return false;
+        if (anIndex < min)         min=anIndex;
+        if (!bitSet.get(anIndex)) {
+          bitSet.set(anIndex);
+          validCount++;
+        }
+      }
+    }
+    int maxCounter=validCount + min;
+    for (counter=min; counter < maxCounter; counter++)     if (!bitSet.get(counter))     return false;
+  }
+  return true;
+}","returns true if the paths are contiguous , or this object has no rowmapper .",property, returns true if all the paths are contiguous in the tree . 
+3995,"@Override public String findLibrary(String name){
+  String systemName=System.mapLibraryName(name);
+  ArrayList<Loader> loaders=getLoaders();
+  for (int i=0; i < loaders.size(); i++) {
+    Loader loader=loaders.get(i);
+    Path path=loader.getPath(systemName);
+    if (path != null && path.canRead()) {
+      return path.getNativePath();
+    }
+    path=loader.getPath(""native/"" + systemName);
+    if (path != null && path.canRead()) {
+      return path.getNativePath();
+    }
+  }
+  for (int i=0; i < _nativePath.size(); i++) {
+    Path path=_nativePath.get(i);
+    if (path.canRead())     return path.getNativePath();
+  }
+  return super.findLibrary(name);
+}",returns the full library path for the name .,property, returns the path to the native library with the specified name . 
+37560,"public String globalInfo(){
+  return ""Generates a single train/test split and calls the appropriate "" + ""SplitEvaluator to generate some results."";
+}",returns a string describing this result producer,property, returns a string that describes the function of the method . 
+48100,"@Override public boolean isInitial(){
+  return init;
+}",returns a boolean flag indicating if the state is initial ( just starting ),property, returns whether the object is initial or not . 
+53676,"public static <T>CompletableFuture<T> exceptionallyCompletedFuture(Throwable throwable){
+  final CompletableFuture<T> future=new CompletableFuture<T>();
+  future.completeExceptionally(throwable);
+  return future;
+}",returns a new completablefuture that is already exceptionally completed with the given exception .,property, returns a CompletableFuture that is completed exceptionally with the given Throwable. 
+86244,"public Date modifiedDate(String path) throws IllegalStateException, IOException, FTPIllegalReplyException, FTPException {
+synchronized (lock) {
+    if (!connected) {
+      throw new IllegalStateException(""Client not connected"");
+    }
+    if (!authenticated) {
+      throw new IllegalStateException(""Client not authenticated"");
+    }
+    communication.sendFTPCommand(""MDTM "" + path);
+    FTPReply r=communication.readFTPReply();
+    touchAutoNoopTimer();
+    if (!r.isSuccessCode()) {
+      throw new FTPException(r);
+    }
+    String[] messages=r.getMessages();
+    if (messages.length != 1) {
+      throw new FTPIllegalReplyException();
+    }
+ else {
+      try {
+        return MDTM_DATE_FORMAT.parse(messages[0]);
+      }
+ catch (      ParseException e) {
+        throw new FTPIllegalReplyException();
+      }
+    }
+  }
+}",this method asks and returns the last modification date of a file or directory .,property, returns the last modified date of the file at the specified path .
+70738,"static boolean verifyZipFile(File file){
+  try {
+    ZipFile zipFile=new ZipFile(file);
+    try {
+      zipFile.close();
+      return true;
+    }
+ catch (    IOException e) {
+      Log.w(TAG,""Failed to close zip file: "" + file.getAbsolutePath());
+    }
+  }
+ catch (  ZipException ex) {
+    Log.w(TAG,""File "" + file.getAbsolutePath() + "" is not a valid zip file."",ex);
+  }
+catch (  IOException ex) {
+    Log.w(TAG,""Got an IOException trying to open zip file: "" + file.getAbsolutePath(),ex);
+  }
+  return false;
+}",returns whether the file is a valid zip file .,property, returns true if the file is a valid zip file and false otherwise 
+13709,"public PropertyXMLBuilder(ServiceSchema serviceSchema,AMModel model,Set attributeSchemas) throws SMSException, SSOException {
+  this.model=model;
+  this.serviceName=serviceSchema.getServiceName();
+  getServiceResourceBundle(serviceSchema);
+  if (serviceBundle != null) {
+    mapTypeToAttributeSchema=new HashMap(attributeSchemas.size() * 2);
+    mapTypeToAttributeSchema.put(NULL_TYPE,attributeSchemas);
+  }
+}",returns a xml for displaying attribute in property sheet .,property, creates a new instance of the PropertyXMLBuilder class with the given parameters .
+61863,"public static <T>UnaryOperator<List<T>> from(Collection<String> commandLineUdids,Function<T,ICloud.MBSBackup> mbsBackup,Function<ICloud.MBSBackup,String> formatter,Printer out,InputStream in){
+  return commandLineUdids.isEmpty() ? new User(mbsBackup,out,in,formatter) : new Udid(mbsBackup,out,in,new ArrayList<>(commandLineUdids));
+}",returns a new instance .,property, returns a UnaryOperator that creates a User or Udid object based on the command line Udids . 
+44250,"public static int uriType(String uri){
+  if (uri.indexOf(':') != -1) {
+    return ABS_URI;
+  }
+ else   if (uri.startsWith(""/"")) {
+    return ROOT_REL_URI;
+  }
+ else {
+    return NOROOT_REL_URI;
+  }
+}",returns the type of a uri : abs _ uri root _ rel _ uri noroot _ rel _ uri,property, returns the type of the URI . 
+84675,"protected boolean isCompatible(Taxa taxa,List<Taxon> availableTaxa){
+  for (int i=0; i < taxa.getTaxonCount(); i++) {
+    Taxon taxon=taxa.getTaxon(i);
+    if (!availableTaxa.contains(taxon)) {
+      return false;
+    }
+  }
+  return true;
+}",returns true if taxa are all found in availabletaxa,property, returns whether the taxa is compatible with the available taxa . 
+35431,"public static void assertExpectedOutputContains(String expectedString,String x){
+  if (!x.contains(expectedString)) {
+    fail(""expected '"" + expectedString + ""' not found in '""+ x+ ""'"");
+  }
+}",fails if expectedstring is not found in x,property, asserts that the expected string is present in the output string . 
+30710,"private FastConcurrentSkipListMap.Node<K,V> loNode(){
+  if (lo == null)   return m.findFirst();
+ else   if (loInclusive)   return m.findNear(lo,m.GT | m.EQ);
+ else   return m.findNear(lo,m.GT);
+}",returns lowest node .,property, returns the node with the lowest key in the map . 
+23356,"public static boolean hasTokenInformation(Bundle bundle){
+  if (bundle == null) {
+    return false;
+  }
+  String token=bundle.getString(TOKEN_KEY);
+  if ((token == null) || (token.length() == 0)) {
+    return false;
+  }
+  long expiresMilliseconds=bundle.getLong(EXPIRATION_DATE_KEY,0L);
+  if (expiresMilliseconds == 0L) {
+    return false;
+  }
+  return true;
+}",returns a boolean indicating whether a bundle contains properties that could be a valid saved token .,property," returns true if the bundle contains token information, false otherwise."
+85424,"public static List<String> expandWildcards(Iterable<File> dirs,List<String> names,Backend forBackend){
+  List<String> result=new ArrayList<String>(names.size());
+  for (  String name : names) {
+    expandWildcard(result,dirs,name,forBackend);
+  }
+  return result;
+}",given a list of source directories and a list of module names that possibly contain wildcards it returns a expanded list of module names of modules that were actually found in the given source directories .,property, returns a list of expanded wildcard names . 
+46416,"private int convertLocationToColumn(int x,int y){
+  if (cellWidth > 0) {
+    if (layoutOrientation == JList.VERTICAL) {
+      return 0;
+    }
+    Insets insets=list.getInsets();
+    int col;
+    if (isLeftToRight) {
+      col=(x - insets.left) / cellWidth;
+    }
+ else {
+      col=(list.getWidth() - x - insets.right- 1) / cellWidth;
+    }
+    if (col < 0) {
+      return 0;
+    }
+ else     if (col >= columnCount) {
+      return columnCount - 1;
+    }
+    return col;
+  }
+  return 0;
+}",returns the closest column to the passed in location .,property, returns the column index for the specified location . 
+38962,"@Override public Enumeration<Option> listOptions(){
+  Vector<Option> result=enumToVector(super.listOptions());
+  result.addElement(new Option(""\tThe number of clusters (default "" + defaultNumClusters() + "")"",""k"",1,""-k <num>""));
+  result.addElement(new Option(""\tSet pattern to grid (default is random).\n"" + ""\tThis flag cannot be used at the same time as flag I.\n"" + ""\tThe pattern is random, if neither flag G nor flag I is set."",""G"",0,""-G""));
+  result.addElement(new Option(""\tSet pattern to sine (default is random).\n"" + ""\tThis flag cannot be used at the same time as flag I.\n"" + ""\tThe pattern is random, if neither flag G nor flag I is set."",""I"",0,""-I""));
+  result.addElement(new Option(""\tThe range of number of instances per cluster (default "" + defaultMinInstNum() + ""..""+ defaultMaxInstNum()+ "").\n""+ ""\tLower number must be between 0 and 2500,\n""+ ""\tupper number must be between 50 and 2500."",""N"",1,""-N <num>..<num>""));
+  result.addElement(new Option(""\tThe range of radius per cluster (default "" + defaultMinRadius() + ""..""+ defaultMaxRadius()+ "").\n""+ ""\tLower number must be between 0 and SQRT(2), \n""+ ""\tupper number must be between SQRT(2) and SQRT(32)."",""R"",1,""-R <num>..<num>""));
+  result.addElement(new Option(""\tThe distance multiplier (default "" + defaultDistMult() + "")."",""M"",1,""-M <num>""));
+  result.addElement(new Option(""\tThe number of cycles (default "" + defaultNumCycles() + "")."",""C"",1,""-C <num>""));
+  result.addElement(new Option(""\tFlag for input order is ORDERED. If flag is not set then \n"" + ""\tinput order is RANDOMIZED. RANDOMIZED is currently not \n"" + ""\timplemented, therefore is the input order always ORDERED."",""O"",0,""-O""));
+  result.addElement(new Option(""\tThe noise rate in percent (default "" + defaultNoiseRate() + "").\n""+ ""\tCan be between 0% and 30%. (Remark: The original \n""+ ""\talgorithm only allows noise up to 10%.)"",""P"",1,""-P <num>""));
+  return result.elements();
+}",returns an enumeration describing the available options .,property, returns a list of options for the algorithm.
+46969,"public boolean isSpecified(int index){
+  if ((index < 0) || (index >= mLength)) {
+    throw new ArrayIndexOutOfBoundsException("""");
+  }
+  String str=mItems[(index << 3) + 5];
+  return ((str != null) ? (str.charAt(0) == 'd') : true);
+}",returns true unless the attribute value was provided by dtd defaulting .,property, returns whether the item at the specified index is specified . 
+50427,"public Name join(String identifier){
+  validateLowerUnderscore(identifier);
+  List<NamePiece> newPieceList=new ArrayList<>();
+  newPieceList.addAll(namePieces);
+  newPieceList.add(new NamePiece(identifier,CaseFormat.LOWER_UNDERSCORE));
+  return new Name(newPieceList);
+}",returns a new name containing the pieces from this name plus the given identifier added on the end .,property, joins the given identifier to the name . 
+81267,"public static Object[] sortCopy(Object[] objects,Comparer comparer){
+  int len=objects.length;
+  Object[] copy=new Object[len];
+  System.arraycopy(objects,0,copy,0,len);
+  sort(copy,comparer);
+  return copy;
+}","sorts an array of strings , returning a new array with the sorted items .",property, returns a sorted copy of the array of objects . 
+43175,"protected <T extends TaskServiceDocument<E>,E extends Enum<E>>T waitForTaskCompletion(String documentSelfLink,Class<T> type) throws Throwable {
+  return waitForPropertyValue(documentSelfLink,type,TaskServiceDocument.FIELD_NAME_TASK_STAGE,Arrays.asList(TaskStage.FINISHED,TaskStage.FAILED,TaskStage.CANCELLED),true,waitForStageChangeCountLonger());
+}",waits until the given task completes and returns its final state .,property, waits for the task to complete and returns the document . 
+39357,"@Override public Enumeration<Option> listOptions(){
+  Vector<Option> result=new Vector<Option>();
+  result.addElement(new Option(""\tUse double precision format.\n"" + ""\t(default: single precision)"",""double"",0,""-double""));
+  result.addElement(new Option(""\tUse tabs as separator.\n"" + ""\t(default: blanks)"",""tabs"",0,""-tabs""));
+  result.addAll(Collections.list(super.listOptions()));
+  return result.elements();
+}",returns an enumeration describing the available options .,property, returns a list of options for this command line parser . 
+60876,"private static Locale strip(Locale locale){
+  String language=locale.getLanguage();
+  String country=locale.getCountry();
+  String variant=locale.getVariant();
+  if (!variant.isEmpty()) {
+    variant="""";
+  }
+ else   if (!country.isEmpty()) {
+    country="""";
+  }
+ else   if (!language.isEmpty()) {
+    language="""";
+  }
+ else {
+    return null;
+  }
+  return new Locale(language,country,variant);
+}","returns a locale with the most - specific field removed , or null if this locale had an empty language , country and variant .",property," returns a new locale with the same language, country, and variant as the input locale, but with the variant and country removed if they are not empty"
+33745,"private static Object invokeOrDie(final Method method,final Object object,final Object... params){
+  try {
+    return method.invoke(object,params);
+  }
+ catch (  IllegalAccessException e) {
+    throw new RuntimeException(""Couldn't use Java reflection to implement protocol message "" + ""reflection."",e);
+  }
+catch (  InvocationTargetException e) {
+    final Throwable cause=e.getCause();
+    if (cause instanceof RuntimeException) {
+      throw (RuntimeException)cause;
+    }
+ else     if (cause instanceof Error) {
+      throw (Error)cause;
+    }
+ else {
+      throw new RuntimeException(""Unexpected exception thrown by generated accessor method."",cause);
+    }
+  }
+}",calls invoke and throws a runtimeexception if it fails .,property," invokes a method on an object with the specified parameters , handling exceptions and returning the result . "
+47123,"public final void quietlyJoin(){
+  doJoin();
+}","joins this task , without returning its result or throwing its exception .",property, joins the thread without throwing an exception 
+57622,"public int countTokens(){
+  int count=0;
+  boolean inToken=false;
+  for (int i=position, length=string.length(); i < length; i++) {
+    if (delimiters.indexOf(string.charAt(i),0) >= 0) {
+      if (returnDelimiters)       count++;
+      if (inToken) {
+        count++;
+        inToken=false;
+      }
+    }
+ else {
+      inToken=true;
+    }
+  }
+  if (inToken)   count++;
+  return count;
+}",returns the number of unprocessed tokens remaining in the string .,property, returns the number of tokens in the string using the specified delimiters . 
+49240,"private static byte[] WindowsRegEnumKeyEx1(int hKey,int subKeyIndex,int maxKeyLength){
+  byte[] result=WindowsRegEnumKeyEx(hKey,subKeyIndex,maxKeyLength);
+  if (result != null) {
+    return result;
+  }
+ else {
+    long sleepTime=INIT_SLEEP_TIME;
+    for (int i=0; i < MAX_ATTEMPTS; i++) {
+      try {
+        Thread.sleep(sleepTime);
+      }
+ catch (      InterruptedException e) {
+        return result;
+      }
+      sleepTime*=2;
+      result=WindowsRegEnumKeyEx(hKey,subKeyIndex,maxKeyLength);
+      if (result != null) {
+        return result;
+      }
+    }
+  }
+  return result;
+}",retries regenumkeyex ( ) max _ attempts times before giving up .,property, returns the byte array of the Windows Registry Enum Key Ex 1. 
+56387,"public final boolean isOpen(){
+  return closed.get() == false;
+}",returns true if this lock is still open ie . has not been closed yet .,property," returns true if the resource is open, false otherwise. "
+57393,"protected <T extends KeySpec>T engineGetKeySpec(Key key,Class<T> keySpec) throws InvalidKeySpecException {
+  BigInteger p, q, g, x, y;
+  if (key != null) {
+    if (keySpec == null) {
+      throw new NullPointerException(""keySpec == null"");
+    }
+    if (key instanceof DSAPrivateKey) {
+      DSAPrivateKey privateKey=(DSAPrivateKey)key;
+      if (keySpec.equals(DSAPrivateKeySpec.class)) {
+        x=privateKey.getX();
+        DSAParams params=privateKey.getParams();
+        p=params.getP();
+        q=params.getQ();
+        g=params.getG();
+        return (T)(new DSAPrivateKeySpec(x,p,q,g));
+      }
+      if (keySpec.equals(PKCS8EncodedKeySpec.class)) {
+        return (T)(new PKCS8EncodedKeySpec(key.getEncoded()));
+      }
+      throw new InvalidKeySpecException(""'keySpec' is neither DSAPrivateKeySpec nor PKCS8EncodedKeySpec"");
+    }
+    if (key instanceof DSAPublicKey) {
+      DSAPublicKey publicKey=(DSAPublicKey)key;
+      if (keySpec.equals(DSAPublicKeySpec.class)) {
+        y=publicKey.getY();
+        DSAParams params=publicKey.getParams();
+        p=params.getP();
+        q=params.getQ();
+        g=params.getG();
+        return (T)(new DSAPublicKeySpec(y,p,q,g));
+      }
+      if (keySpec.equals(X509EncodedKeySpec.class)) {
+        return (T)(new X509EncodedKeySpec(key.getEncoded()));
+      }
+      throw new InvalidKeySpecException(""'keySpec' is neither DSAPublicKeySpec nor X509EncodedKeySpec"");
+    }
+  }
+  throw new InvalidKeySpecException(""'key' is neither DSAPublicKey nor DSAPrivateKey"");
+}",this method returns a specification for the supplied key .,property, returns the key specification for the given key and key specification . 
+16416,"protected static Vector convertToVector(final Object[] anArray){
+  if (anArray == null) {
+    return null;
+  }
+  final Vector v=new Vector(anArray.length);
+  for (  final Object element : anArray) {
+    v.addElement(element);
+  }
+  return v;
+}",returns a vector that contains the same objects as the array .,property, returns a vector containing all elements from the array . 
+31961,"public static Collection<InetAddress> toInetAddresses(Collection<String> addrs,Collection<String> hostNames) throws IgniteCheckedException {
+  Set<InetAddress> res=new HashSet<>(addrs.size());
+  Iterator<String> hostNamesIt=hostNames.iterator();
+  for (  String addr : addrs) {
+    String hostName=hostNamesIt.hasNext() ? hostNamesIt.next() : null;
+    InetAddress inetAddr=null;
+    if (!F.isEmpty(hostName)) {
+      try {
+        inetAddr=InetAddress.getByName(hostName);
+      }
+ catch (      UnknownHostException ignored) {
+      }
+    }
+    if (inetAddr == null || inetAddr.isLoopbackAddress()) {
+      try {
+        inetAddr=InetAddress.getByName(addr);
+      }
+ catch (      UnknownHostException ignored) {
+      }
+    }
+    if (inetAddr != null)     res.add(inetAddr);
+  }
+  if (res.isEmpty())   throw new IgniteCheckedException(""Addresses can not be resolved [addr="" + addrs + "", hostNames=""+ hostNames+ ']');
+  return res;
+}",returns tha list of resolved inet addresses .,property, returns a collection of InetAddress objects that correspond to the given addresses and host names . 
+62630,"public static String slurpURLNoExceptions(URL u,String encoding){
+  try {
+    return slurpURL(u,encoding);
+  }
+ catch (  Exception e) {
+    e.printStackTrace();
+    return null;
+  }
+}",returns all the text at the given url .,property, attempts to read the content of a URL and returns it as a string . 
+22904,"public OsmElement pasteFrom(){
+  List<Way> ways=storage.getWays();
+  List<Node> nodes=storage.getNodes();
+  if (mode == Mode.CUT) {
+    reset();
+    if (ways != null && ways.size() == 1) {
+      Way w=ways.get(0);
+      w.setState(savedState);
+      for (      Node nd : w.getNodes()) {
+        Log.d(""PasteFrom"",""Restoring state for "" + nd.getOsmId());
+        nd.setState(savedNdState.get(nd));
+      }
+      return w;
+    }
+ else     if (nodes != null && nodes.size() == 1) {
+      Node n=nodes.get(0);
+      n.setState(savedState);
+      return n;
+    }
+  }
+ else {
+    if (ways != null && ways.size() == 1) {
+      return ways.get(0);
+    }
+ else     if (nodes != null && nodes.size() == 1) {
+      return nodes.get(0);
+    }
+  }
+  return null;
+}",returns whatever is in the clipboard,property, returns the element that was cut or copied from the storage . 
+51004,"public final CharSequence yytext(){
+  return zzBuffer.subSequence(zzStartRead,zzMarkedPos);
+}",returns the text matched by the current regular expression .,property, returns the text that has been matched by the lexer . 

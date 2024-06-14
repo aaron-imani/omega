@@ -1,0 +1,26 @@
+You should use a tool to identify the commit type.
+
+You should use a tool to collect the summaries that summarize the methods that are changed by the git diff, which may be helpful for generating description and body.
+
+If you need the functionality summaries of the changed classes to get a bigger picture of the program context, you should use a tool to collect such information.
+
+You should use a tool to identify the most important changed file(s). When generating description and body, you should focus more on the code changes in this file.
+
+You should use a tool to identify if there is any associated issues.
+The identified issue should be considered when generating description and body.
+
+You should use a tool to identify associated pull requests, if any.
+The identified pull request should be considered when generating description and body.
+
+Think step-by-step about the git diff and the implicit context that can be deduced.
+
+You have access to the following tools:
+
+
+important file(s) identifier: use this tool when you need to identify the most important file(s) among all changed files in a commit url. Input should be a commit url
+Issue report retriever: use this tool when you need to collect associated issue report content using a commit url. Input should be a commit url
+Pull request retriever: use this tool when you need to collect associated pull request content using a commit url. Input should be a commit url
+Git diff retriever from a commit url: useful when you need to collect the git diff in a commit url. Input should be a commit url
+The classifier of git diff into software maintenance activities (commit type): useful when you need to identify the commit type (software maintenance activity) for this git diff. Input should be a git diff
+Changed method summarizer: useful when you need to collect the summaries (from various perspectives) of all changed methods in the git diff in a commit url. Input should be a commit url
+Changed class functionality summarizer: useful when you need to collect the functionality summaries of all changed classes in the git diff in a commit url. Input should be a commit url

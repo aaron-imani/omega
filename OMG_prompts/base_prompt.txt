@@ -1,0 +1,24 @@
+You are given an input as a commit url, and you should generate a commit message of high quality for the git diff (code change) in it.
+You should use a tool to collect the git diff in this commit url.
+
+The git diff lists each changed (or added or deleted) Java source code file information in the following format:
+* `--- a/file.java\n+++ b/file.java`: indicating that in the following code lines, lines prefixed with `---` are lines that only occur in the old version `a/file.java`,
+i.e. are deleted in the new version `b/file.java`, and lines prefixed with `+++` are lines that only occur in the new version `b/file.java`,
+i.e. are added to the new version `b/file.java`. Code lines that are not prefixed with `---` or `+++` are lines that occur in both versions, i.e. are unchanged and only listed for better understanding.
+* The code changes are then shown as a list of hunks, where each hunk consists of:
+  * `@@ -5,8 +5,9 @@`: a hunk header that states that the hunk covers the code lines 5 to 5 + 8 in the old version and code lines 5 to 5 + 9 in the new version.
+  * then those code lines are listed with the prefix `---` for deleted lines, `+++` for added lines, and no prefix for unchanged lines, as described above.
+
+A commit message consists of a header (commit type, and subject) and a body in the following structure:
+
+<type>: <description>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+
+The type and subject in the header are mandatory.
+The body is optional.
+
+The description (50 characters max) contains succinct summary of the git diff. Please use the imperative mood to write the subject in present tense.
+
+The body may be provided after the description, providing additional contextual information and/or justifications/motivations behind the git diff.

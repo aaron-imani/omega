@@ -1,0 +1,6 @@
+From File,To File,References
+core/src/main/java/org/apache/ldap/server/jndi/AbstractContextFactory.java,core/src/main/java/org/apache/ldap/server/jndi/ContextFactoryConfiguration.java,4
+core/src/main/java/org/apache/ldap/server/jndi/AbstractContextFactory.java,core/src/main/java/org/apache/ldap/server/jndi/DefaultContextFactoryConfiguration.java,4
+core/src/main/java/org/apache/ldap/server/jndi/DefaultContextFactoryConfiguration.java,core/src/main/java/org/apache/ldap/server/jndi/ContextFactoryConfiguration.java,1
+core/src/main/java/org/apache/ldap/server/jndi/RootNexusProxy.java,core/src/main/java/org/apache/ldap/server/jndi/ContextFactoryConfiguration.java,23
+main/src/main/java/org/apache/ldap/server/jndi/ServerContextFactory.java,core/src/main/java/org/apache/ldap/server/jndi/ContextFactoryConfiguration.java,2

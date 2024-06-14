@@ -1,0 +1,6 @@
+Criterion,AMG,Identical,OMG,Winner
+Rationality,0.38,0.32,0.29,AMG
+Expressiveness,0.23,0.42,0.34,Identical
+Conciseness,0.51,0.15,0.34,AMG
+Comprehensiveness,0.28,0.22,0.5,OMG
+Overall Preference,0.46,0.09,0.45,AMG

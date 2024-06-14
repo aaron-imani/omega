@@ -1,0 +1,10 @@
+public BrowsingResults getRoot(String principle, List<String> observableRepositoryIds):68,78
+public BrowsingResults selectArtifactId(String principle, List<String> observableRepositoryIds, String groupId, String artifactId):80,94
+public BrowsingResults selectGroupId(String principle, List<String> observableRepositoryIds, String groupId):96,111
+public ArchivaProjectModel selectVersion(String principle, List<String> observableRepositoryIds, String groupId, String artifactId, String version) throws ObjectNotFoundException, ArchivaDatabaseException:113,131
+public String getRepositoryId(String principle, List<String> observableRepositoryIds, String groupId, String artifactId, String version) throws ObjectNotFoundException, ArchivaDatabaseException:133,141
+private ArchivaArtifact getArtifact(String principle, List<String> observableRepositoryIds, String groupId, String artifactId, String version) throws ObjectNotFoundException, ArchivaDatabaseException:143,175
+public List<ArchivaProjectModel> getUsedBy(String principle, List<String> observableRepositoryIds, String groupId, String artifactId, String version) throws ArchivaDatabaseException:177,191
+private void processSnapshots(List<String> versions):211,235
+private ArchivaArtifact handleGenericSnapshots(String groupId, String artifactId, String version, ArchivaArtifact pomArtifact) throws ArchivaDatabaseException:251,274
+private ArchivaProjectModel getProjectModel(String groupId, String artifactId, String version) throws ArchivaDatabaseException:285,304
