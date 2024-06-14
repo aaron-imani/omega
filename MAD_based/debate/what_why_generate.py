@@ -18,12 +18,21 @@ selected_answer_regex = re.compile(
 
 class Debate:
     def __init__(
-        self, num_players: int, use_information_card=False, small_players=False
+        self,
+        num_players: int,
+        use_information_card=False,
+        small_players=False,
+        use_role_reversal=False,
+        use_persona=False,
     ):
+        self.use_role_reversal = use_role_reversal
+        self.use_persona = use_persona
         self.store = {}
         players = []
         player_system_prompt = prompts.get_players_initial_system_prompt(
-            use_information_card
+            use_information_card,
+            use_persona=use_persona,
+            role_reversal=use_role_reversal,
         )
 
         if small_players:
@@ -201,20 +210,29 @@ class Debate:
             "changed_class_functionality_summary": self.commit_context[
                 "changed_class_functionality_summary"
             ],
-            # "changed_files_importance": self.commit_context["changed_files_importance"],
         }
         what_context = prompts.make_context(self.use_information_card, **what_context)
-        round_prompt = prompts.get_what_prompt(self.use_information_card).format(
-            context=what_context.replace("{", "{{").replace("}", "}}")
-        )
-        # print(round_prompt)
+
+        if self.use_role_reversal:
+            round_prompt = prompts.get_what_prompt(self.use_information_card).format(
+                context=what_context.replace("{", "{{").replace("}", "}}")
+            )
+        else:
+            round_prompt = prompts.get_what_prompt(self.use_information_card).format(
+                context=what_context
+            )
+
         round_debate = []
         prev_role = "senior"
         for p in self.players:
-            current_role = self._reverse_role(prev_role)
-            player_query = round_prompt.format(
-                role=prompts.roles_instructions[current_role]
-            )
+            if self.use_role_reversal:
+                current_role = self._reverse_role(prev_role)
+                player_query = round_prompt.format(
+                    role=prompts.roles_instructions[current_role]
+                )
+            else:
+                player_query = round_prompt
+
             prev_answers = "\n".join(round_debate)
             player_query += f"\n\n{prev_answers}"
             response = p.ask(player_query)
@@ -263,14 +281,21 @@ class Debate:
         round_debate = []
         prev_role = "junior"
         for i in range(len(self.players)):
-            current_role = self._reverse_role(prev_role)
+            if self.use_role_reversal:
+                current_role = self._reverse_role(prev_role)
+                player_query = round_prompt.format(
+                    role=prompts.roles_instructions[current_role]
+                )
+            else:
+                player_query = round_prompt
+
             p = self.players[i]
             p_query = ""
             for j in range(i + 1, len(what_debate)):
                 p_query += f"{what_debate[j]}\n"
             p_query += (
                 f"Round #1 is finished with the following conclusion by the moderator:\n\n{moderator_response}\n\n"
-                f"Now, it is time to move on to the next round. \n\n{round_prompt.format(role=prompts.roles_instructions[current_role])}"
+                f"Now, it is time to move on to the next round. \n\n{player_query}"
             ) + "\n\n"
             p_query += "\n".join(round_debate)
             response = p.ask(p_query.strip())
@@ -327,14 +352,20 @@ class Debate:
         round_debate = []
         prev_role = "senior"
         for i in range(len(self.players)):
-            current_role = self._reverse_role(prev_role)
+            if self.use_role_reversal:
+                current_role = self._reverse_role(prev_role)
+                player_query = round_prompt.format(
+                    role=prompts.roles_instructions[current_role]
+                )
+            else:
+                player_query = round_prompt
             p = self.players[i]
             p_query = ""
             for j in range(i + 1, len(why_debate)):
                 p_query += f"{why_debate[j]}\n"
             p_query += (
                 f"Round #2 is finished with the following conclusion by the moderator:\n\n{moderator_response}\n\n"
-                f"Now, it is time to move on to the next round. \n\n{round_prompt.format(role=prompts.roles_instructions[current_role])}"
+                f"Now, it is time to move on to the next round. \n\n{player_query}"
             ) + "\n\n"
             p_query += "\n".join(round_debate)
             response = p.ask(p_query.strip())

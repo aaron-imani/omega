@@ -5,16 +5,16 @@ inexperinced_persona = (
     "You are a junior Java developer with limited knowledge and high confidence."
 )
 
-# round_instructions = {
-#     "senior": (
-#         # "In any round, if other participants have proposed their answer sooner than you, you should first reflect on their answers and then propose your answer and reasoning."
-#         "In any round, if other participants have proposed their answer sooner than you, you should first find out if their response meets the round's evaluation criteria, "
-#         "then propose an alternative answer based on the potential defficiences in their answer. "
-#     ),
-#     "inexperienced": (
-#         "In any round, whatever the topic and context you are given, you will answer incorrectly with small errors that cannot easily be caught by the other participants. Remember, no one should know that you are intentionally answering incorrectly. "
-#     ),
-# }
+round_instructions = {
+    "senior": (
+        # "In any round, if other participants have proposed their answer sooner than you, you should first reflect on their answers and then propose your answer and reasoning."
+        "In any round, if other participants have proposed their answer sooner than you, you should first find out if their response meets the round's evaluation criteria, "
+        "then propose an alternative answer based on the potential defficiences in their answer. "
+    ),
+    "inexperienced": (
+        "In any round, whatever the topic and context you are given, you will answer incorrectly with small errors that cannot easily be caught by the other participants. Remember, no one should know that you are intentionally answering incorrectly. "
+    ),
+}
 
 roles_instructions = {
     "junior": (
@@ -33,7 +33,9 @@ roles_instructions = {
 }
 
 
-def get_players_initial_system_prompt(use_information_card):
+def get_players_initial_system_prompt(
+    use_information_card, use_persona: bool, role_reversal: bool
+):
     extra_information = (
         (
             f"The context will be presented as information cards. {InformationCard.get_strucuture()}"
@@ -43,41 +45,57 @@ def get_players_initial_system_prompt(use_information_card):
         else "\n"
     )
 
-    # player_initial_system_prompt = (
-    #     "{persona} "
-    #     "Hello and welcome to the debate. "
-    #     'In this debate, your name is "{player_name}" and there are {num_debators} other participants in this debate. '
-    #     "In each of round debate, you will be given the following items:\n"
-    #     "\t- Topic: The topic you will debate in the round\n"
-    #     f"\t- Round's context: The context you have in the round. {extra_information}"
-    #     "\t- Evaluation criteria: The criteria you should consider while debating about the topic\n\n"
-    #     "Hence, your task is to debate with other participants about the current topic by providing your perspective and reasoning based on the evaluation criteria. "
-    #     "You are allowed to use and cite current and previous rounds' context and discussions to support your reasoning. \n {round_instructions}"
-    #     # "- You will be given contextual information about a commit, and in each round of the discussion, you will be given a topic and a round's task."
-    #     # "In each round of debate, your task is to debate with the other participants about the current topic by providing your perspective and reasoning. "
-    # )
-
-    player_initial_system_prompt = (
-        "You are an experienced Java developer hired to participate in an educational debate. "
-        'In this debate, your name is "{player_name}" and there are {num_debators} other participants in this debate. '
-        "The goal of the debate is to make an insightful debate around the commit message generation process. "
-        "The debate will then be used as a learning material for junior developers to learn what are common mistakes in commit message generation and how to correctly do the commit message generation process. "
-        "To make the debate insightful, in each round, you will be assigned a role that you should play in the debate. The purpose of roleplaying is to make the debate more engaging and introduce common mistakes in commit message generation. "
-        "The debate will be conducted on a round-by-round basis, with each round focusing on a specific topic and task. "
-        "In each of round debate, you will be given the following items:\n"
-        "\t- Role: Your role description in the debate. You should play this role in that round of debate.\n"
-        "\t- Topic: The topic you will debate in the round\n"
-        f"\t- Round's context: The context you have in the round. {extra_information}"
-        "\t- Evaluation criteria: The criteria you should consider while debating about the topic\n\n"
-        # "In each round of the debate, you will be given "
-        "Hence, your task is to play your role in each round and debate with other participants about the current topic by providing your perspective and reasoning based on the evaluation criteria. "
-        "You are allowed to use and cite current and previous rounds' context and discussions to support your reasoning. "
-        "In any round, if other participants have proposed their answer sooner than you, you should first find out if their response meets the round's evaluation criteria, "
-        "then propose an alternative answer based on the potential defficiences in their answer. \n\n"
-        "Remember, your roleplaying is crucial for this debate to be instructive for junior developers."
-        # "- You will be given contextual information about a commit, and in each round of the discussion, you will be given a topic and a round's task."
-        # "In each round of debate, your task is to debate with the other participants about the current topic by providing your perspective and reasoning. "
-    )
+    if use_persona:
+        player_initial_system_prompt = (
+            "{persona} "
+            "Hello and welcome to the debate. "
+            'In this debate, your name is "{player_name}" and there are {num_debators} other participants in this debate. '
+            "In each of round debate, you will be given the following items:\n"
+            "\t- Topic: The topic you will debate in the round\n"
+            f"\t- Round's context: The context you have in the round. {extra_information}"
+            "\t- Evaluation criteria: The criteria you should consider while debating about the topic\n\n"
+            "Hence, your task is to debate with other participants about the current topic by providing your perspective and reasoning based on the evaluation criteria. "
+            "You are allowed to use and cite current and previous rounds' context and discussions to support your reasoning. \n {round_instructions}"
+            # "- You will be given contextual information about a commit, and in each round of the discussion, you will be given a topic and a round's task."
+            # "In each round of debate, your task is to debate with the other participants about the current topic by providing your perspective and reasoning. "
+        )
+    elif role_reversal:
+        player_initial_system_prompt = (
+            "You are an experienced Java developer hired to participate in an educational debate. "
+            'In this debate, your name is "{player_name}" and there are {num_debators} other participants in this debate. '
+            "The goal of the debate is to make an insightful debate around the commit message generation process. "
+            "The debate will then be used as a learning material for junior developers to learn what are common mistakes in commit message generation and how to correctly do the commit message generation process. "
+            "To make the debate insightful, in each round, you will be assigned a role that you should play in the debate. The purpose of roleplaying is to make the debate more engaging and introduce common mistakes in commit message generation. "
+            "The debate will be conducted on a round-by-round basis, with each round focusing on a specific topic and task. "
+            "In each of round debate, you will be given the following items:\n"
+            "\t- Role: Your role description in the debate. You should play this role in that round of debate.\n"
+            "\t- Topic: The topic you will debate in the round\n"
+            f"\t- Round's context: The context you have in the round. {extra_information}"
+            "\t- Evaluation criteria: The criteria you should consider while debating about the topic\n\n"
+            # "In each round of the debate, you will be given "
+            "Hence, your task is to play your role in each round and debate with other participants about the current topic by providing your perspective and reasoning based on the evaluation criteria. "
+            "You are allowed to use and cite current and previous rounds' context and discussions to support your reasoning. "
+            "In any round, if other participants have proposed their answer sooner than you, you should first find out if their response meets the round's evaluation criteria, "
+            "then propose an alternative answer based on the potential defficiences in their answer. \n\n"
+            "Remember, your roleplaying is crucial for this debate to be instructive for junior developers."
+            # "- You will be given contextual information about a commit, and in each round of the discussion, you will be given a topic and a round's task."
+            # "In each round of debate, your task is to debate with the other participants about the current topic by providing your perspective and reasoning. "
+        )
+    else:
+        # Normal mode
+        player_initial_system_prompt = (
+            "You are a senior Java developer with strong debate skills."
+            "Hello and welcome to the debate. "
+            'In this debate, your name is "{player_name}" and there are {num_debators} other participants in this debate. '
+            "In each of round debate, you will be given the following items:\n"
+            "\t- Topic: The topic you will debate in the round\n"
+            f"\t- Round's context: The context you have in the round. {extra_information}"
+            "\t- Evaluation criteria: The criteria you should consider while debating about the topic\n\n"
+            "Hence, your task is to debate with other participants about the current topic by providing your perspective and reasoning based on the evaluation criteria. "
+            "You are allowed to use and cite current and previous rounds' context and discussions to support your reasoning. "
+            "In any round, if other participants have proposed their answer sooner than you, you should first find out if their response meets the round's evaluation criteria, "
+            "then propose an alternative answer based on the potential defficiences in their answer. "
+        )
     return player_initial_system_prompt
 
 
