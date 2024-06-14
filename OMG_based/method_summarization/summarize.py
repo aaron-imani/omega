@@ -38,7 +38,6 @@ def _get_changes(before, after):
     # Initialize lists to hold changes with line numbers
     added_lines = []
     removed_lines = []
-    replaced_lines = []
 
     # Variables to track current line numbers in old and new files
     old_line_num = 0
