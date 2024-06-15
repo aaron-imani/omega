@@ -60,17 +60,29 @@ def evaluate_machine_generated_text(
             # print(bleurt_score)
             bleurt_score = sum(bleurt_score) / len(bleurt_score)
 
-    bleu_score = bleu.compute(
-        predictions=predictions, references=references, smooth=True
-    )
-    bleu_score = bleu_score["bleu"] * 100
+    try:
+        bleu_score = bleu.compute(
+            predictions=predictions, references=references, smooth=True
+        )
+        bleu_score = bleu_score["bleu"] * 100
+    except ZeroDivisionError:
+        bleu_score = 0
 
-    rouge_score = (
-        rouge.compute(predictions=predictions, references=references)["rougeL"] * 100
-    )
-    meteor_score = (
-        meteor.compute(predictions=predictions, references=references)["meteor"] * 100
-    )
+    try:
+        rouge_score = (
+            rouge.compute(predictions=predictions, references=references)["rougeL"]
+            * 100
+        )
+    except ZeroDivisionError:
+        rouge_score = 0
+
+    try:
+        meteor_score = (
+            meteor.compute(predictions=predictions, references=references)["meteor"]
+            * 100
+        )
+    except ZeroDivisionError:
+        meteor_score = 0
 
     evaluation = Evaluation(
         bleu=round(bleu_score, 2),
