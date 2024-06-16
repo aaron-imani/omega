@@ -192,13 +192,12 @@ Property: Asserts properties of a method including pre-conditions or post-condit
                 + "\n"
             )
 
-        after_method_body = after_method_bodies[method_dec]
-
-        summary = summarize_method(
-            before_method_body, after_method_body, before_summary
-        )
+        after_method_body = after_method_bodies.get("method_dec", None)
 
         if after_method_body:
+            summary = summarize_method(
+                before_method_body, after_method_body, before_summary
+            )
             after_method_what = summarize_method_body(after_method_body, "what")
             after_method_why = summarize_method_body(after_method_body, "why")
             after_method_use = summarize_method_body(after_method_body, "usage")
@@ -217,13 +216,13 @@ Property: Asserts properties of a method including pre-conditions or post-condit
                 + "\n"
             )
 
-        # print("Summary:", summary)
-        ans += "Method {} is modified by this git diff.\n".format(method_dec)
-        ans += "The method summaries before the commit are:\n"
-        ans += before_summary + "\n\n"
-        # ans += "The method summaries after the commit are:\n"
-        # ans += after_summary
-        ans += summary
+            # print("Summary:", summary)
+            ans += "Method {} is modified by this git diff.\n".format(method_dec)
+            ans += "The method summaries before the commit are:\n"
+            ans += before_summary + "\n\n"
+            # ans += "The method summaries after the commit are:\n"
+            # ans += after_summary
+            ans += summary
 
     for method_dec in clustered_methods["added"]:
         after_method_body = added_method_bodies[method_dec]
