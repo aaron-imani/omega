@@ -1,15 +1,11 @@
 import json
 import os
 import pathlib
-import random
 import subprocess
 from argparse import ArgumentParser
 
-from tqdm.auto import tqdm
-
-random.seed(42)
-
 import pandas as pd
+from tqdm.auto import tqdm
 
 # script dir
 script_dir = pathlib.Path(__file__).parent.resolve()
@@ -21,14 +17,15 @@ repo_mapping = {key.lower(): value for key, value in repo_mapping.items()}
 
 
 def _retrieve_commits(project_path):
+    cmd = ["git", "log", '--format="%H %s"']
     commits = subprocess.run(
-        f'cd {project_path} ; git log --format="%H %s"',
-        stdout=subprocess.PIPE,
+        cmd,
+        capture_output=True,
         text=True,
-        shell=True,
+        cwd=project_path,
     ).stdout.split("\n")
     commits = [
-        (commit.split(" ")[0], " ".join(commit.split(" ")[1:]))
+        (commit.split(" ")[0].strip('" '), " ".join(commit.split(" ")[1:]))
         for commit in commits
         if commit != ""
     ]
@@ -39,7 +36,6 @@ def _get_repo_name(project_name):
     project_name = project_name.lower()
     if project_name in repo_mapping:
         return repo_mapping[project_name]
-
     for key in repo_mapping:
         if key.find(project_name) != -1:
             return repo_mapping[key]
@@ -52,6 +48,9 @@ def _retrieve_all_commits(projects_path):
     for project in tqdm(projects, desc="Retrieving commits for all projects"):
         project = projects_path / project
         repo_name = _get_repo_name(project.parts[-1])
+        if repo_name == None:
+            print(f"Skipping {project.parts[-1]}")
+            continue
         project_commits = _retrieve_commits(project)
         for commit in project_commits:
             records.append(
