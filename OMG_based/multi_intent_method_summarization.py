@@ -77,6 +77,8 @@ def generate_multi_intent_summaries(commit_url, disable_cache=False):
     repo_dir = projects_dir / str(repo_name)
     # commit_id = commit.sha
     commit_id = get_commit_id(commit_url)
+    # print(commit_id)
+    # print(repo_name)
     changed_files, _ = get_file_names(repo_name, commit_id)
 
     if (
@@ -192,7 +194,7 @@ Property: Asserts properties of a method including pre-conditions or post-condit
                 + "\n"
             )
 
-        after_method_body = after_method_bodies.get("method_dec", None)
+        after_method_body = after_method_bodies.get(method_dec, None)
 
         if after_method_body:
             summary = summarize_method(
@@ -281,16 +283,19 @@ Property: Asserts properties of a method including pre-conditions or post-condit
 
 
 if __name__ == "__main__":
-    # project = "apache/directory-server"
-    # sha = "9cbf06fcae73d281aa4804e574335d12fd0764ec"
+    project = "apache/directory-server"
+    sha = "9cbf06fcae73d281aa4804e574335d12fd0764ec"
 
     # project = "apache/ant"
     # sha = "5e099552e5af434568a4294cf7bcebb732cd3bfa"
 
-    project = "apache/cxf"
-    sha = "260efe56fc1bfc89950d1eda89114feb287490cd"
+    # project = "apache/cxf"
+    # sha = "260efe56fc1bfc89950d1eda89114feb287490cd"
     commit_url = f"https://github.com/{project}/commit/{sha}"
-    # commit_url = 'https://github.com/apache/cxf/commit/cbc0fde7f85d01e379e40a7f27fe5cea20169ddf"'
+
+    # commit_url = (
+    #     "https://github.com/apache/cxf/commit/cbc0fde7f85d01e379e40a7f27fe5cea20169ddf"
+    # )
 
     print(commit_url)
     response = generate_multi_intent_summaries(commit_url, disable_cache=True)
