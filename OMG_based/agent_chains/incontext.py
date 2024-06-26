@@ -1,6 +1,8 @@
+import openai
 from langchain.prompts import ChatPromptTemplate
 
 from common.model_loader import model as llm
+from MAD_based.prompts.what_why_generate import good_cm
 
 # Original template
 # tmpl = """A git diff lists each changed (or added or deleted) Java source code file information in the following format:
@@ -43,12 +45,9 @@ good_cm_criteria = (
     "4. Expressiveness: reflects whether the message content is grammatically correct and fluent.\n\n"
 )
 
-# Template matched with MAD template
-tmpl = (
-    "You are an AI model that specializes in generating high quality commit messages. "
-    "You will be given contextual information about a commit, and your task is to generate a commit message of high quality for it.\n\n"
-    """ANSWERING FORMAT AND INSTRUCTIONS
-Your commit message must be in the following format:
+# Original - Used For Survey
+answering_instructions = """ANSWERING FORMAT AND INSTRUCTIONS
+Your commit message should be in the following format:
 
 ```json
 {{
@@ -56,21 +55,51 @@ Your commit message must be in the following format:
     "subject": "the subject of the commit message",
     "body": "the body of the commit message"
 }}
-```
 
 - The subject must be at most 72 characters. It should contain a brief summary of the changes introduced by the commit. You must use **imperative mood** to write the subject. Do not repeat the type in the subject.
-- The body is optional but strongly recommended. It should comprehensively provide additional relevant contextual information about **all** the changes made and/or justifications/motivations behind them. It must be written as detailed as possible. If you do not provide a body, you should use an empty string for its value. You are strongly encouraged to provide a body based on all the provided context. 
-- Body should not include code blocks or snippets. 
+- The body is optional and can be used to provide additional relevant contextual information and/or justifications/motivations behind the commit. If you do not provide a body, you should use an empty string for its value. You are strongly encouraged to provide a body based on all the provided context.
+- Body should not include code blocks or snippets.
 - Do not write generic/uniformative/useless sentences in body. Provide only important and relevant information.
 - The type is the software maintenance activity type of the commit that should be determined based on the commit changes, commit message body and subject. The type must be exactly one of the following: feat, fix, style, refactor.  No other values are acceptable. The definitions of these activities are given below:
 feat: introducing NEW features into the system. (feat is short for feature)
 fix: FIXING faults or software bugs.
 style: code FORMAT changes such as fixing redundant white-space, adding missing semi-colons, and similar changes.
 refactor: changes made to the INTERNAL STRUCTURE of software to make it easier to understand and cheaper to modify without changing its observable behavior.
-- Type should not be repeated in the subject. Remember, type should be determined based on the commit changes, commit message body and subject.
-"""
-    # f"{good_cm_criteria}"
+- Type should not be repeated in the subject. Remember, type should be determined based on the commit changes, commit message body and subject."""
+
+# Modified - Used After Survey to make it more comprehensive
+# answering_instructions = """ANSWERING FORMAT AND INSTRUCTIONS
+# Your commit message must be in the following format:
+
+# ```json
+# {{
+#     "type": "the type of the commit",
+#     "subject": "the subject of the commit message",
+#     "body": "the body of the commit message"
+# }}
+# ```
+
+# - The subject must be at most 72 characters. It should contain a brief summary of the changes introduced by the commit. You must use **imperative mood** to write the subject. Do not repeat the type in the subject.
+# - The body is optional but strongly recommended. It should comprehensively provide additional relevant contextual information about **all** the changes made and/or justifications/motivations behind them. It must be written as detailed as possible. If you do not provide a body, you should use an empty string for its value. You are strongly encouraged to provide a body based on all the provided context.
+# - Body should not include code blocks or snippets.
+# - Do not write generic/uniformative/useless sentences in body. Provide only important and relevant information.
+# - The type is the software maintenance activity type of the commit that should be determined based on the commit changes, commit message body and subject. The type must be exactly one of the following: feat, fix, style, refactor.  No other values are acceptable. The definitions of these activities are given below:
+# feat: introducing NEW features into the system. (feat is short for feature)
+# fix: FIXING faults or software bugs.
+# style: code FORMAT changes such as fixing redundant white-space, adding missing semi-colons, and similar changes.
+# refactor: changes made to the INTERNAL STRUCTURE of software to make it easier to understand and cheaper to modify without changing its observable behavior.
+# - Type should not be repeated in the subject. Remember, type should be determined based on the commit changes, commit message body and subject.
+# """
+
+# answering_instructions = good_cm
+
+# Template matched with MAD template
+tmpl = (
+    "You are an AI model that specializes in generating high quality commit messages. "
+    "You will be given contextual information about a commit, and your task is to generate a commit message of high quality for it.\n\n"
+    f"{answering_instructions}"
 )
+
 
 user_prompt = (
     "START OF COMMIT CONTEXT\n\n"
@@ -84,8 +113,46 @@ user_prompt = (
 )
 
 prompt = ChatPromptTemplate.from_messages([("system", tmpl), ("human", user_prompt)])
+roles = ["system", "human"]
 
 
 def get_agent_chain():
-    agent_chain = prompt | llm.bind(max_tokens=500)
+    global prompt, roles
+    agent_chain = prompt | llm.bind(
+        max_tokens=500
+        # , presence_penalty=1.0, frequency_penalty=1.0
+    )
+    try:
+        agent_chain.invoke(
+            {
+                "git_diff": "",
+                "changed_files_importance": "",
+                "changed_method_summaries": "",
+                "changed_class_functionality_summary": "",
+                "associated_issues": "",
+                "associated_pull_requests": "",
+            }
+        )
+    except openai.BadRequestError as e:
+        if (
+            e.body["message"] == "System messages are not allowed in this template."
+            or e.body["message"]
+            == "Conversation roles must alternate user/assistant/user/assistant/..."
+        ):
+            roles = ["human", "ai", "human"]
+            prompt = ChatPromptTemplate.from_messages(
+                [
+                    ("human", tmpl),
+                    (
+                        "ai",
+                        "Please send the commit context and I will write a high quality commit message for you.",
+                    ),
+                    ("human", user_prompt),
+                ]
+            )
+            agent_chain = prompt | llm.bind(
+                max_tokens=500
+                # , presence_penalty=1.0, frequency_penalty=1.0
+            )
+
     return agent_chain
