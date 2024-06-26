@@ -1,5 +1,5 @@
+import os
 import pathlib
-import subprocess
 
 if __name__ == "__main__":
     import sys
@@ -10,8 +10,7 @@ import OMG_based.cache_manager as cache_manager
 from OMG_based.code_summarizer import summarize_method_body
 from OMG_based.method_body import get_method_bodies_after, get_method_bodies_before
 from OMG_based.method_summarization.summarize import summarize_method
-from OMG_based.utils import (
-    get_commit_from_github,
+from OMG_based.utils import (  # get_commit_from_github,
     get_commit_id,
     get_file_names,
     get_repo_name,
@@ -19,6 +18,7 @@ from OMG_based.utils import (
     run_java_jar,
 )
 
+use_old_method = os.getenv("METHOD_SUMMARIES", "NEW") == "OLD"
 cur_dir = pathlib.Path(__file__).parent.resolve()
 program_contexts_path = cur_dir / "program_contexts"
 projects_dir = cur_dir / "Projects"
@@ -197,34 +197,40 @@ Property: Asserts properties of a method including pre-conditions or post-condit
         after_method_body = after_method_bodies.get(method_dec, None)
 
         if after_method_body:
-            summary = summarize_method(
-                before_method_body, after_method_body, before_summary
-            )
-            after_method_what = summarize_method_body(after_method_body, "what")
-            after_method_why = summarize_method_body(after_method_body, "why")
-            after_method_use = summarize_method_body(after_method_body, "usage")
-            after_method_done = summarize_method_body(after_method_body, "done")
-            after_method_property = summarize_method_body(after_method_body, "property")
-            after_summary = (
-                "What: " + after_method_what + "\n" + "Why: " + after_method_why + "\n"
-                "How-to-use: "
-                + after_method_use
-                + "\n"
-                + "How-it-is-done: "
-                + after_method_done
-                + "\n"
-                + "Property: "
-                + after_method_property
-                + "\n"
-            )
-
-            # print("Summary:", summary)
+            if use_old_method:
+                after_method_what = summarize_method_body(after_method_body, "what")
+                after_method_why = summarize_method_body(after_method_body, "why")
+                after_method_use = summarize_method_body(after_method_body, "usage")
+                after_method_done = summarize_method_body(after_method_body, "done")
+                after_method_property = summarize_method_body(
+                    after_method_body, "property"
+                )
+                after_summary = (
+                    "The method summaries after the commit are:\n"
+                    "What: "
+                    + after_method_what
+                    + "\n"
+                    + "Why: "
+                    + after_method_why
+                    + "\n"
+                    "How-to-use: "
+                    + after_method_use
+                    + "\n"
+                    + "How-it-is-done: "
+                    + after_method_done
+                    + "\n"
+                    + "Property: "
+                    + after_method_property
+                    + "\n"
+                )
+            else:
+                after_summary = summarize_method(
+                    before_method_body, after_method_body, before_summary
+                )
             ans += "Method {} is modified by this git diff.\n".format(method_dec)
             ans += "The method summaries before the commit are:\n"
             ans += before_summary + "\n\n"
-            # ans += "The method summaries after the commit are:\n"
-            # ans += after_summary
-            ans += summary
+            ans += after_summary
 
     for method_dec in clustered_methods["added"]:
         after_method_body = added_method_bodies[method_dec]

@@ -3,6 +3,7 @@ import subprocess
 import sys
 
 sys.path.append("..")
+use_old_class_summarizer = os.getenv("CLASS_SUMMARIES", "NEW") == "OLD"
 # from .utils import get_commit_from_github, get_repo_name, get_file_names, get_commit_id
 import pandas as pd
 
@@ -11,9 +12,17 @@ from langchain.agents import Tool
 from langchain.tools import BaseTool
 
 import OMG_based.cache_manager as cache_manager
+from common.diff_explainer import diff_explanation_method
+
+if diff_explanation_method != "None":
+    from common.diff_explainer import summarize_diff
 
 # from OMG_based.code_understanding import class_sum
-from OMG_based.class_summarizer_enhanced import class_sum
+if use_old_class_summarizer:
+    from OMG_based.class_summarizer_omg import class_sum
+else:
+    from OMG_based.class_summarizer_enhanced import class_sum
+
 from OMG_based.commit_type_classifier import classify_commit_type
 from OMG_based.crawl_pr_issue import *
 from OMG_based.fetch_important_files import export_dependencies_csv
@@ -23,16 +32,16 @@ from OMG_based.multi_intent_method_summarization import (
 )
 from OMG_based.utils import *
 
-diff_explanation_method = os.getenv("DIFF_EXPLANATION_METHOD", "None")
+# diff_explanation_method = os.getenv("DIFF_EXPLANATION_METHOD", "None")
 
-if diff_explanation_method == "zeroshot":
-    from common.diff_explainer.zeroshot import summarize_diff
-elif diff_explanation_method == "interactive":
-    from common.diff_explainer.interactive import summarize_diff
-elif diff_explanation_method == "fewshot":
-    from common.diff_explainer.fewshot import summarize_diff
+# if diff_explanation_method == "zeroshot":
+#     from common.diff_explainer.zeroshot import summarize_diff
+# elif diff_explanation_method == "interactive":
+#     from common.diff_explainer.interactive import summarize_diff
+# elif diff_explanation_method == "fewshot":
+#     from common.diff_explainer.fewshot import summarize_diff
 
-print("Diff explanation method:", diff_explanation_method)
+# print("Diff explanation method:", diff_explanation_method)
 
 
 def get_git_diff_from_commit_url(commit_url=""):
@@ -50,7 +59,9 @@ def get_git_diff_from_commit_url(commit_url=""):
                 return "\n" + cached_diff
             else:
                 diff_summary = cache_manager.get_execution_value(
-                    commit_url, "diff_summary"
+                    commit_url,
+                    "diff_summary",
+                    model_name="Meta-Llama-3-70B-Instruct-AWQ",
                 )
                 if diff_summary:
                     return "\n" + cached_diff + "\n\n" + diff_summary
@@ -298,7 +309,7 @@ class HistoricalContextTool(BaseTool):
 
 if __name__ == "__main__":
     # tool = PullRequestCollectingTool()
-    tool = HistoricalContextTool()
+    tool = get_git_diff_from_commit_url
 
     # For testing issue collecting tool
     # commit_url = "https://github.com/apache/cassandra/commit/8c04ffd52a43358a8eb56a68fa7aeae0bfa94577"
