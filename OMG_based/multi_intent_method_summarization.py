@@ -18,7 +18,8 @@ from OMG_based.utils import (  # get_commit_from_github,
     run_java_jar,
 )
 
-use_old_method = os.getenv("METHOD_SUMMARIES", "NEW") == "OLD"
+summarization_method = os.getenv("METHOD_SUMMARIES", "NEW")
+use_old_method = summarization_method == "OLD"
 cur_dir = pathlib.Path(__file__).parent.resolve()
 program_contexts_path = cur_dir / "program_contexts"
 projects_dir = cur_dir / "Projects"
@@ -55,7 +56,7 @@ def get_clustered_methods(commit_url):
 def generate_multi_intent_summaries(commit_url, disable_cache=False):
     if not disable_cache:
         cached_value = cache_manager.get_execution_value(
-            commit_url, "generate_multi_intent_summaries"
+            commit_url, f"{summarization_method}_generate_multi_intent_summaries"
         )
         if cached_value:
             return cached_value
@@ -90,7 +91,7 @@ def generate_multi_intent_summaries(commit_url, disable_cache=False):
         if not disable_cache:
             cache_manager.store_execution_value(
                 commit_url,
-                "generate_multi_intent_summaries",
+                f"{summarization_method}_generate_multi_intent_summaries",
                 "The code changes in this git diff are not located within any method body.",
             )
         # return "The code changes in this git diff are not located within any method body. You probably should see if they are located in any class body."
@@ -282,7 +283,7 @@ Property: Asserts properties of a method including pre-conditions or post-condit
 
     if not disable_cache:
         cache_manager.store_execution_value(
-            commit_url, "generate_multi_intent_summaries", ans
+            commit_url, f"{summarization_method}_generate_multi_intent_summaries", ans
         )
 
     return ans

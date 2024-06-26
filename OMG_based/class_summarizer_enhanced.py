@@ -107,7 +107,9 @@ def class_sum(commit_url, use_cache=True):
     # put changed files in a commit into temp_path (before or after)
     # class_name is from
     if use_cache:
-        cached_class_sum = cache_manager.get_execution_value(commit_url, "class_sum")
+        cached_class_sum = cache_manager.get_execution_value(
+            commit_url, "NEW_class_sum"
+        )
         if cached_class_sum:
             # cached_class_sum += "\n\nNow, proceed to the next step by using other tools if needed. If you are done, you can proceed to generate the Final Answer."
             return cached_class_sum
@@ -277,7 +279,7 @@ def class_sum(commit_url, use_cache=True):
         if use_cache:
             cache_manager.store_execution_value(
                 commit_url,
-                "class_sum",
+                "NEW_class_sum",
                 "The code changes in this git diff are not located within any class body. They might be either import statement or comment changes.",
             )
         return "The code changes in this git diff are not located within any class body. They might be either import statement or comment changes."
@@ -471,7 +473,7 @@ def class_sum(commit_url, use_cache=True):
                     class_summary = summarize_class(class_body=class_body)
                     ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
     if use_cache:
-        cache_manager.store_execution_value(commit_url, "class_sum", ans)
+        cache_manager.store_execution_value(commit_url, "NEW_class_sum", ans)
     # ans += "\n\nNow, proceed to the next step by using other tools if needed. If you are done, you can proceed to generate the Final Answer."
     return ans
 
