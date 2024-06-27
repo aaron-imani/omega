@@ -31,11 +31,10 @@ def connect_db(path):
     return connection
 
 
-def change_model_db(model_name):
-    global db, db_path
-    db.close()
+def get_model_db(model_name):
     db_path = base_path / f"{model_name}.db"
     db = connect_db(db_path)
+    return db
 
 
 def initiate_commits_db():
@@ -81,11 +80,18 @@ def store_execution_value(commit_url, command, output):
     db.commit()
 
 
-def get_execution_value(commit_url, command):
-    execution_value = _get(db.cursor(), commit_url)
+def get_execution_value(commit_url, command, model_name=None):
+    if model_name:
+        cur_db = get_model_db(model_name)
+    else:
+        cur_db = db
+
+    execution_value = _get(cur_db.cursor(), commit_url)
     if execution_value is None:
         return None
     execution_value = eval(execution_value)  # Convert string back to dictionary
+    if model_name:
+        cur_db.close()
     return execution_value.get(command)
 
 
@@ -125,6 +131,11 @@ def store_commit_data(
     commits_db.commit()
 
 
+def delete_commit_data(metadata):
+    commits_db.cursor().execute(f"DELETE FROM {metadata}")
+    commits_db.commit()
+
+
 def get_commit_data(
     commit_url,
     metadata: Union[
@@ -148,6 +159,9 @@ for table in ["issues", "prs", "git_diff", "important_files"]:
         f"Cached {table}:",
         commits_db.cursor().execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0],
     )
+
+# delete_commit_data("prs")
+# delete_commit_data("issues")
 
 # delete_execution_value("diff_summary")
 # delete_execution_value("class_sum")
