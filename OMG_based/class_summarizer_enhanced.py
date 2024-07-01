@@ -34,11 +34,10 @@ from OMG_based.utils import (
     get_commit_from_github,
     get_commit_id,
     get_deleted_line_nums_file,
-    get_file_change_status,
     get_file_names,
     get_repo_name,
     git_reset,
-    process_class,
+    remove_comments,
     run_java_jar,
 )
 
@@ -54,34 +53,6 @@ modified_before_dir = program_contexts_path / "code_und_dirs/modified/before"
 modified_after_dir = program_contexts_path / "code_und_dirs/modified/after"
 deleted_dir = program_contexts_path / "code_und_dirs/deleted"
 # text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-
-
-def remove_comments(java_code):
-    """
-    Remove all comment lines from Java code.
-
-    Parameters:
-    java_code (str): The input Java code as a string.
-
-    Returns:
-    str: The Java code with comments removed.
-    """
-    # Pattern to match single-line comments
-    single_line_pattern = r"//.*?$"
-
-    # Pattern to match multi-line comments and documentation comments
-    multi_line_pattern = r"/\*.*?\*/"
-
-    # Combine patterns
-    combined_pattern = f"{single_line_pattern}|{multi_line_pattern}"
-
-    # Remove comments using regex
-    cleaned_code = re.sub(
-        combined_pattern, "", java_code, flags=re.DOTALL | re.MULTILINE
-    )
-
-    # Return the cleaned code
-    return cleaned_code
 
 
 def _clone_repo(repo_name):
@@ -360,7 +331,7 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(deleted_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
-                    class_body = process_class(os.path.join(dirpath, file))
+                    class_body = remove_comments(os.path.join(dirpath, file))
                     class_body = remove_comments(class_body)
                     class_summary = summarize_class(class_body=class_body)
                     ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
@@ -374,7 +345,7 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(modified_before_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
-                    class_body = process_class(os.path.join(dirpath, file))
+                    class_body = remove_comments(os.path.join(dirpath, file))
                     class_body = remove_comments(class_body)
                     class_summary = summarize_class(class_body=class_body)
                     before_summaries[file.split(".java")[0]] = class_summary
@@ -441,7 +412,7 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(modified_after_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
-                    class_body = process_class(os.path.join(dirpath, file))
+                    class_body = remove_comments(os.path.join(dirpath, file))
                     class_body = remove_comments(class_body)
                     class_summary = summarize_class(class_body=class_body)
                     after_summaries[file.split(".java")[0]] = class_summary
@@ -469,7 +440,7 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(added_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
-                    class_body = process_class(os.path.join(dirpath, file))
+                    class_body = remove_comments(os.path.join(dirpath, file))
                     class_summary = summarize_class(class_body=class_body)
                     ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
     if use_cache:

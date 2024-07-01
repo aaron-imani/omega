@@ -33,11 +33,9 @@ from OMG_based.utils import (
     get_commit_from_github,
     get_commit_id,
     get_deleted_line_nums_file,
-    get_file_change_status,
     get_file_names,
     get_repo_name,
     git_reset,
-    process_class,
     run_java_jar,
 )
 
@@ -333,7 +331,7 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(deleted_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
-                    class_body = process_class(os.path.join(dirpath, file))
+                    class_body = remove_comments(os.path.join(dirpath, file))
                     class_summary = summarize_class(class_body=class_body)
                     ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
         # for deleted_f in os.listdir(deleted_dir):
@@ -345,7 +343,7 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(modified_before_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
-                    class_body = process_class(os.path.join(dirpath, file))
+                    class_body = remove_comments(os.path.join(dirpath, file))
                     class_summary = summarize_class(class_body=class_body)
                     ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
         # for modified_before_f in os.listdir(modified_before_dir):
@@ -409,7 +407,6 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(modified_after_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
-                    class_body = process_class(os.path.join(dirpath, file))
                     class_summary = summarize_class(class_body=class_body)
                     ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
 
@@ -418,7 +415,6 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(added_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
-                    class_body = process_class(os.path.join(dirpath, file))
                     class_summary = summarize_class(class_body=class_body)
                     ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
     if use_cache:
