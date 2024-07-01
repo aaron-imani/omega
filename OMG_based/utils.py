@@ -105,10 +105,10 @@ def get_file_names(repo_name, commit_sha):
             cmd,
             stdout=subprocess.PIPE,
             text=True,
-            cwd=cur_dir / f"Projects/{repo_name}",
+            cwd=cur_dir / "Projects" / repo_name,
         )
         .stdout.strip()
-        .split("\n")
+        .splitlines()
     )
     changed_files = [file.split("\t") for file in changed_files]
     file_names = [file[1] for file in changed_files]
@@ -405,6 +405,17 @@ def get_commit_id(commit_url):
 #     return "\n".join(changes).strip()+"\n"
 
 
+def unmark_diff(diff):
+    diff = diff.splitlines()
+    lines = diff[:5]
+    for line in diff[5:]:
+        if line.startswith("+") or line.startswith("-"):
+            lines.append(line[1:])
+        else:
+            lines.append(line)
+    return "\n".join(lines)
+
+
 def highlight_git_diff(raw_diff: str) -> str:
     """
     Highlights a git diff in unified format.
@@ -452,8 +463,17 @@ def highlight_git_diff(raw_diff: str) -> str:
         else:
             # Keep unchanged lines
             highlighted_diff.append(f"{'UNCHANGED LINE |':20} {line}")
-
-    return "\n".join(highlighted_diff)
+    highlighted_diff = "\n".join(highlighted_diff)
+    diff = (
+        "This Git diff has been highlighted for easier reading. "
+        "Lines starting with 'ADDED' are new lines that are added by the commit. "
+        "Lines starting with 'REMOVED' are lines that are removed by the commit. "
+        "Lines starting with 'UNCHANGED' are lines that have not been changed by the commit. "
+        "'ADDED' or 'REMOVED' lines that are comments are marked as 'COMMENT'. "
+        "'ADDED' or 'REMOVED' lines that are code are marked as 'CODE'. "
+        f"Here is the highlighted diff:\n\n{highlighted_diff}"
+    )
+    return diff
 
 
 def get_patches(commit_url):
@@ -560,15 +580,32 @@ def format_output(raw_output):
                 return raw_output
 
 
-def process_class(path):
-    forbidden_start = re.compile(r"^\s*(\n|/\*|\*|\*/|package|import)")
-    with open(path, "r") as f:
-        lines = f.readlines()
-        i = 0
-        while forbidden_start.match(lines[i]):
-            i += 1
-        content = "".join(lines[i:])
-    return content
+def remove_comments(java_code):
+    """
+    Remove all comment lines from Java code.
+
+    Parameters:
+    java_code (str): The input Java code as a string.
+
+    Returns:
+    str: The Java code with comments removed.
+    """
+    # Pattern to match single-line comments
+    single_line_pattern = r"//.*?$"
+
+    # Pattern to match multi-line comments and documentation comments
+    multi_line_pattern = r"/\*.*?\*/"
+
+    # Combine patterns
+    combined_pattern = f"{single_line_pattern}|{multi_line_pattern}"
+
+    # Remove comments using regex
+    cleaned_code = re.sub(
+        combined_pattern, "", java_code, flags=re.DOTALL | re.MULTILINE
+    )
+
+    # Return the cleaned code
+    return cleaned_code
 
 
 if __name__ == "__main__":
