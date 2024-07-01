@@ -19,6 +19,7 @@ from OMG_based.utils import (  # get_commit_from_github,
 )
 
 summarization_method = os.getenv("METHOD_SUMMARIES", "NEW")
+print(f"Using {summarization_method} summarization method.")
 use_old_method = summarization_method == "OLD"
 cur_dir = pathlib.Path(__file__).parent.resolve()
 program_contexts_path = cur_dir / "program_contexts"

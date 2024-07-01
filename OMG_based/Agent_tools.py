@@ -3,7 +3,11 @@ import subprocess
 import sys
 
 sys.path.append("..")
-use_old_class_summarizer = os.getenv("CLASS_SUMMARIES", "NEW") == "OLD"
+use_old_class_summarizer = os.getenv("CLASS_SUMMARIES", "OLD") == "NEW"
+if use_old_class_summarizer:
+    print("Using old class summarizer")
+else:
+    print("Using new class summarizer")
 # from .utils import get_commit_from_github, get_repo_name, get_file_names, get_commit_id
 import pandas as pd
 
