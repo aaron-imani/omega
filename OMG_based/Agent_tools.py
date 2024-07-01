@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 sys.path.append("..")
-use_old_class_summarizer = os.getenv("CLASS_SUMMARIES", "OLD") == "NEW"
+use_old_class_summarizer = os.getenv("CLASS_SUMMARIES", "NEW") == "OLD"
 if use_old_class_summarizer:
     print("Using old class summarizer")
 else:
