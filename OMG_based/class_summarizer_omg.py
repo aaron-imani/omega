@@ -331,7 +331,8 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(deleted_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
-                    class_body = remove_comments(os.path.join(dirpath, file))
+                    with open(os.path.join(dirpath, file), "r") as f:
+                        class_body = f.read()
                     class_summary = summarize_class(class_body=class_body)
                     ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
         # for deleted_f in os.listdir(deleted_dir):
@@ -342,10 +343,10 @@ def class_sum(commit_url, use_cache=True):
         # for class_name in before_after_pairs:
         for dirpath, dirnames, filenames in os.walk(modified_before_dir):
             for file in filenames:
-                if file.strip().endswith(".java"):
-                    class_body = remove_comments(os.path.join(dirpath, file))
-                    class_summary = summarize_class(class_body=class_body)
-                    ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
+                with open(os.path.join(dirpath, file), "r") as f:
+                    class_body = f.read()
+                class_summary = summarize_class(class_body=class_body)
+                ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
         # for modified_before_f in os.listdir(modified_before_dir):
         #     os.remove(modified_before_dir+ '/' +modified_before_f)
 
@@ -407,6 +408,8 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(modified_after_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
+                    with open(os.path.join(dirpath, file), "r") as f:
+                        class_body = f.read()
                     class_summary = summarize_class(class_body=class_body)
                     ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
 
@@ -415,6 +418,8 @@ def class_sum(commit_url, use_cache=True):
         for dirpath, dirnames, filenames in os.walk(added_dir):
             for file in filenames:
                 if file.strip().endswith(".java"):
+                    with open(os.path.join(dirpath, file), "r") as f:
+                        class_body = f.read()
                     class_summary = summarize_class(class_body=class_body)
                     ans = ans + file.split(".java")[0] + ": " + class_summary + "\n"
     if use_cache:
