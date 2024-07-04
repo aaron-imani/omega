@@ -1,10 +1,13 @@
 import difflib
 import re
 
+import openai
 from langchain.prompts import ChatPromptTemplate
 
+from common.log_config import get_logger
 from common.model_loader import model
 
+logger = get_logger("MethodSummarizer")
 system_message = (
     "You are a senior Java developer. You will be given a Java function and a list of changes that will be applied to it. "
     "Your task is to identify how applying those changes will affect the function's behavior from the following aspects: \n"
@@ -20,7 +23,7 @@ prompt = ChatPromptTemplate.from_messages(
     [("system", system_message), ("human", "{input}")]
 )
 
-chain = prompt | model
+chain = prompt | model.bind(max_tokens=1000)
 
 hunk_regex = re.compile(r"@@ -(\d+),(\d+) \+(\d+),(\d+) @@")
 
@@ -107,9 +110,32 @@ def summarize_method(before, after, before_summary):
         + before_summary
         + "\n\nNow, please tell me how each aspect of the method will change after the changes are applied."
     )
-    return chain.invoke({"input": message}).content
-    # print(added, removed)
-    # print(before)
-    # print(after)
-    # print("===")
-    # return model(before, after, added, removed)
+    global chain
+
+    try:
+        response = chain.invoke({"input": message}).content
+    except openai.BadRequestError as e:
+        error_body = e.body["message"]
+        logger.error(error_body)
+        if (
+            error_body == "System messages are not allowed in this template."
+            or error_body
+            == "Conversation roles must alternate user/assistant/user/assistant/..."
+        ):
+            prompt = ChatPromptTemplate.from_messages(
+                [
+                    ("human", system_message),
+                    (
+                        "ai",
+                        "Sounds good. Please send me the Java function and the list of changes that will be applied to it.",
+                    ),
+                    ("human", "{input}"),
+                ]
+            )
+
+            chain = prompt | model
+            response = chain.invoke({"input": message}).content
+        elif error_body.startswith("This model's maximum context length"):
+            response = "Method body is too long to summarize."
+
+    return response
