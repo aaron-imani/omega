@@ -13,6 +13,7 @@ from OMG_based.find_examples_tlc_training_SUM import (
 
 logger = get_logger("MethodSummarizer")
 model = model_loader.model
+instruction_allowed = model_loader.is_instruction_tuned
 # from langchain_community.callbacks import get_openai_callback
 
 # system messages
@@ -67,28 +68,6 @@ training_codes_embeddings = torch.load(training_codes_embeddings_path)
 
 # def ollama_completetion(messages, **kwargs):
 #     return model.invoke(messages, **kwargs)
-
-instruction_allowed = True
-try:
-    model.invoke(
-        [
-            ("system", "You are a helpful assistant"),
-            ("human", "How are you?"),
-            ("ai", " I am fine, thank you. How can I help you today?"),
-            ("human", "Can you summarize a method body?"),
-        ],
-        max_tokens=2,
-    )
-except BadRequestError as e:
-    error_msg = e.body["message"]
-    logger.error(error_msg)
-
-    if (
-        error_msg == "System messages are not allowed in this template."
-        or error_msg
-        == "Conversation roles must alternate user/assistant/user/assistant/..."
-    ):
-        instruction_allowed = False
 
 
 def _prepare_messages(query_method, comment_category):

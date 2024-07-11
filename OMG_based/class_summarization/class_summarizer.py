@@ -1,5 +1,6 @@
 import os
 import re
+from urllib import response
 
 import openai
 from langchain.chains.retrieval_qa.base import RetrievalQA
@@ -9,7 +10,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_text_splitters import Language, RecursiveCharacterTextSplitter
 
 import common.model_loader as model_loader
+from common.log_config import get_logger
 
+logger = get_logger("ClassSummarizer")
 model = model_loader.model
 embeddings = model_loader.embeddings
 path_prefix = model_loader.raw_model_name.replace("/", "-").replace(":", "-")
@@ -27,16 +30,27 @@ zeroshot_template = (
     "Write your answer to the point and avoid any introductory phrases.\n"
 )
 
-zeroshot_prompt = ChatPromptTemplate.from_messages(
-    [
-        ("system", zeroshot_template),
-        (
-            "human",
-            "What is the main functionality of the below Java class in a few words?\n```{code_block}\n```\n\nYour answer: (MUST START WITH A VERB)",
-        ),
-    ]
-)
-
+if model_loader.is_instruction_tuned:
+    zeroshot_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", zeroshot_template),
+            (
+                "human",
+                "What is the main functionality of the below Java class in a few words?\n```{code_block}\n```\n\nYour answer: (MUST START WITH A VERB)",
+            ),
+        ]
+    )
+else:
+    zeroshot_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("human", zeroshot_template),
+            ("ai", "I am ready. Please send me the Java class."),
+            (
+                "human",
+                "What is the main functionality of the below Java class in a few words?\n```{code_block}\n```\n\nYour answer: (MUST START WITH A VERB)",
+            ),
+        ]
+    )
 model = (
     model.bind(max_tokens=50)
     if isinstance(model, model_loader.ChatOpenAI)
@@ -143,20 +157,26 @@ def init_class_summarizer(documents, dataset_name, overwite=False, verbose=True)
 def summarize_class(class_name=None, use_retrieval=False, class_body=None):
     # summary = qa.pick("answer").invoke({"input": f"What is the main functionality (summary) of the class {class_name}? Please use less than 20 words."}).strip()
     if use_retrieval:
-        summary = qa.invoke(
+        response = qa.invoke(
             f"What is the main functionality (summary) of the class {class_name}? Please use less than 20 words.",
             num_predict=30,
         )["result"].strip()
     else:
         try:
-            summary = chain.invoke({"code_block": class_body}).content.strip(' "')
+            response = chain.invoke({"code_block": class_body}).content.strip(' "')
             # summary = model_loader.ask_llm(["What is the main functionality of the below Java class in a few words?\n```\n" + class_body + "\n```\n Please answer in less than 20 words, starting with a verb."], verbose=True, max_tokens=50).strip(' "')
         except openai.BadRequestError as e:
-            summary = "Too long to summarize"
-            # if e.message.startswith("This model's maximum context length is"):
-            #     summary = "Too long to summarize"
+            # summary = "Too long to summarize"
+            error_msg = e.body["message"]
+            logger.error(error_msg)
 
-    return strip_tags(summary)
+            if error_msg.startswith("This model's maximum context length is"):
+                response = "Too long to summarize"
+
+            else:
+                response = "Error occurred while summarizing class"
+
+    return strip_tags(response)
 
 
 if __name__ == "__main__":

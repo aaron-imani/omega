@@ -1,15 +1,20 @@
 import os
 from typing import List
 
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
+from langchain.globals import set_llm_cache
+from langchain_community.cache import SQLiteCache
 from langchain_community.chat_models.ollama import ChatOllama
 from langchain_community.embeddings.ollama import OllamaEmbeddings
 from langchain_community.llms.ollama import Ollama
 from langchain_openai import ChatOpenAI, OpenAI, OpenAIEmbeddings
+from openai import BadRequestError
+from termcolor import colored
 
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
-from langchain.globals import set_llm_cache
-from langchain_community.cache import SQLiteCache
+# load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+from . import load_env
+
+load_env.load()
 
 set_llm_cache(SQLiteCache(database_path=".langchain.db"))
 
@@ -22,11 +27,16 @@ temperature = float(os.getenv("MODEL_TEMPERATURE"))
 using_open_source = os.getenv("USE_OPEN_SOURCE") == "1"
 if using_open_source:
     raw_model_name = os.getenv("MODEL_NAME")
-    base_url = os.getenv("OLLAMA_SERVER")
+    base_url = os.getenv("INFERENCE_URL")
 else:
     raw_model_name = "gpt-4-turbo"
 
 processed_model_name = raw_model_name.split("/")[-1].replace(":", "-")
+
+
+print("Inference Model Info")
+print(colored("Model Name:", "blue"), processed_model_name)
+print(colored("Inference URL:", "blue"), base_url)
 
 
 def make_chat_model(base_url, model_name, server_type, temperature=0.0):
@@ -35,7 +45,7 @@ def make_chat_model(base_url, model_name, server_type, temperature=0.0):
             base_url=base_url,
             model=model_name,
             temperature=temperature,
-            num_ctx=8196,
+            num_ctx=8192,
         )
     else:
         return ChatOpenAI(
@@ -44,6 +54,27 @@ def make_chat_model(base_url, model_name, server_type, temperature=0.0):
             api_key="lm-studio",
             base_url=base_url,
         )
+
+
+def is_instruction_tuned_model():
+    messages = [
+        ("system", "You are a senior Java developer"),
+        ("human", "How can I understand the changes in a universal git diff?"),
+        ("ai", "I don't know"),
+        ("human", "Why?"),
+    ]
+    try:
+        model.invoke(messages, max_tokens=20)
+    except BadRequestError as e:
+        error_msg = e.body["message"]
+
+        if (
+            error_msg == "System messages are not allowed in this template."
+            or error_msg
+            == "Conversation roles must alternate user/assistant/user/assistant/..."
+        ):
+            return False
+    return True
 
 
 def make_completion_model(model_name, server_type, base_url, temperature=0.0):
@@ -106,7 +137,11 @@ else:
             model = model.bind(stop=["<|eot_id|>"])
     else:
         embeddings = OpenAIEmbeddings(
-            disallowed_special=(), base_url=base_url, api_key="lm-studio"
+            disallowed_special=(),
+            base_url=base_url,
+            api_key="lm-studio",
+            model=raw_model_name,
+            # model_kwargs={"encoding_format": "float"},
         )
         model = ChatOpenAI(
             model=raw_model_name,
@@ -120,6 +155,8 @@ else:
             api_key="lm-studio",
             base_url=base_url,
         )
+
+    is_instruction_tuned = is_instruction_tuned_model()
 
 
 def ask_llm(messages: List[str], verbose=False, **kwargs):
