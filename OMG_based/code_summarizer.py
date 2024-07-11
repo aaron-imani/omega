@@ -5,11 +5,13 @@ import torch
 from openai import BadRequestError
 
 import common.model_loader as model_loader
+from common.log_config import get_logger
 from OMG_based.find_examples_tlc_training_SUM import (
     get_data,
     pre_process_samples_semantic,
 )
 
+logger = get_logger("MethodSummarizer")
 model = model_loader.model
 # from langchain_community.callbacks import get_openai_callback
 
@@ -99,13 +101,24 @@ def _prepare_messages(query_method, comment_category):
 def summarize_method_body(query_method, comment_category):
     messages = _prepare_messages(query_method, comment_category)
     if messages:
+        cur_ans = "Method body's summary can not be generated."
         try:
             response = model.invoke(messages, max_tokens=30)
-        except BadRequestError:
-            return "Method body's summary can not be generated due to model's context window limit."
-            # response = model.invoke(messages, num_predict=30)
+            cur_ans = response.content
+        except BadRequestError as e:
+            error_msg = e.body["message"]
+            logger.error(error_msg)
+            if error_msg.startswith("This model's maximum context length is"):
+                cur_ans = "Method is too long to summarize"
 
-        cur_ans = response.content
+            if (
+                error_msg == "System messages are not allowed in this template."
+                or error_msg
+                == "Conversation roles must alternate user/assistant/user/assistant/..."
+            ):
+                response = model.invoke(messages[1:], max_tokens=30)
+                cur_ans = response.content
+
         return cur_ans
     else:
         return "Method body's summary can not be generated."
