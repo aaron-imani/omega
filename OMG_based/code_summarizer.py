@@ -68,6 +68,28 @@ training_codes_embeddings = torch.load(training_codes_embeddings_path)
 # def ollama_completetion(messages, **kwargs):
 #     return model.invoke(messages, **kwargs)
 
+instruction_allowed = True
+try:
+    model.invoke(
+        [
+            ("system", "You are a helpful assistant"),
+            ("human", "How are you?"),
+            ("ai", " I am fine, thank you. How can I help you today?"),
+            ("human", "Can you summarize a method body?"),
+        ],
+        max_tokens=2,
+    )
+except BadRequestError as e:
+    error_msg = e.body["message"]
+    logger.error(error_msg)
+
+    if (
+        error_msg == "System messages are not allowed in this template."
+        or error_msg
+        == "Conversation roles must alternate user/assistant/user/assistant/..."
+    ):
+        instruction_allowed = False
+
 
 def _prepare_messages(query_method, comment_category):
     training_codes, training_comments, training_labels = data[comment_category]
@@ -78,7 +100,13 @@ def _prepare_messages(query_method, comment_category):
 
         system_msg = prompt_lists.get(comment_category, zero_what)
 
-        messages = [{"role": "system", "content": system_msg}]
+        if instruction_allowed:
+            messages = [{"role": "system", "content": system_msg}]
+        else:
+            messages = [
+                {"role": "user", "content": system_msg},
+                {"role": "assistant", "content": "Sure, please provide the method."},
+            ]
 
         for i in range(10):
             example_index = int(demonstration_example_idxs[i])
@@ -110,14 +138,6 @@ def summarize_method_body(query_method, comment_category):
             logger.error(error_msg)
             if error_msg.startswith("This model's maximum context length is"):
                 cur_ans = "Method is too long to summarize"
-
-            if (
-                error_msg == "System messages are not allowed in this template."
-                or error_msg
-                == "Conversation roles must alternate user/assistant/user/assistant/..."
-            ):
-                response = model.invoke(messages[1:], max_tokens=30)
-                cur_ans = response.content
 
         return cur_ans
     else:
