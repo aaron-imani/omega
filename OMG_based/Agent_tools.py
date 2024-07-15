@@ -3,11 +3,12 @@ import subprocess
 import sys
 
 sys.path.append("..")
-use_old_class_summarizer = os.getenv("CLASS_SUMMARIES", "NEW") == "OLD"
-if use_old_class_summarizer:
-    print("Using old class summarizer")
+should_remove_comments = os.getenv("REMOVE_COMMENTS", "TRUE") == "TRUE"
+if should_remove_comments:
+    print("Removing comments from class bodies before summarization")
 else:
-    print("Using new class summarizer")
+    print("Keeping comments in class bodies before summarization")
+
 # from .utils import get_commit_from_github, get_repo_name, get_file_names, get_commit_id
 import pandas as pd
 
@@ -22,7 +23,7 @@ if diff_explanation_method != "None":
     from common.diff_explainer import summarize_diff
 
 # from OMG_based.code_understanding import class_sum
-if use_old_class_summarizer:
+if not should_remove_comments:
     from OMG_based.class_summarizer_omg import class_sum
 else:
     from OMG_based.class_summarizer_enhanced import class_sum
@@ -65,7 +66,7 @@ def get_git_diff_from_commit_url(commit_url=""):
                 diff_summary = cache_manager.get_execution_value(
                     commit_url,
                     "diff_summary",
-                    model_name="Meta-Llama-3-70B-Instruct-AWQ",
+                    # model_name="Meta-Llama-3-70B-Instruct-AWQ",
                 )
                 if diff_summary:
                     return "\n" + cached_diff + "\n\n" + diff_summary
