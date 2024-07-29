@@ -56,6 +56,10 @@ cd CMG ; python download_projects.py
 
 6. Download [`training_data_semantic_embedding.pt`](https://figshare.com/ndownloader/files/48005074?private_link=b7e5f33347c7faa51e5e) and copy it to the `CMG` folder.
 
+7. Download [`java-jars.zip`](https://figshare.com/ndownloader/files/48005554?private_link=b7e5f33347c7faa51e5e) and unzip it to the `CMG` folder. It should create the JavaParser jar files in the `program_contexts` folder of the `CMG` folder.
+
+7. Download [`MMS.zip`](https://figshare.com/ndownloader/files/48005545?private_link=b7e5f33347c7faa51e5e) and unzip it to the `CMG` folder. It should create the requires for MMS and CMMS in the `program_contexts` folder of the `CMG` folder.
+
 ## OLLMs' Performance in CMG With Different Diff Augmentation Techniques
 
 ### Mistral 7B Instruct v0.3 AWQ

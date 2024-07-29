@@ -20,3 +20,4 @@ wandb
 .gitignore
 archived/*
 data/*
+*.zip
