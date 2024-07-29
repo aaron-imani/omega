@@ -1,0 +1,16 @@
+create -db /home/alirezi/research/AMG/CMG/program_contexts/temp.und -gitcommit 9cbf06fcae73d281aa4804e574335d12fd0764ec -gitrepo /home/alirezi/research/AMG/CMG/Projects/directory-server -languages Java
+add /home/alirezi/research/AMG/CMG/Projects/directory-server /home/alirezi/research/AMG/CMG/program_contexts/temp.und
+analyze -db /home/alirezi/research/AMG/CMG/program_contexts/temp.und -errors
+export -dependencies -group to -sort to -col none -format longnoroot file csv /home/alirezi/research/AMG/CMG/program_contexts/file_dependencies/directory-server/9cbf06fcae73d281aa4804e574335d12fd0764ec.csv /home/alirezi/research/AMG/CMG/program_contexts/temp.und
+export -dependencies -format longnoroot -col refs file csv /home/alirezi/research/AMG/CMG/program_contexts/file_dependencies/directory-server/pairwise-9cbf06fcae73d281aa4804e574335d12fd0764ec.csv /home/alirezi/research/AMG/CMG/program_contexts/temp.und
+
+create -db /home/alirezi/research/AMG/CMG/temp/directory-server-pre.und -gitcommit 6326e6849eac9f2d68b6be3e61e24ef1a152695b -gitrepo /home/alirezi/research/AMG/CMG/Projects/directory-server -languages Java
+add /home/alirezi/research/AMG/CMG/Projects/directory-server /home/alirezi/research/AMG/CMG/temp/directory-server-pre.und
+analyze -db /home/alirezi/research/AMG/CMG/temp/directory-server-pre.und -errors
+
+create -db /home/alirezi/research/AMG/CMG/temp/directory-server-post.und -gitcommit 9cbf06fcae73d281aa4804e574335d12fd0764ec -gitrepo /home/alirezi/research/AMG/CMG/Projects/directory-server -refdb /home/alirezi/research/AMG/CMG/temp/directory-server-pre.und -languages Java
+add /home/alirezi/research/AMG/CMG/Projects/directory-server /home/alirezi/research/AMG/CMG/temp/directory-server-post.und
+analyze -db /home/alirezi/research/AMG/CMG/temp/directory-server-post.und -errors
+-db /home/alirezi/research/AMG/CMG/temp/directory-server-pre.und
+
+und export -dependencies class csv /home/alirezi/research/AMG/CMG/temp/pre.csv /home/alirezi/research/AMG/CMG/temp/directory-server-post.und
