@@ -1,6 +1,6 @@
 <img src="corgee.png" width="256" style="display: block; margin-left: auto; margin-right: auto;" alt="Corgi icon designed by Triberion from Flaticon"/>
 
-# Beyond GPT-4: Superior Commit Messages By Open-Source Language Models Through Contextual Refinements
+# Better Context Outweighs Parameters: Commit Message Generation With Open-Source LLM
 
 <img src="us-vs-omg.jpg" width="750" style="display: block; margin-left: auto; margin-right: auto;" alt="Corgi icon designed by Triberion from Flaticon" alt="CORGEE OMG" />
 
