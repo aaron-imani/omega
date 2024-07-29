@@ -13,8 +13,10 @@ added-ma
 .vscode
 .DS_Store
 *.ipynb
+*.pt
 program_contexts/code_und_dirs
 cache*
 wandb
 .gitignore
 archived/*
+data/*

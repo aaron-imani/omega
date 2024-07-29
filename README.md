@@ -52,6 +52,10 @@ OPENAI_ORGANIZATION=YOUR_OPENAI_ORGANIZATION # Only required if you want to use 
 cd CMG ; python download_projects.py
 ```
 
+5. Download and unzip [`datasets.zip`](https://figshare.com/ndownloader/files/48005035?private_link=b7e5f33347c7faa51e5e) to the root directory of this project. (A folder named `data` should be available in the root directory after unzipping).
+
+6. Download [`training_data_semantic_embedding.pt`](https://figshare.com/ndownloader/files/48005074?private_link=b7e5f33347c7faa51e5e) and copy it to the `CMG` folder.
+
 ## OLLMs' Performance in CMG With Different Diff Augmentation Techniques
 
 ### Mistral 7B Instruct v0.3 AWQ
