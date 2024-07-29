@@ -24,8 +24,10 @@ def get_logger(name):
     ch.setLevel(log_level)
     logger.setLevel(log_level)
 
-    if not logger.hasHandlers():
-        logger.addHandler(ch)
+    if logger.hasHandlers():
+        logger.handlers.clear()
+
+    logger.addHandler(ch)
 
     return logger
 

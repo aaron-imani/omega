@@ -1,0 +1,11 @@
+X,Y,method,alternative,n,r,CI95%,p-unc,power
+Rationality,Expressiveness,spearman,two-sided,22,0.46364,[0.05 0.74],0.02975,0.60652
+Rationality,Conciseness,spearman,two-sided,22,0.21638,[-0.23  0.58],0.33345,0.16391
+Rationality,Comprehensiveness,spearman,two-sided,22,0.38812,[-0.04  0.7 ],0.07428,0.44432
+Rationality,Overall I prefer ...,spearman,two-sided,22,0.40271,[-0.02  0.7 ],0.06314,0.47482
+Expressiveness,Conciseness,spearman,two-sided,22,0.32858,[-0.11  0.66],0.13543,0.32864
+Expressiveness,Comprehensiveness,spearman,two-sided,22,0.71583,[0.42 0.87],0.00018,0.97869
+Expressiveness,Overall I prefer ...,spearman,two-sided,22,0.80829,[0.59 0.92],1e-05,0.99869
+Conciseness,Comprehensiveness,spearman,two-sided,22,0.22786,[-0.21  0.59],0.3078,0.17721
+Conciseness,Overall I prefer ...,spearman,two-sided,22,0.30353,[-0.14  0.64],0.16969,0.28532
+Comprehensiveness,Overall I prefer ...,spearman,two-sided,22,0.84133,[0.65 0.93],0.0,0.99973

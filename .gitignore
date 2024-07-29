@@ -10,7 +10,11 @@ understand_projects
 DeepLake
 deleted-mb
 added-ma
-MAGDi/*
 .vscode
 .DS_Store
 *.ipynb
+program_contexts/code_und_dirs
+cache*
+wandb
+.gitignore
+archived/*

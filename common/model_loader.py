@@ -30,6 +30,7 @@ if using_open_source:
     base_url = os.getenv("INFERENCE_URL")
 else:
     raw_model_name = "gpt-4-turbo"
+    base_url = "https://api.openai.com/v1"
 
 processed_model_name = raw_model_name.split("/")[-1].replace(":", "-")
 
@@ -73,7 +74,9 @@ def is_instruction_tuned_model():
             or error_msg
             == "Conversation roles must alternate user/assistant/user/assistant/..."
         ):
+            print(colored("Instruction-tuned:", "blue"), "False")
             return False
+    print(colored("Instruction-tuned:", "blue"), "True")
     return True
 
 
@@ -105,6 +108,7 @@ if not using_open_source:
     embeddings = OpenAIEmbeddings(disallowed_special=())
     model = ChatOpenAI(model=raw_model_name, temperature=0)
     path_prefix = "GPT-4"
+    is_instruction_tuned = True
 else:
     assert (
         raw_model_name is not None

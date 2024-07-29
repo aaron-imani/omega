@@ -5,12 +5,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pingouin as pg
 import seaborn as sns
+from altair import FontWeight
 
 os.makedirs("output", exist_ok=True)
 
 survey_report = pd.read_excel(sys.argv[1], sheet_name="Raw Data", header=None)
-# print(len(survey_report.columns.get_level_values(1)))
-survey_report = survey_report.iloc[:, 18:-2]
 
 cur_col = "OMG"
 for i in range(0, len(survey_report.columns), 5):
@@ -75,36 +74,74 @@ for criterion in criteria:
 
 data = pd.DataFrame(data, index=criteria)
 data = data.rename(index={"Overall I prefer ...": "Overall Preference"})
+data = data.div(data.sum(axis=1), axis=0)
 data["Winner"] = data.idxmax(axis=1)
 data.index.name = "Criterion"
 cols = ["AMG", "Identical", "OMG", "Winner"]
 data = data[cols]
+data.rename(columns={"AMG": "Llama3 70B AWQ"}, inplace=True)
 data.to_csv("output/summary.csv")
 
 # plt.figure(dpi=100)
+colors = ["#2CA02C", "#7F7F7F", "#D62728"]
 
 # Plot the data
 ax = data.plot(
-    kind="bar", stacked=False, rot=90, title="Survey Results", figsize=(4, 5)
+    kind="barh",
+    stacked=True,
+    # rot=90,
+    figsize=(8, 5),
+    color=colors,
 )
+ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{int(x * 100)}%"))
+ax.set_xlabel("Percentage", fontweight="bold")
+ax.set_ylabel("Criterion", fontweight="bold")
+# ax.yaxis.set_label_position('right')
+ax.set_yticklabels(
+    [
+        "Overall Preference",
+        "Comprehensiveness",
+        "Conciseness",
+        "Expressiveness",
+        "Rationality",
+    ],
+    fontsize=11,
+    fontweight="bold",
+)
+ax.set_title(
+    "Human Evaluation Results of Llama3 70B AWQ VS OMG", fontsize=14, fontweight="bold"
+)
+plt.xticks(fontsize=11, fontweight="bold")
+
+
+# Add labels on bars
+for i, container in enumerate(ax.containers):
+    # Adding text labels for each bar
+    ax.bar_label(
+        container,
+        labels=[f"{v * 100:.0f}%" for v in container.datavalues],
+        label_type="center",
+        color="white",
+        fontsize=11,
+        fontweight="bold",
+    )
 
 
 # Define hatch patterns for each method
-hatch_patterns = {"AMG": "-", "OMG": "X", "Identical": None}
+# hatch_patterns = {"AMG": "-", "OMG": "X", "Identical": None}
+# # Apply consistent hatches to the bars
+# for bars, method in zip(ax.containers, data.columns):
+#     for bar in bars:
+#         bar.set_hatch(hatch_patterns[method])
+#         bar.set_linewidth(1.5)
 
-# Apply consistent hatches to the bars
-for bars, method in zip(ax.containers, data.columns):
-    for bar in bars:
-        bar.set_hatch(hatch_patterns[method])
-        bar.set_linewidth(1.5)
-
-plt.legend(loc="center left", bbox_to_anchor=(1.05, 0.85))
+plt.legend(loc="center left", bbox_to_anchor=(1.02, 0.92), prop={"weight": "bold"})
 # plt.tight_layout()
 
 # Show the plot
 # plt.show()
-plt.savefig("output/stacked_bar.eps", bbox_inches="tight", format="eps")
-plt.savefig("output/stacked_bar.png", bbox_inches="tight", format="png")
+plt.savefig("output/survey-1-figure.eps", bbox_inches="tight", format="eps")
+plt.savefig("output/survey-1-figure.png", bbox_inches="tight", format="png")
 
 
 # Encode the categorical variables numerically for correlation analysis
@@ -116,11 +153,11 @@ encoding = {"AMG": 1, "OMG": 2, "Identical": 0}
 encoded_df = df.map(lambda x: encoding.get(x, x))
 
 # Calculate the correlation matrix with p-values
-corr_results = pg.pairwise_corr(encoded_df, method="pearson")
+corr_results = pg.pairwise_corr(encoded_df, method="spearman").round(5)
 corr_results.to_csv("output/correlation.csv", index=False)
 
 # Filter out the significant correlations
-significant_corr = corr_results[corr_results["p-unc"] < 0.1]
+significant_corr = corr_results[corr_results["p-unc"] < 0.05]
 significant_corr.to_csv("output/significant_correlation.csv", index=False)
 
 

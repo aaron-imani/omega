@@ -4,8 +4,11 @@ import re
 import sys
 from collections import namedtuple
 
+# from sacrebleu.metrics import BLEU
+
 sys.path.append(".")
 
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 import evaluate
 import pandas as pd
 import requests
@@ -19,7 +22,8 @@ from .log_mxnet import log_mnext_score
 
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
-bleu = evaluate.load("bleu")
+# bleu = BLEU()
+bleu = evaluate.load("sacrebleu")
 rouge = evaluate.load("rouge")
 meteor = evaluate.load("meteor")
 
@@ -61,10 +65,9 @@ def evaluate_machine_generated_text(
             bleurt_score = sum(bleurt_score) / len(bleurt_score)
 
     try:
-        bleu_score = bleu.compute(
-            predictions=predictions, references=references, smooth=True
-        )
-        bleu_score = bleu_score["bleu"] * 100
+        # bleu_score = bleu.corpus_score(predictions, [references]).score
+        bleu_score = bleu.compute(predictions=predictions, references=references)
+        bleu_score = bleu_score["score"]
     except ZeroDivisionError:
         bleu_score = 0
 
@@ -127,7 +130,7 @@ def evaluate_generation(
 ):
     df = pd.read_csv(predictions_path)
     if basis_mode:
-        df = df[base_rows]
+        df = df[df["commit_url"].isin(base_rows)]
 
     df = df[df[prediction_col].notna()]
     print("Non-empty CMs:", len(df))
@@ -135,7 +138,7 @@ def evaluate_generation(
     # gt = gt[gt['commit'].isin(df['commit'])]
     gt = df
 
-    df[prediction_col] = df[prediction_col].apply(fix_faulty_cm)
+    # df[prediction_col] = df[prediction_col].apply(fix_faulty_cm)
     valid_cms = df[prediction_col].str.match(".*:[^\n]*\n?.*", re.DOTALL)
     valid_cm_ratio = round(valid_cms.sum() / len(df) * 100, 2)
     print("Valid CM Ratio:", valid_cm_ratio)
@@ -311,7 +314,7 @@ if __name__ == "__main__":
     basis_mode = args.basis
     if basis_mode:
         basis = pd.read_csv(basis_mode)
-        base_rows = basis[args.prediction_col].notna()
+        base_rows = basis["commit_url"].tolist()
 
     for f_name in args.file_names:
         if f_name.endswith("_all.csv"):
@@ -323,7 +326,11 @@ if __name__ == "__main__":
         )
         if args.mode == "all":
             evaluate_generation(
-                f_name, args.reference_cols, args.prediction_col, args.bleurt
+                f_name,
+                args.reference_cols,
+                args.prediction_col,
+                args.bleurt,
+                basis_mode,
             )
         else:
             evaluate_rows(f_name, args.reference_cols, args.prediction_col, args.bleurt)

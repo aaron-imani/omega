@@ -1,0 +1,13 @@
+{
+    "ReactiveX-RxJava": "ReactiveX/RxJava",
+    "hbase": "apache/hbase",
+    "elasticsearch": "elastic/elasticsearch",
+    "intellij-community": "JetBrains/intellij-community",
+    "hadoop": "apache/hadoop",
+    "drools": "apache/incubator-kie-drools",
+    "kotlin": "JetBrains/kotlin",
+    "restlet-framework-java": "restlet/restlet-framework-java",
+    "orientdb": "orientechnologies/orientdb",
+    "camel": "apache/camel",
+    "spring-framework": "spring-projects/spring-framework"
+}
