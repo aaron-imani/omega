@@ -19,5 +19,10 @@ cache*
 wandb
 .gitignore
 archived/*
-data/*
+data
 *.zip
+*.jar
+**/logs/*
+CMG/program_contexts/funcom.test
+CMG/program_contexts/tlcodesum.train
+CMG/program_contexts/understand_commands.txt
