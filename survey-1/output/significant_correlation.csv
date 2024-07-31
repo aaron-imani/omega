@@ -1,3 +1,0 @@
-X,Y,method,alternative,n,r,CI95%,p-unc,power
-Rationality,Comprehensiveness,spearman,two-sided,10,-0.6455,[-0.91 -0.03],0.04382,0.56187
-Expressiveness,Overall I prefer ...,spearman,two-sided,10,0.72222,[0.17 0.93],0.01833,0.7088

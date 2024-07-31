@@ -146,31 +146,16 @@ plt.savefig("output/survey-1-figure.png", bbox_inches="tight", format="png")
 
 # Encode the categorical variables numerically for correlation analysis
 
-data = pd.read_csv("output/processed.csv")
-df = data[criteria]
+# data = pd.read_csv("output/processed.csv")
+# df = data[criteria]
 
-encoding = {"AMG": 1, "OMG": 2, "Identical": 0}
-encoded_df = df.map(lambda x: encoding.get(x, x))
+# encoding = {"AMG": 1, "OMG": 2, "Identical": 0}
+# encoded_df = df.map(lambda x: encoding.get(x, x))
 
-# Calculate the correlation matrix with p-values
-corr_results = pg.pairwise_corr(encoded_df, method="spearman").round(5)
-corr_results.to_csv("output/correlation.csv", index=False)
+# # Calculate the correlation matrix with p-values
+# corr_results = pg.pairwise_corr(encoded_df, method="spearman").round(5)
+# corr_results.to_csv("output/correlation.csv", index=False)
 
-# Filter out the significant correlations
-significant_corr = corr_results[corr_results["p-unc"] < 0.05]
-significant_corr.to_csv("output/significant_correlation.csv", index=False)
-
-
-# corr_matrix = corr_results.pivot(index="X", columns="Y", values="r")
-# p_matrix = corr_results.pivot(index="X", columns="Y", values="p-unc")
-# Plot the correlation matrix with annotations for significance
-# plt.figure(figsize=(10, 8))
-# sns.heatmap(
-#     corr_matrix,
-#     annot=True,
-#     cmap="coolwarm",
-#     fmt=".2f",
-#     mask=p_matrix >= 0.05,
-#     cbar_kws={"label": "Correlation Coefficient"},
-# )
-# plt.title("Correlation Matrix of Criteria (Significant Values)")
+# # Filter out the significant correlations
+# significant_corr = corr_results[corr_results["p-unc"] < 0.05]
+# significant_corr.to_csv("output/significant_correlation.csv", index=False)
