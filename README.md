@@ -1,6 +1,6 @@
 <img src="corgee.png" width="256" style="display: block; margin-left: auto; margin-right: auto;" alt="Corgi icon designed by Triberion from Flaticon"/>
 
-# Better Context Outweighs Parameters: Commit Message Generation With Open-Source LLM
+# Context Conquers Parameters: Outperforming Proprietary LLM in Commit Message Generation
 
 <img src="us-vs-omg.jpg" width="750" style="display: block; margin-left: auto; margin-right: auto;" alt="Corgi icon designed by Triberion from Flaticon" alt="CORGEE OMG" />
 
