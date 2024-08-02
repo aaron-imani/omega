@@ -81,7 +81,7 @@ data["Winner"] = data.idxmax(axis=1)
 data.index.name = "Criterion"
 cols = ["AMG", "Identical", "OMG", "Winner"]
 data = data[cols]
-data.rename(columns={"AMG": "Llama3 8B AWQ"}, inplace=True)
+data.rename(columns={"AMG": "OMEGA"}, inplace=True)
 data.to_csv("output/summary.csv")
 
 # plt.figure(dpi=100)
@@ -110,9 +110,7 @@ ax.set_yticklabels(
     fontsize=11,
     fontweight="bold",
 )
-ax.set_title(
-    "Human Evaluation Results of Llama3 8B AWQ VS OMG", fontsize=14, fontweight="bold"
-)
+ax.set_title("Human Evaluation Results of OMEGA VS OMG", fontsize=14, fontweight="bold")
 plt.xticks(fontsize=11, fontweight="bold")
 
 

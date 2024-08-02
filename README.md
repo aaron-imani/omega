@@ -1,13 +1,11 @@
-<img src="corgee.png" width="256" style="display: block; margin-left: auto; margin-right: auto;" alt="Corgi icon designed by Triberion from Flaticon"/>
-
 # Context Conquers Parameters: Outperforming Proprietary LLM in Commit Message Generation
 
-<img src="us-vs-omg.jpg" width="750" style="display: block; margin-left: auto; margin-right: auto;" alt="Corgi icon designed by Triberion from Flaticon" alt="CORGEE OMG" />
+<img src="us-vs-omg.jpg" width="750" style="display: block; margin-left: auto; margin-right: auto;" alt="Corgi icon designed by Triberion from Flaticon" alt="omega OMG" />
 
 ## Candidate Models
 
 ### Candidate OLLMs
-
+`
 - [Llama3 70B Instruct AWQ](https://huggingface.co/TechxGenus/Meta-Llama-3-70B-Instruct-AWQ})
 - [DeepSeek-Coder 33B AWQ](https://huggingface.co/TheBloke/deepseek-coder-33B-instruct-AWQ)
 
@@ -115,7 +113,7 @@ Reported in the paper.
 
 ```bash
 cd CMG
-REMOVE_COMMENTS=FALSE METHOD_SUMMARIES=OLD python corgee.py ../data/omg_data_preprocessed.csv all
+REMOVE_COMMENTS=FALSE METHOD_SUMMARIES=OLD python omega.py ../data/omg_data_preprocessed.csv all
 ```
 
 ### RQ2
@@ -128,7 +126,7 @@ REMOVE_COMMENTS=FALSE METHOD_SUMMARIES=OLD python corgee.py ../data/omg_data_pre
 
 ```bash
 cd CMG
-python corgee.py ../data/omg_data_preprocessed.csv all
+python omega.py ../data/omg_data_preprocessed.csv all
 ```
 
 ### RQ3
@@ -141,12 +139,12 @@ python corgee.py ../data/omg_data_preprocessed.csv all
 
 ```bash
 cd CMG
-python corgee.py ../data/omg_data_preprocessed.csv all --dn
+python omega.py ../data/omg_data_preprocessed.csv all --dn
 ```
 
 4. Run following command to use FIDEX-generated Diff Summary:
 
 ```bash
 cd CMG
-python corgee.py ../data/omg_data_preprocessed.csv all --fidex
+python omega.py ../data/omg_data_preprocessed.csv all --fidex
 ```
