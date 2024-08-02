@@ -140,8 +140,9 @@ plt.legend(loc="center left", bbox_to_anchor=(1.02, 0.92), prop={"weight": "bold
 
 # Show the plot
 # plt.show()
-plt.savefig("output/survey-3-figure.eps", bbox_inches="tight", format="eps")
-plt.savefig("output/survey-3-figure.png", bbox_inches="tight", format="png")
+# plt.savefig("output/survey-3-figure.eps", bbox_inches="tight", format="eps")
+# plt.savefig("output/survey-3-figure.png", bbox_inches="tight", format="png")
+plt.savefig("output/survey-3-figure.pdf", bbox_inches="tight", format="pdf")
 
 
 # Encode the categorical variables numerically for correlation analysis
