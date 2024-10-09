@@ -1,11 +1,14 @@
 import os
 import sys
+from collections import defaultdict
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import pingouin as pg
 import seaborn as sns
 from altair import FontWeight
+from numpy import int16
+from scipy.stats import chi2_contingency, fisher_exact
 
 os.makedirs("output", exist_ok=True)
 
@@ -67,8 +70,55 @@ def count_methods(column):
     return {method: count / total for method, count in counts.items()}
 
 
+def count_methods_no_ratio(column):
+    counts = {"AMG": 0, "OMG": 0, "Identical": 0}
+    for value in column:
+        counts[value] += 1
+    return {method: count for method, count in counts.items()}
+
+
 # Apply the function to each criterion
 ratios = survey_report[criteria].apply(count_methods).apply(pd.Series)
+
+counts = survey_report[criteria].apply(count_methods_no_ratio).apply(pd.Series)
+
+preference = {}
+
+p_values = []
+for criterion, criterion_df in counts.groupby(level=0):
+
+    stats = criterion_df.loc[:, ["AMG", "OMG"]].values.tolist()
+    chi2, p_value, dof, expected = chi2_contingency(stats)
+    print(f"Criterion: {criterion}")
+    print(
+        f"Chi-Square Statistic: {chi2}, P-value: {p_value}, Degrees of Freedom: {dof}"
+    )
+    p_values.append(p_value)
+    # Check significance
+    alpha = 0.05
+    if p_value < alpha:
+        print(f"Significant preference found for {criterion}.")
+    else:
+        print(f"No significant preference found for {criterion}.")
+
+average_p_value = sum(p_values) / len(p_values)
+print(f"\n\nAverage P-value: {round(average_p_value, 5)}")
+
+grouped_df = counts.groupby(level=0).sum()
+all_criteria = grouped_df.loc[:, ["AMG", "OMG"]].values.tolist()
+
+# Perform Chi-Square test
+chi2, p_value, dof, expected = chi2_contingency(all_criteria)
+
+print(f"Chi-Square Statistic: {chi2}, P-value: {p_value}, Degrees of Freedom: {dof}")
+
+# Check significance
+alpha = 0.05
+if p_value < alpha:
+    print(f"Significant preference found for all criteria.")
+else:
+    print(f"No significant preference found for criteria.")
+
 
 data = []
 for criterion in criteria:
@@ -147,16 +197,18 @@ plt.savefig("output/survey-3-figure.pdf", bbox_inches="tight", format="pdf")
 
 # Encode the categorical variables numerically for correlation analysis
 
-# data = pd.read_csv("output/processed.csv")
-# df = data[criteria]
+data = pd.read_csv("output/processed.csv")
+df = data[criteria]
 
-# encoding = {"AMG": 1, "OMG": 2, "Identical": 0}
-# encoded_df = df.map(lambda x: encoding.get(x, x))
+encoding = {"AMG": 1, "OMG": 2, "Identical": 0}
+encoded_df = df.apply(lambda x: x.map(encoding))
 
-# # Calculate the correlation matrix with p-values
-# corr_results = pg.pairwise_corr(encoded_df, method="spearman").round(5)
-# corr_results.to_csv("output/correlation.csv", index=False)
+# Perform Fisher's Exact Test
 
-# # Filter out the significant correlations
-# significant_corr = corr_results[corr_results["p-unc"] < 0.1]
-# significant_corr.to_csv("output/significant_correlation.csv", index=False)
+# Calculate the correlation matrix with p-values
+corr_results = pg.pairwise_corr(encoded_df, method="spearman").round(5)
+corr_results.to_csv("output/correlation.csv", index=False)
+
+# Filter out the significant correlations
+significant_corr = corr_results[corr_results["p-unc"] < 0.1]
+significant_corr.to_csv("output/significant_correlation.csv", index=False)
