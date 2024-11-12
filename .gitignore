@@ -2,7 +2,6 @@ CMG/Projects/*
 csv
 temp*
 *.db
-cache
 __pycache__
 .env
 file_dependencies
@@ -15,7 +14,6 @@ added-ma
 *.ipynb
 *.pt
 program_contexts/code_und_dirs
-cache*
 wandb
 .gitignore
 archived/*
