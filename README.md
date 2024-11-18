@@ -1,6 +1,8 @@
-# Context Conquers Parameters: Outperforming Proprietary LLM in Commit Message Generation
+# lOcal MessagE GenerAtor (OMEGA)
 
 <img src="us-vs-omg.jpg" width="750" style="display: block; margin-left: auto; margin-right: auto;" alt="Corgi icon designed by Triberion from Flaticon" alt="omega OMG" />
+
+Official repository for the ICSE 2025 paper [Context Conquers Parameters: Outperforming Proprietary LLM in Commit Message Generation](https://arxiv.org/abs/2408.02502])
 
 ## Candidate Models
 
