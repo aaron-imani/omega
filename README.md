@@ -5,7 +5,7 @@
 ## Candidate Models
 
 ### Candidate OLLMs
-`
+
 - [Llama3 70B Instruct AWQ](https://huggingface.co/TechxGenus/Meta-Llama-3-70B-Instruct-AWQ})
 - [DeepSeek-Coder 33B AWQ](https://huggingface.co/TheBloke/deepseek-coder-33B-instruct-AWQ)
 
@@ -147,4 +147,19 @@ python omega.py ../data/omg_data_preprocessed.csv all --dn
 ```bash
 cd CMG
 python omega.py ../data/omg_data_preprocessed.csv all --fidex
+```
+
+## Citation
+If you found this work helpful, please consider citing it using the following:
+
+```bibtex
+@misc{imani2024contextconquersparametersoutperforming,
+      title={Context Conquers Parameters: Outperforming Proprietary LLM in Commit Message Generation}, 
+      author={Aaron Imani and Iftekhar Ahmed and Mohammad Moshirpour},
+      year={2024},
+      eprint={2408.02502},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2408.02502}, 
+}
 ```
