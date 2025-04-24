@@ -1,8 +1,11 @@
 # lOcal MessagE GenerAtor (OMEGA)
 
+![Conference](https://img.shields.io/badge/ICSE-2025-00B4CC) [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![arXiv](https://img.shields.io/badge/arXiv-2408.02502-b31b1b.svg)](https://arxiv.org/abs/2408.02502)
+
+
 <img src="us-vs-omg.jpg" width="750" style="display: block; margin-left: auto; margin-right: auto;" alt="Corgi icon designed by Triberion from Flaticon" alt="omega OMG" />
 
-Official repository for the ICSE 2025 paper [Context Conquers Parameters: Outperforming Proprietary LLM in Commit Message Generation](https://arxiv.org/abs/2408.02502])
+Official repository for [Context Conquers Parameters: Outperforming Proprietary LLM in Commit Message Generation](https://arxiv.org/abs/2408.02502])
 
 ## Candidate Models
 
