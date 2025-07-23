@@ -158,13 +158,12 @@ python omega.py ../data/omg_data_preprocessed.csv all --fidex
 If you found this work helpful, please consider citing it using the following:
 
 ```bibtex
-@misc{imani2024contextconquersparametersoutperforming,
-      title={Context Conquers Parameters: Outperforming Proprietary LLM in Commit Message Generation}, 
-      author={Aaron Imani and Iftekhar Ahmed and Mohammad Moshirpour},
-      year={2024},
-      eprint={2408.02502},
-      archivePrefix={arXiv},
-      primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2408.02502}, 
+@inproceedings{imani2025context,
+  title={Context Conquers Parameters: Outperforming Proprietary Llm in Commit Message Generation},
+  author={Imani, Aaron and Ahmed, Iftekhar and Moshirpour, Mohammad},
+  booktitle={2025 IEEE/ACM 47th International Conference on Software Engineering (ICSE)},
+  pages={1844--1856},
+  year={2025},
+  organization={IEEE}
 }
 ```
